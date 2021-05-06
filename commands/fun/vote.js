@@ -1,10 +1,9 @@
-const { arg } = require("mathjs");
-
 module.exports = {
     name: 'vote',
     alias: ['v'],
     public: true,
     description: 'this is a vote command',
+    usage: '<prefix>vote [type]',
     async run(client, message, args) {
         try {
             let test = args[0] != null ? args[0].toLowerCase() : 'none';

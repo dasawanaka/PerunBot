@@ -7,5 +7,13 @@
         "prefix": "!",
         "token": "NzIzNDk0NTg1MTQxMTY2MTIw.Xuyc1g.xwGDKls4K4cK1nlAU70WOyiYZKw",
         "owner_id": "344499775351029760"
+    },
+    "mongodbConf":{
+        "user": "pbottest",
+        "pwd": "M72578myppZ3cQkT",
+        "host": "54.38.50.5",
+        "port": "27017",
+        "dbName": "protonbottest"
     }
+
 }

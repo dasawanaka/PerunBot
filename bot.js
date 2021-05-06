@@ -8,12 +8,17 @@ const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION']
 const fs = require('fs');
 const path = require('path');
 const colors = require('colors');
+const Guild = require('./models/guild');
 
-//const sqlite3 = require('sqlite3').verbose();
-//let db = new sqlite3.Database('./db/db.sqlite');
+client.mongoose = require('./utils/mongoose');
+
 const paths = {
   commands: path.join(__dirname, 'commands'),
   events: path.join(__dirname, 'events')
+};
+const loader = {
+  commands: require('./functions/loadCommands.js'),
+  events: require('./functions/loadEvents.js')
 };
 
 const { GiveawaysManager } = require('discord-giveaways');
@@ -31,57 +36,26 @@ client.giveawaysManager = new GiveawaysManager(client, {
 });
 
 client.commands = new Discord.Collection();
-let events = new Discord.Collection();
-let tasks = new Discord.Collection();
+client.events = new Discord.Collection();
+client.guildSettings = new Discord.Collection();
+client.tasks = new Discord.Collection();
 
-const commandModules = fs.readdirSync(paths.commands);
-for (const module of commandModules) {
-  
-  var modulePath = path.join(paths.commands, module);
-  const commandFiles = fs.readdirSync(modulePath).filter(file => file.endsWith('.js'));
-
-  console.log(colors.bold.bgGreen.yellow(``) + colors.green(`[MODULE] find module ${module} with ${commandFiles.length} commands.`))
-
-  if (commandFiles.length > 0) {
-    for (const file of commandFiles) {
-      const commandPath = path.join(paths.commands, module, file);
-      const command = require(commandPath);
-      client.commands.set(command.name, command);
-      command.alias.forEach(al => {
-        client.commands.set(al, command);
-      });
-      console.log(colors.bold.bgGreen.yellow(`[DONE]`) + colors.green(` load command ${command.name} from ${commandPath}`))
-    }
-  }
-
-}
+loader.commands.load(paths.commands, client);
+loader.events.load(paths.events, client);
 
 client.once('ready', () => {
   console.log(colors.rainbow(`Ready! Bot started now!`));
 });
 
+client.on("guildCreate", guild => {
+  console.log("Joined a new guild: " + guild.name);
+  
+})
+
 client.on('message', async message => {
 
-  if (!(message.content.startsWith(discord_conf.prefix))
-    || message.author.bot || message.channel.type === 'dm') {
-    return;
-  }
+  client.events.get('newMessage').run(message, client);
 
-  if (message.content.startsWith(discord_conf.prefix)) {
-
-    const args = message.content.slice(discord_conf.prefix.length).trim().split(/ +/);
-
-    const command = args.shift().toLowerCase();
-
-    if (!client.commands.has(command)) return;
-
-    try {
-      client.commands.get(command).run(client, message, args);
-
-    } catch (error) {
-      console.error(error);
-    }
-  }
 });
 
 client.on('messageReactionAdd', async (reaction, user) => {
@@ -169,4 +143,73 @@ client.on('messageReactionRemove', async (reaction, user) => {
     events.get('messageReactionRemove').run(client, reaction, user);*/
 });
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getPrefixFromDbOrGetDefaultPrefix(serverId) {
+
+  return MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, 
+    function (err, mdb) {
+
+    if (mdb.isConnected()) {
+
+      return mdb.db().collection('serverConfig').findOne({ serverID: serverId })
+        .then(doc => {
+          console.log('serverConfig ', doc);
+          var prefix = '!';
+          if (doc === null) {
+            newServerConfig(serverId);
+          } else {
+            prefix = doc.commandPrefix;
+          }
+          serverPrefixes.set(serverId, prefix);
+          return prefix;
+        }).then(pref => function () {
+          mdb.close();
+          return pref;
+        });
+
+    } else {
+      console.log(err);
+      return '!';
+    }
+
+  }) === null ? '!': serverPrefixes.get(serverId);
+
+  return '!';
+
+}
+
+function newServerConfig(serverId) {
+  MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, mdb) {
+
+    if (mdb.isConnected()) {
+      mdb.db().collection('serverConfig').insertOne({
+        serverID: serverId,
+        commandPrefix: '!',
+        testServer: false,
+        premium: false,
+        disabledModules: ['none']
+      }).then(pref => function () {x
+        mdb.close();
+        return pref;
+      });
+    }
+  });
+}
+
+
+
+client.mongoose.init();
 client.login(discord_conf.token);
