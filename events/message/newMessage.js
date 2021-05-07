@@ -5,6 +5,10 @@ const colors = require('colors');
 const Discord = require('discord.js');
 const Guild = require('../../models/guild');
 const mongoose = require('mongoose');
+const Levels = require("discord-xp");
+
+const expTime = new Map();
+
 
 module.exports = {
     name: 'newMessage',
@@ -47,7 +51,17 @@ module.exports = {
         prefix = guildSettings.prefix;
 
         if (!(message.content.startsWith(prefix))) {
+            if (expTime.get(message.author.id) === undefinded || Date.now() - expTime.get(message.author.id) > 60000) {
+                const randomXp = Math.floor(Math.random() * 9) + 1;
+                const hasLeveledUp = await Levels.appendXp(message.author.id, message.guild.id, randomXp);
+                if (hasLeveledUp) {
+                    const user = await Levels.fetch(message.author.id, message.guild.id);
+                    message.channel.send(`Congrats! You leveled up to ${user.level}! Keep it going!`);
+                }
+                expTime.set(message.author.id, Date.now());
+            }
             return;
+
         }
 
         const args = message.content.slice(prefix.length).trim().split(/ +/);
@@ -62,6 +76,8 @@ module.exports = {
         } catch (error) {
             console.error(error);
         }
+
+
 
     }
 }

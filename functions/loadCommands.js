@@ -21,9 +21,10 @@ module.exports = {
                     const commandPath = path.join(commandDirPath, module, file);
                     const command = require(commandPath);
                     client.commands.set(command.name, command);
-                    command.alias.forEach(al => {
-                        client.commands.set(al, command);
-                    });
+                    if (command.alias != undefined)
+                        command.alias.forEach(al => {
+                            client.commands.set(al, command);
+                        });
                     console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` load command ${command.name} from ${commandPath}`))
                 }
             }

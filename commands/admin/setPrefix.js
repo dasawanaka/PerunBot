@@ -30,11 +30,11 @@ module.exports = {
                     })
                 .catch( function (err) {
                     console.error(err);
-                    message.channel.send(`Can not update prefix now, try again later.`);
+                    message.channel.send(`Could not update prefix now, please try again later.`);
                 });
 
         } else if (!guildSettings) {
-            message.channel.send(`Can not update prefix now, try again later.`);
+            message.channel.send(`Could not update prefix now, please try again later.`);
         }
 
     }

@@ -11,6 +11,7 @@ const colors = require('colors');
 const Guild = require('./models/guild');
 
 client.mongoose = require('./utils/mongoose');
+client.levels = require('./utils/levels');
 
 const paths = {
   commands: path.join(__dirname, 'commands'),
@@ -143,73 +144,6 @@ client.on('messageReactionRemove', async (reaction, user) => {
     events.get('messageReactionRemove').run(client, reaction, user);*/
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getPrefixFromDbOrGetDefaultPrefix(serverId) {
-
-  return MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, 
-    function (err, mdb) {
-
-    if (mdb.isConnected()) {
-
-      return mdb.db().collection('serverConfig').findOne({ serverID: serverId })
-        .then(doc => {
-          console.log('serverConfig ', doc);
-          var prefix = '!';
-          if (doc === null) {
-            newServerConfig(serverId);
-          } else {
-            prefix = doc.commandPrefix;
-          }
-          serverPrefixes.set(serverId, prefix);
-          return prefix;
-        }).then(pref => function () {
-          mdb.close();
-          return pref;
-        });
-
-    } else {
-      console.log(err);
-      return '!';
-    }
-
-  }) === null ? '!': serverPrefixes.get(serverId);
-
-  return '!';
-
-}
-
-function newServerConfig(serverId) {
-  MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, function (err, mdb) {
-
-    if (mdb.isConnected()) {
-      mdb.db().collection('serverConfig').insertOne({
-        serverID: serverId,
-        commandPrefix: '!',
-        testServer: false,
-        premium: false,
-        disabledModules: ['none']
-      }).then(pref => function () {x
-        mdb.close();
-        return pref;
-      });
-    }
-  });
-}
-
-
-
+client.levels.init();
 client.mongoose.init();
 client.login(discord_conf.token);

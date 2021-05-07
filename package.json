@@ -8,8 +8,10 @@
         "node .": "node run bot.js"
     },
     "dependencies": {
+        "canvas": "^2.7.0",
         "colors": "^1.4.0",
         "discord-giveaways": "^4.2.1",
+        "discord-xp": "^1.0.1",
         "discord.js": "^12.2.0",
         "discord.js-pagination": "^1.0.2",
         "mathjs": "^7.1.0",
