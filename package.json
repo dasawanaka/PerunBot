@@ -22,8 +22,6 @@
         "node-cron": "^2.0.3",
         "node-pre-gyp": "^0.15.0",
         "pubsubhubbub": "^1.0.1",
-        "quickdb": "^1.0.5",
-        "sqlite3": "^5.0.0",
         "superagent": "^3.8.3"
     }
 }

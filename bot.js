@@ -12,6 +12,8 @@ const Guild = require('./models/guild');
 
 client.mongoose = require('./utils/mongoose');
 client.levels = require('./utils/levels');
+client.rep = require('./utils/rep');
+client.coins = require('./utils/coins');
 
 const paths = {
   commands: path.join(__dirname, 'commands'),
@@ -21,20 +23,6 @@ const loader = {
   commands: require('./functions/loadCommands.js'),
   events: require('./functions/loadEvents.js')
 };
-
-const { GiveawaysManager } = require('discord-giveaways');
-const { filter } = require('mathjs');
-client.giveawayConfig = giveaway;
-client.giveawaysManager = new GiveawaysManager(client, {
-  storage: "./giveaways.json",
-  updateCountdownEvery: 5000,
-  default: {
-    botsCanWin: false,
-    exemptPermissions: [],
-    embedColor: "#009e08",
-    reaction: "🎉"
-  }
-});
 
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
@@ -58,6 +46,14 @@ client.on('message', async message => {
   client.events.get('newMessage').run(message, client);
 
 });
+
+client.on('messageDelete', async message => {
+
+  client.events.get('messageDelete').run(message, client);
+
+});
+
+
 
 client.on('messageReactionAdd', async (reaction, user) => {
   /*
@@ -145,5 +141,7 @@ client.on('messageReactionRemove', async (reaction, user) => {
 });
 
 client.levels.init();
+client.rep.init();
+client.coins.init();
 client.mongoose.init();
 client.login(discord_conf.token);

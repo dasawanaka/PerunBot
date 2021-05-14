@@ -5,7 +5,7 @@ module.exports = {
     alias: [],
     public: true,
     description: "Give you random iq number",
-
+    
     async run(client, message, args) {
         let iq = between(-50, 200);
         let msg = ` your iq is: ${iq}. `;

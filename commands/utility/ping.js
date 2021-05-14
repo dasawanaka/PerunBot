@@ -1,11 +1,15 @@
+const Discord = require('discord.js');
+
 module.exports = {
     name: 'ping', 
     alias: ['pp', 'pingpong'],
     public: true,
     description: 'Ping command, return api ping',
+    usage: '<prefix>ping',
+    permissions: [],
+    cooldown: 10000,
     async run(client, message, args) {
         var ping = client.ws.ping;
-        var Discord = require('discord.js');
         var embed = new Discord.MessageEmbed()
             .setColor('#0099ff')
             .setTitle('🏓 Pong!')

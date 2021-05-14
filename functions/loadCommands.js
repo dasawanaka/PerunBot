@@ -25,7 +25,7 @@ module.exports = {
                         command.alias.forEach(al => {
                             client.commands.set(al, command);
                         });
-                    console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` load command ${command.name} from ${commandPath}`))
+                    console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` Register command ${command.name} from ${commandPath}`))
                 }
             }
 

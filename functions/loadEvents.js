@@ -21,7 +21,7 @@ module.exports = {
                     const eventPath = path.join(eventDirPath, module, file);
                     const event = require(eventPath);
                     client.events.set(event.name, event);
-                    console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` load event ${event.name} from ${eventPath}`))
+                    console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` Register event ${event.name} from ${eventPath}`))
                 }
             }
 
