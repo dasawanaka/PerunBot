@@ -19,7 +19,7 @@ module.exports = {
 
     const lb = leaderboard.map(e => `${e.position}. ${e.username}#${e.discriminator}\nLevel: ${e.level}\nXP: ${e.xp.toLocaleString()}`);
 
-    message.channel.send(`${lb.join("\n\n")}}`)
+    message.channel.send(`${lb.join("\n\n")}}`);
 
   }
 };
