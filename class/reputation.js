@@ -77,7 +77,7 @@ class Reputation {
       });
 
       await newUser.save().catch(e => console.log(`Failed to save new user.`));
-
+      return newUser;
     };
 
     user.rep += rep;

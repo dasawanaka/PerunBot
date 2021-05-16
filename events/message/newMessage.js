@@ -58,7 +58,7 @@ module.exports = {
     if (!message.content.startsWith(prefix)) {
         //exp on messages, when not use commands
       if (expCD.has(`${message.author.id}_${message.guild.id}`)) return;
-      const randomXp = Math.floor(Math.random() * 9) + 1;
+      const randomXp = Math.floor(Math.random() * 15) + 5;
       const hasLeveledUp = await Levels.appendXp(
         message.author.id,
         message.guild.id,

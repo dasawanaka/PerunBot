@@ -3,6 +3,8 @@ const Canvas = require("canvas");
 const Levels = require("discord-xp");
 const Coins = require("../../class/coins.js");
 const Rep = require("../../class/reputation.js");
+const ComputeLeaderboard = require('../../utils/computeLeaderboard');
+
 
 Canvas.registerFont("fonts/nirmala-ui-bold.ttf", { family: "Nirmala UI" });
 
@@ -128,7 +130,7 @@ module.exports = {
     const found = leaderboard.find((el) => el.userID === message.author.id);
 
     if (found != undefined) {
-      var clb = computeLeaderboard(client, leaderboard);
+      var clb = ComputeLeaderboard.run(client, leaderboard);
       let e = await clb.find((el) => el.userID === message.author.id);
       position = e.position;
     }
@@ -202,37 +204,4 @@ const applyText = (canvas, text, startSize) => {
   return context.font;
 };
 
-/**
- * @param {string} [client] - Your Discord.CLient.
- * @param {array} [leaderboard] - The output from 'fetchLeaderboard' function.
- */
 
-const computeLeaderboard = (client, leaderboard) => {
-  if (!client) throw new TypeError("A client was not provided.");
-  if (!leaderboard) throw new TypeError("A leaderboard id was not provided.");
-
-  if (leaderboard.length < 1) return [];
-
-  const computedArray = [];
-
-  leaderboard.map((key) =>
-    computedArray.push({
-      guildID: key.guildID,
-      userID: key.userID,
-      xp: key.xp,
-      level: key.level,
-      position:
-        leaderboard.findIndex(
-          (i) => i.guildID === key.guildID && i.userID === key.userID
-        ) + 1,
-      username: client.users.cache.get(key.userID)
-        ? client.users.cache.get(key.userID).username
-        : "Unknown",
-      discriminator: client.users.cache.get(key.userID)
-        ? client.users.cache.get(key.userID).discriminator
-        : "0000",
-    })
-  );
-
-  return computedArray;
-};

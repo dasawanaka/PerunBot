@@ -29,7 +29,6 @@ module.exports = {
       }
     )
       .then(function (result) {
-        console.log(result);
         message.channel.send(
           `The new log channel is now **\`${targetChannel}\`**`
         );
