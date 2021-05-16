@@ -1,10 +1,5 @@
 {
-    "giveaway":{
-        "everyoneMention":false,
-        "hostedBy": true
-    },
     "discord_conf": {
-        "prefix": "!",
         "token": "NzIzNDk0NTg1MTQxMTY2MTIw.Xuyc1g.xwGDKls4K4cK1nlAU70WOyiYZKw",
         "owner_id": "344499775351029760"
     },
