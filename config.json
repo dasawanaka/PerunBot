@@ -6,9 +6,8 @@
     "mongodbConf":{
         "user": "pbottest",
         "pwd": "M72578myppZ3cQkT",
-        "host": "54.38.50.5",
+        "host": "localhost",
         "port": "27017",
         "dbName": "protonbottest"
     }
-
 }
