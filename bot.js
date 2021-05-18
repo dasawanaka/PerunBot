@@ -1,27 +1,44 @@
 /* eslint-disable no-inline-comments */
 /* eslint-disable indent */
-const Discord = require('discord.js');
+const Discord = require("discord.js");
 // eslint-disable-next-line no-unused-vars
-const { discord_conf, giveaway } = require('./config.json');
-const client = new Discord.Client({ partials: ['MESSAGE', 'CHANNEL', 'REACTION'], disableEveryone: false });
+const { discord_conf, giveaway } = require("./config.json");
+const client = new Discord.Client({
+  partials: ["MESSAGE", "CHANNEL", "REACTION"],
+  disableEveryone: false,
+});
 
-const fs = require('fs');
-const path = require('path');
-const colors = require('colors');
-const Guild = require('./models/guild');
+const fs = require("fs");
+const path = require("path");
+const colors = require("colors");
 
-client.mongoose = require('./utils/mongoose');
-client.levels = require('./utils/levels');
-client.rep = require('./utils/rep');
-client.coins = require('./utils/coins');
+const Guild = require("./models/guild");
+const Distube = require(`distube`);
+const status = (queue) =>
+  `Filter: \`${queue.filter || "Off"}\` | Loop: \`${
+    queue.repeatMode
+      ? queue.repeatMode == 2
+        ? "All Queue"
+        : "This Song"
+      : "Off"
+  }\` | Autoplay: \`${queue.autoplay ? "On" : "Off"}\``;
+
+client.mongoose = require("./utils/mongoose");
+client.levels = require("./utils/levels");
+client.rep = require("./utils/rep");
+client.coins = require("./utils/coins");
+client.distube = new Distube(client, {
+  searchSongs: true,
+  emitNewSongOnly: true,
+});
 
 const paths = {
-  commands: path.join(__dirname, 'commands'),
-  events: path.join(__dirname, 'events')
+  commands: path.join(__dirname, "commands"),
+  events: path.join(__dirname, "events"),
 };
 const loader = {
-  commands: require('./functions/loadCommands.js'),
-  events: require('./functions/loadEvents.js')
+  commands: require("./functions/loadCommands.js"),
+  events: require("./functions/loadEvents.js"),
 };
 
 client.commands = new Discord.Collection();
@@ -32,30 +49,23 @@ client.tasks = new Discord.Collection();
 loader.commands.load(paths.commands, client);
 loader.events.load(paths.events, client);
 
-client.once('ready', () => {
+client.once("ready", () => {
   console.log(colors.rainbow(`Ready! Bot started now!`));
 });
 
-client.on("guildCreate", guild => {
+client.on("guildCreate", (guild) => {
   console.log("Joined a new guild: " + guild.name);
-  
-})
-
-client.on('message', async message => {
-
-  client.events.get('newMessage').run(message, client);
-
 });
 
-client.on('messageDelete', async message => {
-
-  client.events.get('messageDelete').run(message, client);
-
+client.on("message", async (message) => {
+  client.events.get("newMessage").run(message, client);
 });
 
+client.on("messageDelete", async (message) => {
+  client.events.get("messageDelete").run(message, client);
+});
 
-
-client.on('messageReactionAdd', async (reaction, user) => {
+client.on("messageReactionAdd", async (reaction, user) => {
   /*
     if (user.bot) return; // If the user was a bot, return.
     if (!reaction.message.guild) return; // If the user was reacting something but not in the guild/server, ignore them.
@@ -80,6 +90,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
   if (oldMessage.content === newMessage.content) {
     return;
   }
+  client.events.get("messageUpdate").run(newMessage, oldMessage, client);
   /*
    if (oldMessage.partial) {
      try {
@@ -120,8 +131,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
      */
 });
 
-
-client.on('messageReactionRemove', async (reaction, user) => {
+client.on("messageReactionRemove", async (reaction, user) => {
   /*
     if (user.bot) return;
     if (!reaction.message.guild) return;
@@ -139,6 +149,69 @@ client.on('messageReactionRemove', async (reaction, user) => {
     }
     events.get('messageReactionRemove').run(client, reaction, user);*/
 });
+
+client.distube
+  .on("playSong", (message, queue, song) => {
+      queue.autoplay = false;
+    
+    const embed = new Discord.MessageEmbed()
+      .setTitle(`Monke's playin`)
+      .setDescription(
+        `Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}`
+      )
+      .setFooter(`${status(queue)}`);
+    message.channel.send(embed);
+  })
+
+  .on("addSong", (message, queue, song) => {
+    queue.autoplay = false;
+    const embed = new Discord.MessageEmbed()
+      .setTitle(`Monke's playin`)
+      .setDescription(
+        `Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`
+      );
+    message.channel.send(embed);
+  })
+
+  .on("playList", (message, queue, playlist, song) => {
+    queue.autoplay = false;
+    const embed = new Discord.MessageEmbed()
+      .setTitle(`Monke's playin`)
+      .setDescription(
+        `Play \`${playlist.name}\` playlist (${playlist.songs.length} songs).\nRequested by: ${song.user}\nNow playing \`${song.name}\` - \`${song.formattedDuration}`
+      )
+      .setFooter(`${status(queue)}`);
+    message.channel.send(embed);
+  })
+
+  .on("addList", (message, queue, playlist) => {
+    queue.autoplay = false;
+    const embed = new Discord.MessageEmbed()
+    .setTitle(`Monke's Playin`).setDescription(
+      `Added \`${playlist.name}\` playlist (${
+        playlist.songs.length
+      } songs) to queue\n${status(queue)}`
+    );
+    message.channel.send(embed);
+  })
+
+  // DisTubeOptions.searchSongs = true
+  .on("searchResult", (message, result) => {
+    let i = 0;
+    message.channel.send(
+      `**Choose an option from below**\n${result
+        .map(
+          (song) => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``
+        )
+        .join("\n")}\n*Enter anything else or wait 60 seconds to cancel*`
+    );
+  })
+  // DisTubeOptions.searchSongs = true
+  .on("searchCancel", (message) => message.channel.send(`Searching canceled`))
+  .on("error", (message, e) => {
+    console.error(e);
+    message.channel.send("An error encountered: " + e);
+  });
 
 client.levels.init();
 client.rep.init();
