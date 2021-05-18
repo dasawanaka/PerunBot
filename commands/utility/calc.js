@@ -7,8 +7,7 @@ module.exports = {
     alias: ['calc'],
     public: true,
     description: "Get the answer to a math problem",
-
-
+    cooldown: 10000,
     async run (client, message, args){
 
         if(!args[0]) return message.channel.send('Please provide a question');
