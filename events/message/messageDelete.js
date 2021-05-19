@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const { Logger } = require("mongodb");
 const LOGGER = require("../../class/logger");
 
 module.exports = {
@@ -9,11 +10,26 @@ module.exports = {
     if (
       !author ||
       author.bot ||
-      channel.type === "dm" ||
-      mentions.users.size === 0
+      channel.type === "dm"
     ) {
       return;
     }
+    if (
+      
+      mentions.users.size != 0
+
+    ) {
+      let embed = new MessageEmbed()
+      .setTitle("Message Deleted")
+      .setDescription(`Message content:\n${content}`)
+      .addField("Channel", channel)
+      .addField("Mentions count", `${mentions.users.size}`)
+      .addField("Message author", author)
+      .setColor("#f55742");
+    
+      LOGGER.log(guild, embed)
+    }
+
 
     let embed = new MessageEmbed()
       .setTitle("Possible ghost ping detected")
