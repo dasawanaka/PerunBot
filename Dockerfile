@@ -1,5 +1,7 @@
 FROM node:12
 
+ENV config="config.json"
+
 RUN apt-get update || : && apt-get install python -y
 
 WORKDIR /app
@@ -10,4 +12,4 @@ RUN npm install
 
 RUN npm install -g node-gyp
 
-CMD ["node", "bot.js"]
+CMD ["sh", "-c", "node bot.js --config=${config}" ]

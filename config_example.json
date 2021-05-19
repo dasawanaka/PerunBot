@@ -1,0 +1,13 @@
+{
+  "discord_conf": {
+    "token": "$TOKEN",
+    "owner_id": "$USER_ID"
+  },
+  "mongodbConf": {
+    "user": "$DB_USERNAME",
+    "pwd": "$DB_PWD",
+    "host": "$DB_HOST",
+    "port": "$DB_PORT",
+    "dbName": "$DB_NAME"
+  }
+}

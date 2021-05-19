@@ -1,36 +1,50 @@
-const mongoose = require('mongoose');
-const { mongodbConf } = require('../config.json');
+const mongoose = require("mongoose");
 
 module.exports = {
-    init: () => {
-        const dbOptions = {
-            useNewUrlParser: true,
-            useUnifiedTopology: true,
-            autoIndex: false,
-            reconnectTries: Number.MAX_VALUE,
-            reconnectInterval: 500,
-            poolSize: 10,
-            connectTimeoutMS: 10000,
-            family:4
-        };
+  init: (configFileName) => {
+    const dbOptions = {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+      autoIndex: false,
+      reconnectTries: Number.MAX_VALUE,
+      reconnectInterval: 500,
+      poolSize: 10,
+      connectTimeoutMS: 10000,
+      family: 4,
+    };
 
-        var url = 'mongodb://' + mongodbConf.user + ':' + mongodbConf.pwd + '@'
-                + mongodbConf.host + ':' + mongodbConf.port + '/' + mongodbConf.dbName;
+    const { mongodbConf } = require(`../${configFileName}`);
 
-        mongoose.connect(url, dbOptions);
-        mongoose.set('useFindAndModify', false);
-        mongoose.Promise = global.Promise;
+    let port = mongodbConf.port === "0" ? "" : ":" + mongodbConf.port;
 
-        mongoose.connection.on('connected', () => {
-            console.log('Mongoose has successfully connected!');
-        });
+    let preUrl = port ===""?"mongodb+srv://": "mongodb://" ;
 
-        mongoose.connection.on('err', err => {
-            console.error(`Mongoose connection error: \n${err.stack}`);
-        });
+    var url =
+      preUrl +
+      mongodbConf.user +
+      ":" +
+      mongodbConf.pwd +
+      "@" +
+      mongodbConf.host +
+      port +
+      "/" +
+      mongodbConf.dbName +
+      "?retryWrites=true&w=majority";
 
-        mongoose.connection.on('disconnected', () => {
-            console.warn('Mongoose connection lost');
-        });
-    }
-}
+    mongoose.connect(url, dbOptions);
+    mongoose.set("useFindAndModify", false);
+    mongoose.Promise = global.Promise;
+
+    mongoose.connection.on("connected", () => {
+      console.log("Mongoose has successfully connected!");
+    });
+
+    mongoose.connection.on("err", (err) => {
+      console.error(`Mongoose connection error: \n${err.stack}`);
+    });
+
+    mongoose.connection.on("disconnected", () => {
+      console.warn("Mongoose connection lost");
+    });
+  },
+};

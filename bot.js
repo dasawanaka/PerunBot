@@ -2,7 +2,18 @@
 /* eslint-disable indent */
 const Discord = require("discord.js");
 // eslint-disable-next-line no-unused-vars
-const { discord_conf, giveaway } = require("./config.json");
+
+//load config using param
+const args = require('minimist')(process.argv.slice(2));
+var configFileName;
+if(args['config']===undefined){
+  configFileName = 'config.json'
+}else{
+  configFileName = args['config']
+}
+console.log("Use config file: ", configFileName);
+
+const { discord_conf } = require(`./${configFileName}`);
 const client = new Discord.Client({
   partials: ["MESSAGE", "CHANNEL", "REACTION"],
   disableEveryone: false,
@@ -213,8 +224,9 @@ client.distube
     message.channel.send("An error encountered: " + e);
   });
 
-client.levels.init();
-client.rep.init();
-client.coins.init();
-client.mongoose.init();
+client.levels.init(configFileName);
+client.rep.init(configFileName);
+client.coins.init(configFileName);
+client.mongoose.init(configFileName);
+
 client.login(discord_conf.token);

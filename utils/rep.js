@@ -1,13 +1,25 @@
-const { mongodbConf } = require('../config.json');
 const Reputation = require("../class/reputation.js");
 
 module.exports = {
-    init: () => {
+  init: (configFileName) => {
+    const { mongodbConf } = require(`../${configFileName}`);
 
-        var url = 'mongodb://' + mongodbConf.user + ':' + mongodbConf.pwd + '@'
-            + mongodbConf.host + ':' + mongodbConf.port + '/' + mongodbConf.dbName;
+    let port = mongodbConf.port === "0" ? "" : ":" + mongodbConf.port;
 
-        Reputation.setURL(url);
+    let preUrl = port ===""?"mongodb+srv://": "mongodb://" ;
 
-    }
-}
+    var url =
+      preUrl +
+      mongodbConf.user +
+      ":" +
+      mongodbConf.pwd +
+      "@" +
+      mongodbConf.host +
+      port +
+      "/" +
+      mongodbConf.dbName +
+      "?retryWrites=true&w=majority";
+
+    Reputation.setURL(url);
+  },
+};
