@@ -73,6 +73,7 @@ client.on("message", async (message) => {
 });
 
 client.on("messageDelete", async (message) => {
+  await message.fetch();
   client.events.get("messageDelete").run(message, client);
 });
 
@@ -98,6 +99,8 @@ client.on("messageReactionAdd", async (reaction, user) => {
 });
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
+  await oldMessage.fetch();
+  await newMessage.fetch();
   if (oldMessage.content === newMessage.content) {
     return;
   }
