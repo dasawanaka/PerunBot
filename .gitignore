@@ -1,6 +1,7 @@
 # dev config 
 config_dev.json
 config copy.json
+config.json
 
 # Logs
 logs
