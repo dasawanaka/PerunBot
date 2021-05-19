@@ -28,8 +28,8 @@ module.exports = {
       mongodbConf.host +
       port +
       "/" +
-      mongodbConf.dbName +
-      "?retryWrites=true&w=majority";
+      mongodbConf.dbName; //+
+     // "?retryWrites=true&w=majority";
 
     mongoose.connect(url, dbOptions);
     mongoose.set("useFindAndModify", false);
