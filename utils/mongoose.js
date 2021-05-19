@@ -17,7 +17,7 @@ module.exports = {
 
     let port = mongodbConf.port === "0" ? "" : ":" + mongodbConf.port;
 
-    let preUrl = port ===""?"mongodb+srv://": "mongodb://" ;
+    let preUrl = port === "" ? "mongodb+srv://" : "mongodb://";
 
     var url =
       preUrl +
@@ -28,8 +28,8 @@ module.exports = {
       mongodbConf.host +
       port +
       "/" +
-      mongodbConf.dbName; //+
-     // "?retryWrites=true&w=majority";
+      mongodbConf.dbName +
+      "?retryWrites=true&w=majority";
 
     mongoose.connect(url, dbOptions);
     mongoose.set("useFindAndModify", false);
