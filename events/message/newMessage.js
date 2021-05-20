@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const Levels = require("discord-xp");
 const { Collection } = require("discord.js");
 const ms = require("ms");
-const Coins = require("../../class/coins.js");
+const Coins = require("../../utils/CoinsManager");
 
 const Timeout = new Collection();
 

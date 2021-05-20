@@ -1,6 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const { Logger } = require("mongodb");
-const LOGGER = require("../../class/logger");
+const LOGGER = require("../../utils/logger");
 
 module.exports = {
   name: "messageDelete",

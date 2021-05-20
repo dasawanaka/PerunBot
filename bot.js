@@ -1,15 +1,16 @@
 /* eslint-disable no-inline-comments */
 /* eslint-disable indent */
+var startTime = Date.now();
 const Discord = require("discord.js");
 // eslint-disable-next-line no-unused-vars
 
-//load config using param
-const args = require('minimist')(process.argv.slice(2));
+//get config file name from param
+const args = require("minimist")(process.argv.slice(2));
 var configFileName;
-if(args['config']===undefined){
-  configFileName = 'config.json'
-}else{
-  configFileName = args['config']
+if (args["config"] === undefined) {
+  configFileName = "config.json";
+} else {
+  configFileName = args["config"];
 }
 console.log("Use config file: ", configFileName);
 
@@ -19,12 +20,10 @@ const client = new Discord.Client({
   disableEveryone: false,
 });
 
-const fs = require("fs");
 const path = require("path");
-const colors = require("colors");
-
-const Guild = require("./models/guild");
 const Distube = require(`distube`);
+const ms = require("ms");
+
 const status = (queue) =>
   `Filter: \`${queue.filter || "Off"}\` | Loop: \`${
     queue.repeatMode
@@ -36,8 +35,6 @@ const status = (queue) =>
 
 client.mongoose = require("./utils/mongoose");
 client.levels = require("./utils/levels");
-client.rep = require("./utils/rep");
-client.coins = require("./utils/coins");
 client.distube = new Distube(client, {
   searchSongs: true,
   emitNewSongOnly: true,
@@ -48,20 +45,21 @@ const paths = {
   events: path.join(__dirname, "events"),
 };
 const loader = {
-  commands: require("./functions/loadCommands.js"),
-  events: require("./functions/loadEvents.js"),
+  commands: require("./utils/loadCommands.js"),
+  events: require("./utils/loadEvents.js"),
 };
 
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
 client.guildSettings = new Discord.Collection();
-client.tasks = new Discord.Collection();
+client.tasks = new Discord.Collection(); //used to cron jobs
 
 loader.commands.load(paths.commands, client);
 loader.events.load(paths.events, client);
 
 client.once("ready", () => {
-  console.log(colors.rainbow(`Ready! Bot started now!`));
+  console.log(`Ready! Bot started now!`);
+  console.log(`Run in ${ms(startTime - Date.now())}`);
 });
 
 client.on("guildCreate", (guild) => {
@@ -73,7 +71,7 @@ client.on("message", async (message) => {
 });
 
 client.on("messageDelete", async (message) => {
-  await message.fetch();
+  //await message.fetch();
   client.events.get("messageDelete").run(message, client);
 });
 
@@ -99,13 +97,12 @@ client.on("messageReactionAdd", async (reaction, user) => {
 });
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
-  await oldMessage.fetch();
-  await newMessage.fetch();
+  //await oldMessage.fetch();
+  //await newMessage.fetch();
   if (oldMessage.content === newMessage.content) {
     return;
   }
   client.events.get("messageUpdate").run(newMessage, oldMessage, client);
-
 });
 
 client.on("messageReactionRemove", async (reaction, user) => {
@@ -129,8 +126,8 @@ client.on("messageReactionRemove", async (reaction, user) => {
 
 client.distube
   .on("playSong", (message, queue, song) => {
-      queue.autoplay = false;
-    
+    queue.autoplay = false;
+
     const embed = new Discord.MessageEmbed()
       .setTitle(`Monke's playin`)
       .setDescription(
@@ -164,11 +161,12 @@ client.distube
   .on("addList", (message, queue, playlist) => {
     queue.autoplay = false;
     const embed = new Discord.MessageEmbed()
-    .setTitle(`Monke's Playin`).setDescription(
-      `Added \`${playlist.name}\` playlist (${
-        playlist.songs.length
-      } songs) to queue\n${status(queue)}`
-    );
+      .setTitle(`Monke's Playin`)
+      .setDescription(
+        `Added \`${playlist.name}\` playlist (${
+          playlist.songs.length
+        } songs) to queue\n${status(queue)}`
+      );
     message.channel.send(embed);
   })
 
@@ -189,6 +187,11 @@ client.distube
     console.error(e);
     message.channel.send("An error encountered: " + e);
   });
+
+//handle unhandled rejection error
+process.on("unhandledRejection", (error) => {
+  console.error("Unhandled promise rejection:\n", error);
+});
 
 client.levels.init(configFileName);
 client.mongoose.init(configFileName);

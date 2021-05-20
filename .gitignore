@@ -3,6 +3,8 @@ config_dev.json
 config copy.json
 config.json
 
+*vscode/
+
 # Logs
 logs
 *.log
