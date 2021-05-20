@@ -105,44 +105,7 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
     return;
   }
   client.events.get("messageUpdate").run(newMessage, oldMessage, client);
-  /*
-   if (oldMessage.partial) {
-     try {
-       await oldMessage.fetch();
-     } catch (error) {
-       console.log('Something went wrong when fetching the message: ', error);
-       // Return as `reaction.message.author` may be undefined/null
-       return;
-     }
-   }
- 
-   if (newMessage.partial) {
-     try {
-       await newMessage.fetch();
-     } catch (error) {
-       console.log('Something went wrong when fetching the message: ', error);
-       // Return as `reaction.message.author` may be undefined/null
-       return;
-     }
-   }
- 
-   var embed = new Discord.MessageEmbed()
-     .setColor('#fca00a')
-     //.setAuthor(newMessage.author.tag, newMessage.author.avatar)
-     .setThumbnail(newMessage.author.displayAvatarURL())
-     .setDescription(`Message edited in <#${newMessage.channel.id}> [Go to message](${newMessage.url})`)
-     .addFields(
-       { name: `User`, value: `${newMessage.author.tag}`, inline: true },
-       { name: `UserID`, value: `${newMessage.author.id}`, inline: true },
-       //{ name: '\u200B', value: '\u200B' },
-       { name: 'Before', value: `${oldMessage.content}` },
-       { name: 'After', value: `${newMessage.content}` }
-     )
-     .setTimestamp()
-     .setFooter(`${client.user.username} - modlog`, client.user.avatarURL());
- 
-   newMessage.guild.systemChannel.send(embed);
-     */
+
 });
 
 client.on("messageReactionRemove", async (reaction, user) => {
@@ -228,8 +191,6 @@ client.distube
   });
 
 client.levels.init(configFileName);
-client.rep.init(configFileName);
-client.coins.init(configFileName);
 client.mongoose.init(configFileName);
 
 client.login(discord_conf.token);

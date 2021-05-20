@@ -1,21 +1,6 @@
-const mongoose = require("mongoose");
 const reps = require("../models/rep.js");
-var mongoUrl;
 
 class Reputation {
-
-  /**
-  * @param {string} [dbUrl] - A valid mongo database URI.
-  */
-
-  static async setURL(dbUrl) {
-    if (!dbUrl) throw new TypeError("A database url was not provided.");
-    mongoUrl = dbUrl;
-    return mongoose.connect(dbUrl, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true
-    });
-  }
 
   /**
   * @param {string} [userId] - Discord user id.
