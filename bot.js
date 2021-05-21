@@ -59,7 +59,7 @@ loader.events.load(paths.events, client);
 
 client.once("ready", () => {
   console.log(`Ready! Bot started now!`);
-  console.log(`Run in ${ms(startTime - Date.now())}`);
+  console.log(`Run in ${ms(Date.now() - startTime)}`);
 });
 
 client.on("guildCreate", (guild) => {
@@ -97,8 +97,8 @@ client.on("messageReactionAdd", async (reaction, user) => {
 });
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
-  //await oldMessage.fetch();
-  //await newMessage.fetch();
+  await oldMessage.fetch();
+  await newMessage.fetch();
   if (oldMessage.content === newMessage.content) {
     return;
   }

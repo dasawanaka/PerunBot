@@ -6,7 +6,11 @@ module.exports = {
   name: "messageDelete",
   description: "this is event for delete message",
   async run(message, client) {
-    if (message.partial) await message.fetch();
+    try {
+      if (message.partial) await message.fetch();
+    } catch (error) {
+      return console.error(error);
+    }
     
     const { content, channel, author, guild, mentions } = message;
     
