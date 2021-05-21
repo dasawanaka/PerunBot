@@ -82,7 +82,7 @@ class Coins {
 
     const user = await CoinsModel.findOne({ userID: userId, guildID: guildId });
     if (!user) return false;
-
+    console.log("Fetch user: " + user)
     return user;
   }
 
@@ -102,7 +102,7 @@ class Coins {
 
     user.coins -= coins;
    
-    user.save().catch(e => console.log(`Failed to subtract xp: ${e}`) );
+    user.save().catch(e => console.log(`Failed to subtract coins: ${e}`) );
 
     return user;
   }

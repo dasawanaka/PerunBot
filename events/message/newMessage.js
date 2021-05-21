@@ -56,8 +56,11 @@ module.exports = {
     prefix = guildSettings.prefix;
 
     if (!message.content.startsWith(prefix)) {
-        //exp on messages, when not use commands
-      if (expCD.has(`${message.author.id}_${message.guild.id}`)) return;
+      //exp on messages, when not use commands
+      // if (expCD.has(`${message.author.id}_${message.guild.id}`))
+      //   return console.log(
+      //     `User ${message.author.username}(USER_ID:${message.author.id}) has cd to earn exp on guild with ID ${message.guild.id})`
+      //   );
       const randomXp = Math.floor(Math.random() * 15) + 5;
       const hasLeveledUp = await Levels.appendXp(
         message.author.id,
@@ -67,7 +70,7 @@ module.exports = {
       if (hasLeveledUp) {
         const user = await Levels.fetch(message.author.id, message.guild.id);
         message.channel.send(
-          `Congrats! You leveled up to ${user.level}! Keep it going! $1000 added to your account `
+          `Congrats ${message.author.username}! You leveled up to ${user.level}! Keep it going! \`$1000\` added to your account `
         );
         Coins.appendCoins(message.author.id, message.guild.id, 1000);
       }

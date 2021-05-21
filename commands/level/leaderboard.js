@@ -19,10 +19,13 @@ module.exports = {
     const lb = leaderboard.map(
       (e) =>
         `${e.position}. ${e.username}#${e.discriminator}\nLevel: ${
-          e.level
-        }\nXP: ${e.xp.toLocaleString()}`
+          e.level} | XP: ${e.xp.toLocaleString()}`
     );
 
-    message.channel.send(`${lb.join("\n\n")}}`);
+    const embed = new Discord.MessageEmbed()
+    .setTitle(`Leaderboard`)
+    .setDescription(`${lb.join("\n\n")}`)
+
+    message.channel.send(embed);
   },
 };
