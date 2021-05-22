@@ -9,7 +9,8 @@ const guildSchema = mongoose.Schema({
     premium: Boolean,
     disabledModules: [{
         type: String
-    }]
+    }],
+    autoBan: { type: Number, default:5 }
 });
 
 module.exports = mongoose.model('Guild', guildSchema, 'guilds');

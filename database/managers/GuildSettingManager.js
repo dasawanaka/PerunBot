@@ -17,6 +17,16 @@ module.exports = {
     }
     return guildSettings;
   },
+
+  async getAutoBan(guildId, message) {
+    let guildSettings = await this.fetch(guildId, message)
+
+    if(!guildSettings.autoBan){
+      guildSettings.autoBan = 5;
+      guildSettings.save();
+    }
+    return guildSettings.autoBan;
+  }
 };
 
 function getGuildFromDB(err, guild, message) {
@@ -30,6 +40,7 @@ function getGuildFromDB(err, guild, message) {
       testServer: false,
       premium: false,
       disabledModules: ["none"],
+      autoBan: 5
     });
     newGuild
       .save()
