@@ -67,7 +67,7 @@ module.exports = {
     commands.forEach((value, key, map) => {
       var desc = "";
       value.forEach((val) => {
-        desc += `\`${val.name}\`: ${val.description}\n`;
+        desc += `\`${val.name}\`: ${val.description.length > 100? val.description.slice(0, 97) + "...":val.description}\n`;
       });
 
       var embed = new MessageEmbed()
