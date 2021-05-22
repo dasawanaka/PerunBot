@@ -6,7 +6,7 @@ const Rep = require("../../utils/ReputationManager");
 const ComputeLeaderboard = require('../../utils/computeLeaderboard');
 
 
-Canvas.registerFont("fonts/nirmala-ui-bold.ttf", { family: "Nirmala UI" });
+Canvas.registerFont("assets/fonts/nirmala-ui-bold.ttf", { family: "Nirmala UI" });
 
 module.exports = {
   name: "profile",
@@ -26,7 +26,7 @@ module.exports = {
     roundRect(context, 0, 0, canvas.width, canvas.height, 20, true, true);
 
     //background image
-    const bgImage = await Canvas.loadImage("img/pc_bg_down_2.jpg");
+    const bgImage = await Canvas.loadImage("assets/img/pc_bg_down_2.jpg");
     context.save();
     roundRect(context, 9, 260, bgImage.width, bgImage.height, 20, false, false);
     context.strokeStyle = "rgba(48, 48, 48, 1.0)";
@@ -36,7 +36,7 @@ module.exports = {
     context.restore();
 
     //top image
-    const topImage = await Canvas.loadImage("img/pc_top_img.jpg");
+    const topImage = await Canvas.loadImage("assets/img/pc_top_img.jpg");
     context.save();
     roundRect(context, 9, 9, topImage.width, topImage.height, 20, false, false);
     context.strokeStyle = "rgba(48, 48, 48, 1.0)";
@@ -90,7 +90,7 @@ module.exports = {
     context.fillStyle = "#ffffff";
     context.fillText(repText, 35 + pos, 550);
 
-    const hearthImage = await Canvas.loadImage("img/hearthSmall.png");
+    const hearthImage = await Canvas.loadImage("assets/img/hearthSmall.png");
 
     context.drawImage(
       hearthImage,
@@ -105,7 +105,7 @@ module.exports = {
     context.fillStyle = "#ffffff";
     context.fillText("---", 360, 420);
 
-    const coinImage = await Canvas.loadImage("img/coinSmall.png");
+    const coinImage = await Canvas.loadImage("assets/img/coinSmall.png");
 
     context.drawImage(coinImage, 275, 440, coinImage.width, coinImage.height);
 
@@ -114,7 +114,7 @@ module.exports = {
     context.fillStyle = "#ffffff";
     context.fillText(uCoins.coins, 360, 495);
 
-    const trophImage = await Canvas.loadImage("img/trophSmall.png");
+    const trophImage = await Canvas.loadImage("assets/img/trophSmall.png");
 
     context.drawImage(
       trophImage,

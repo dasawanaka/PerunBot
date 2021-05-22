@@ -1,5 +1,4 @@
 const math = require('mathjs');
-
 const Discord = require('discord.js');
 
 module.exports = {
@@ -7,7 +6,7 @@ module.exports = {
     alias: ['calc'],
     public: true,
     description: "Get the answer to a math problem",
-    cooldown: 1000,
+    cooldown: 5000,
     async run (client, message, args){
 
         if(!args[0]) return message.channel.send('Please provide a question');
