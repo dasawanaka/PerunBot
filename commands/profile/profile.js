@@ -1,16 +1,18 @@
 const Discord = require("discord.js");
 const Canvas = require("canvas");
 const Levels = require("discord-xp");
-const Coins = require("../../utils/CoinsManager");
-const Rep = require("../../utils/ReputationManager");
-const ComputeLeaderboard = require('../../utils/computeLeaderboard');
+const Coins = require("../../database/managers/CoinsManager");
+const Rep = require("../../database/managers/ReputationManager");
+const MessageCounterManager = require("../../database/managers/MessageCounterManager");
+const ComputeLeaderboard = require("../../utils/computeLeaderboard");
 
-
-Canvas.registerFont("fonts/nirmala-ui-bold.ttf", { family: "Nirmala UI" });
+Canvas.registerFont("assets/fonts/nirmala-ui-bold.ttf", {
+  family: "Nirmala UI",
+});
 
 module.exports = {
   name: "profile",
-  alias: ["prof", "pro", "userprofile", "user"],
+  alias: ["prof", "pro", "userprofile", "user", "ppc"],
   public: true,
   description: "Show user profile card",
   usage: "<prefix>profile",
@@ -26,7 +28,7 @@ module.exports = {
     roundRect(context, 0, 0, canvas.width, canvas.height, 20, true, true);
 
     //background image
-    const bgImage = await Canvas.loadImage("img/pc_bg_down_2.jpg");
+    const bgImage = await Canvas.loadImage("assets/img/pc_bg_down_2.jpg");
     context.save();
     roundRect(context, 9, 260, bgImage.width, bgImage.height, 20, false, false);
     context.strokeStyle = "rgba(48, 48, 48, 1.0)";
@@ -36,7 +38,7 @@ module.exports = {
     context.restore();
 
     //top image
-    const topImage = await Canvas.loadImage("img/pc_top_img.jpg");
+    const topImage = await Canvas.loadImage("assets/img/pc_top_img.jpg");
     context.save();
     roundRect(context, 9, 9, topImage.width, topImage.height, 20, false, false);
     context.strokeStyle = "rgba(48, 48, 48, 1.0)";
@@ -90,7 +92,7 @@ module.exports = {
     context.fillStyle = "#ffffff";
     context.fillText(repText, 35 + pos, 550);
 
-    const hearthImage = await Canvas.loadImage("img/hearthSmall.png");
+    const hearthImage = await Canvas.loadImage("assets/img/hearthSmall.png");
 
     context.drawImage(
       hearthImage,
@@ -105,7 +107,7 @@ module.exports = {
     context.fillStyle = "#ffffff";
     context.fillText("---", 360, 420);
 
-    const coinImage = await Canvas.loadImage("img/coinSmall.png");
+    const coinImage = await Canvas.loadImage("assets/img/coinSmall.png");
 
     context.drawImage(coinImage, 275, 440, coinImage.width, coinImage.height);
 
@@ -114,7 +116,7 @@ module.exports = {
     context.fillStyle = "#ffffff";
     context.fillText(uCoins.coins, 360, 495);
 
-    const trophImage = await Canvas.loadImage("img/trophSmall.png");
+    const trophImage = await Canvas.loadImage("assets/img/trophSmall.png");
 
     context.drawImage(
       trophImage,
@@ -139,6 +141,12 @@ module.exports = {
     context.strokeText(posText, 360, 565);
     context.fillStyle = "#ffffff";
     context.fillText(posText, 360, 565);
+
+    const messagesCount = await MessageCounterManager.fetch(
+      message.author.id,
+      message.guild.id
+    ).messages;
+    console.log(messagesCount);
 
     const attachment = new Discord.MessageAttachment(
       canvas.toBuffer(),
@@ -203,5 +211,3 @@ const applyText = (canvas, text, startSize) => {
   // Return the result to use in the actual canvas
   return context.font;
 };
-
-

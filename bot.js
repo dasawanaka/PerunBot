@@ -33,7 +33,7 @@ const status = (queue) =>
       : "Off"
   }\` | Autoplay: \`${queue.autoplay ? "On" : "Off"}\``;
 
-client.mongoose = require("./utils/mongoose");
+client.mongoose = require("./database/mongoose");
 client.levels = require("./utils/levels");
 client.distube = new Distube(client, {
   searchSongs: true,
@@ -59,7 +59,7 @@ loader.events.load(paths.events, client);
 
 client.once("ready", () => {
   console.log(`Ready! Bot started now!`);
-  console.log(`Run in ${ms(startTime - Date.now())}`);
+  console.log(`Run in ${ms(Date.now() - startTime)}`);
 });
 
 client.on("guildCreate", (guild) => {
@@ -76,10 +76,6 @@ client.on("message", async (message) => {
 // });
 
 client.on("messageDelete", async (message) => {
-<<<<<<< HEAD
-=======
-  //await message.fetch();
->>>>>>> b6284b6a0b9efbae7203806ac889bd217920e7f6
   client.events.get("messageDelete").run(message, client);
 });
 

@@ -1,14 +1,14 @@
-const LogChannel = require("../../models/log_channel");
+const LogChannel = require("../../database/models/log_channel");
 
 module.exports = {
   name: "setlogchannel",
   alias: [],
   public: true,
   description: "Set log channel",
+  userPermissions: ['MANAGE_GUILD'],
   usage: "<prefix>setLogChannel <#channel>",
+  cooldown: 5000,
   async run(client, message, args) {
-    if (!message.member.hasPermission("ADMINISTRATOR"))
-      return message.channel.send("You must have an ADMINISTRATOR permission!");
     if (!message.mentions.channels.first())
       return message.channel.send("Please tag a **channel**!");
 
