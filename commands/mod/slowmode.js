@@ -72,5 +72,8 @@ module.exports = {
           .addField("Reason", reason)
       );
     }
+    console.log(
+        `${message.guild.name}: ${message.author.tag} set slowmode on one channel to ${rate}`
+      );
   },
 };
