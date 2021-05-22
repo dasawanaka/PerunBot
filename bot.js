@@ -1,15 +1,16 @@
 /* eslint-disable no-inline-comments */
 /* eslint-disable indent */
+var startTime = Date.now();
 const Discord = require("discord.js");
 // eslint-disable-next-line no-unused-vars
 
-//load config using param
-const args = require('minimist')(process.argv.slice(2));
+//get config file name from param
+const args = require("minimist")(process.argv.slice(2));
 var configFileName;
-if(args['config']===undefined){
-  configFileName = 'config.json'
-}else{
-  configFileName = args['config']
+if (args["config"] === undefined) {
+  configFileName = "config.json";
+} else {
+  configFileName = args["config"];
 }
 console.log("Use config file: ", configFileName);
 
@@ -19,12 +20,10 @@ const client = new Discord.Client({
   disableEveryone: false,
 });
 
-const fs = require("fs");
 const path = require("path");
-const colors = require("colors");
-
-const Guild = require("./models/guild");
 const Distube = require(`distube`);
+const ms = require("ms");
+
 const status = (queue) =>
   `Filter: \`${queue.filter || "Off"}\` | Loop: \`${
     queue.repeatMode
@@ -36,8 +35,6 @@ const status = (queue) =>
 
 client.mongoose = require("./utils/mongoose");
 client.levels = require("./utils/levels");
-client.rep = require("./utils/rep");
-client.coins = require("./utils/coins");
 client.distube = new Distube(client, {
   searchSongs: true,
   emitNewSongOnly: true,
@@ -48,20 +45,21 @@ const paths = {
   events: path.join(__dirname, "events"),
 };
 const loader = {
-  commands: require("./functions/loadCommands.js"),
-  events: require("./functions/loadEvents.js"),
+  commands: require("./utils/loadCommands.js"),
+  events: require("./utils/loadEvents.js"),
 };
 
 client.commands = new Discord.Collection();
 client.events = new Discord.Collection();
 client.guildSettings = new Discord.Collection();
-client.tasks = new Discord.Collection();
+client.tasks = new Discord.Collection(); //used to cron jobs
 
 loader.commands.load(paths.commands, client);
 loader.events.load(paths.events, client);
 
 client.once("ready", () => {
-  console.log(colors.rainbow(`Ready! Bot started now!`));
+  console.log(`Ready! Bot started now!`);
+  console.log(`Run in ${ms(startTime - Date.now())}`);
 });
 
 client.on("guildCreate", (guild) => {
@@ -78,55 +76,21 @@ client.on("message", async (message) => {
 // });
 
 client.on("messageDelete", async (message) => {
+<<<<<<< HEAD
+=======
+  //await message.fetch();
+>>>>>>> b6284b6a0b9efbae7203806ac889bd217920e7f6
   client.events.get("messageDelete").run(message, client);
 });
 
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
-  await oldMessage.fetch();
-  await newMessage.fetch();
+  //await oldMessage.fetch();
+  //await newMessage.fetch();
   if (oldMessage.content === newMessage.content) {
     return;
   }
   client.events.get("messageUpdate").run(newMessage, oldMessage, client);
-  /*
-   if (oldMessage.partial) {
-     try {
-       await oldMessage.fetch();
-     } catch (error) {
-       console.log('Something went wrong when fetching the message: ', error);
-       // Return as `reaction.message.author` may be undefined/null
-       return;
-     }
-   }
- 
-   if (newMessage.partial) {
-     try {
-       await newMessage.fetch();
-     } catch (error) {
-       console.log('Something went wrong when fetching the message: ', error);
-       // Return as `reaction.message.author` may be undefined/null
-       return;
-     }
-   }
- 
-   var embed = new Discord.MessageEmbed()
-     .setColor('#fca00a')
-     //.setAuthor(newMessage.author.tag, newMessage.author.avatar)
-     .setThumbnail(newMessage.author.displayAvatarURL())
-     .setDescription(`Message edited in <#${newMessage.channel.id}> [Go to message](${newMessage.url})`)
-     .addFields(
-       { name: `User`, value: `${newMessage.author.tag}`, inline: true },
-       { name: `UserID`, value: `${newMessage.author.id}`, inline: true },
-       //{ name: '\u200B', value: '\u200B' },
-       { name: 'Before', value: `${oldMessage.content}` },
-       { name: 'After', value: `${newMessage.content}` }
-     )
-     .setTimestamp()
-     .setFooter(`${client.user.username} - modlog`, client.user.avatarURL());
- 
-   newMessage.guild.systemChannel.send(embed);
-     */
 });
 client.on("messageReactionAdd", async (reaction, user) => {
     if (reaction.message.partial) await reaction.message.fetch(); //if (reaction.message.partial) 
@@ -186,8 +150,8 @@ client.on("messageReactionRemove", async (reaction, user) => {
 
 client.distube
   .on("playSong", (message, queue, song) => {
-      queue.autoplay = false;
-    
+    queue.autoplay = false;
+
     const embed = new Discord.MessageEmbed()
       .setTitle(`Monke's playin`)
       .setDescription(
@@ -221,11 +185,12 @@ client.distube
   .on("addList", (message, queue, playlist) => {
     queue.autoplay = false;
     const embed = new Discord.MessageEmbed()
-    .setTitle(`Monke's Playin`).setDescription(
-      `Added \`${playlist.name}\` playlist (${
-        playlist.songs.length
-      } songs) to queue\n${status(queue)}`
-    );
+      .setTitle(`Monke's Playin`)
+      .setDescription(
+        `Added \`${playlist.name}\` playlist (${
+          playlist.songs.length
+        } songs) to queue\n${status(queue)}`
+      );
     message.channel.send(embed);
   })
 
@@ -247,9 +212,12 @@ client.distube
     message.channel.send("An error encountered: " + e);
   });
 
+//handle unhandled rejection error
+process.on("unhandledRejection", (error) => {
+  console.error("Unhandled promise rejection:\n", error);
+});
+
 client.levels.init(configFileName);
-client.rep.init(configFileName);
-client.coins.init(configFileName);
 client.mongoose.init(configFileName);
 
 client.login(discord_conf.token);

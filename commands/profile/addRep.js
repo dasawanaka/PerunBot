@@ -1,4 +1,4 @@
-const Rep = require("../../class/reputation.js");
+const Rep = require("../../utils/ReputationManager");
 const Discord = require('discord.js');
 
 module.exports = {

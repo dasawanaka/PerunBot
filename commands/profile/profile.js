@@ -1,8 +1,8 @@
 const Discord = require("discord.js");
 const Canvas = require("canvas");
 const Levels = require("discord-xp");
-const Coins = require("../../class/coins.js");
-const Rep = require("../../class/reputation.js");
+const Coins = require("../../utils/CoinsManager");
+const Rep = require("../../utils/ReputationManager");
 const ComputeLeaderboard = require('../../utils/computeLeaderboard');
 
 

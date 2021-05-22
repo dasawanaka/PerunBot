@@ -1,4 +1,3 @@
-const { arg } = require("mathjs");
 const path = require('path');
 const fs = require('fs');
 const colors = require('colors');

@@ -20,10 +20,10 @@ module.exports = {
                 for (const file of commandFiles) {
                     const commandPath = path.join(commandDirPath, module, file);
                     const command = require(commandPath);
-                    client.commands.set(command.name, command);
+                    client.commands.set(command.name.toLowerCase(), command);
                     if (command.alias != undefined)
                         command.alias.forEach(al => {
-                            client.commands.set(al, command);
+                            client.commands.set(al.toLowerCase(), command);
                         });
                     console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` Register command ${command.name} from ${commandPath}`))
                 }

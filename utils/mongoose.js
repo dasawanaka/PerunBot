@@ -17,7 +17,7 @@ module.exports = {
 
     let port = mongodbConf.port === "0" ? "" : ":" + mongodbConf.port;
 
-    let preUrl = port ===""?"mongodb+srv://": "mongodb://" ;
+    let preUrl = port === "" ? "mongodb+srv://" : "mongodb://";
 
     var url =
       preUrl +
