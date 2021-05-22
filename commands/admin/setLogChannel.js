@@ -1,4 +1,4 @@
-const LogChannel = require("../../models/log_channel");
+const LogChannel = require("../../database/models/log_channel");
 
 module.exports = {
   name: "setlogchannel",

@@ -1,4 +1,4 @@
-const Guild = require("../../models/guild");
+const Guild = require("../../database/models/guild");
 
 module.exports = {
   name: "setprefix",

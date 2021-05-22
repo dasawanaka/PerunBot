@@ -4,14 +4,14 @@ const mongoose = require("mongoose");
 const cache = new Map();
 
 module.exports = {
-  async fetch(guildId) {
+  async fetch(guildId, message) {
     let guildSettings = cache.get(guildId);
 
     if (!guildSettings) {
       guildSettings = Guild.findOne({ guildID: guildId }, (err, guild) =>
-        getGuildFromDB(err, guild)
+        getGuildFromDB(err, guild, message)
       );
-      cache.set(guildId, guildSettings);
+     
     } else {
       console.log(`Use cached guild settings for ${guildSettings.guildName}(ID: ${guildId})`);
     }
@@ -19,7 +19,7 @@ module.exports = {
   },
 };
 
-function getGuildFromDB(err, guild) {
+function getGuildFromDB(err, guild, message) {
   if (err) console.error(err);
   if (!guild) {
     const newGuild = new Guild({
@@ -36,7 +36,7 @@ function getGuildFromDB(err, guild) {
       .then((result) => console.log(result))
       .catch((err) => console.error(err));
 
-    client.guildSettings.set(guildId, newGuild);
+      cache.set(message.guild.id, newGuild);
 
     return message.channel
       .send(

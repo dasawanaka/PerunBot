@@ -1,16 +1,18 @@
 const Discord = require("discord.js");
 const Canvas = require("canvas");
 const Levels = require("discord-xp");
-const Coins = require("../../utils/CoinsManager");
-const Rep = require("../../utils/ReputationManager");
-const ComputeLeaderboard = require('../../utils/computeLeaderboard');
+const Coins = require("../../database/managers/CoinsManager");
+const Rep = require("../../database/managers/ReputationManager");
+const MessageCounterManager = require("../../database/managers/MessageCounterManager");
+const ComputeLeaderboard = require("../../utils/computeLeaderboard");
 
-
-Canvas.registerFont("assets/fonts/nirmala-ui-bold.ttf", { family: "Nirmala UI" });
+Canvas.registerFont("assets/fonts/nirmala-ui-bold.ttf", {
+  family: "Nirmala UI",
+});
 
 module.exports = {
   name: "profile",
-  alias: ["prof", "pro", "userprofile", "user"],
+  alias: ["prof", "pro", "userprofile", "user", "ppc"],
   public: true,
   description: "Show user profile card",
   usage: "<prefix>profile",
@@ -140,6 +142,12 @@ module.exports = {
     context.fillStyle = "#ffffff";
     context.fillText(posText, 360, 565);
 
+    const messagesCount = await MessageCounterManager.fetch(
+      message.author.id,
+      message.guild.id
+    ).messages;
+    console.log(messagesCount);
+
     const attachment = new Discord.MessageAttachment(
       canvas.toBuffer(),
       `profile-${message.author.username}.png`
@@ -203,5 +211,3 @@ const applyText = (canvas, text, startSize) => {
   // Return the result to use in the actual canvas
   return context.font;
 };
-
-

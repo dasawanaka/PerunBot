@@ -33,7 +33,7 @@ const status = (queue) =>
       : "Off"
   }\` | Autoplay: \`${queue.autoplay ? "On" : "Off"}\``;
 
-client.mongoose = require("./utils/mongoose");
+client.mongoose = require("./database/mongoose");
 client.levels = require("./utils/levels");
 client.distube = new Distube(client, {
   searchSongs: true,

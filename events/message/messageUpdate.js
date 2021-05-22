@@ -1,5 +1,5 @@
 const { MessageEmbed } = require("discord.js");
-const LOGGER = require("../../utils/logger");
+const LOGGER = require("../../utils/ModLogger");
 
 module.exports = {
   name: "messageUpdate",

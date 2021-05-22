@@ -1,5 +1,5 @@
 const { Collection } = require("discord.js");
-const LogChannel = require("../models/log_channel.js");
+const LogChannel = require("../database/models/log_channel.js");
 const cache = new Collection();
 
 class Logger {

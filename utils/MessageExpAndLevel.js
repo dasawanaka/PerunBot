@@ -1,10 +1,14 @@
 const Levels = require("discord-xp");
-const Coins = require("./CoinsManager");
+const Coins = require("../database/managers/CoinsManager");
+const MessageCounterManager = require("../database/managers/MessageCounterManager");
 
 const expCD = new Map();
 
 module.exports = {
-    async run(message) {      
+    async run(message) {   
+      
+      MessageCounterManager.appendOneMessage(message.author.id, message.guild.id);
+
         if (expCD.has(`${message.author.id}_${message.guild.id}`))
           return console.log(
             `User ${message.author.username}(USER_ID:${message.author.id}) has cd to earn exp on guild ${message.guild.name}(ID: ${message.guild.id})`
