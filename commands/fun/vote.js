@@ -10,20 +10,29 @@ module.exports = {
   cooldown: 240000,
   async run(client, message, args) {
     try {
-      if (!args[0])
-        return message.channel.send(
-          "Enter your voting topic. You need to enter the command again."
+      if (!args[0]) {
+        message.channel.send(
+          "Enter your voting topic. You need to enter the command again with arg."
         );
-        if(args.join(' ').length>250)  return message.channel.send(
-            "To long... You need to enter the command again."
-          );
+        throw new Error("Empty vote topic");
+      }
+      if (args.join(" ").length > 250) {
+        message.channel.send(
+          "To long...Max topic characters is 250. You need to enter the command again."
+        );
+        throw new Error("Vote topic to long.");
+      }
       const embed = new MessageEmbed()
         .setAuthor(
           `${message.author.tag}`,
           message.author.displayAvatarURL({ dynamic: true })
         )
         .setTitle(`Vote now: `)
-        .setDescription(`${args.join(" ")}\n\nTo vote react with emoji: \nUPVOTE: 🔼  |  DOWNVOTE: 🔽`);
+        .setDescription(
+          `${args.join(
+            " "
+          )}\n\nTo vote react with emoji: \nUPVOTE: 🔼  |  DOWNVOTE: 🔽`
+        );
       const embedMessage = await message.channel.send(embed);
 
       await embedMessage.react("🔼");
@@ -33,11 +42,10 @@ module.exports = {
         .delete({ timeout: 1000 })
         .then((msg) =>
           console.log(
-            `Deleted message from ${msg.author.username} after 5 seconds`
+            `Deleted message from ${msg.author.username} after 1 seconds`
           )
         )
         .catch(console.error);
-
     } catch (error) {
       console.error("One of the emojis failed to react.");
     }
