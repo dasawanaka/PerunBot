@@ -142,11 +142,26 @@ module.exports = {
     context.fillStyle = "#ffffff";
     context.fillText(posText, 360, 565);
 
-    const messagesCount = await MessageCounterManager.fetch(
+    const messagesCountObj = await MessageCounterManager.fetch(
       message.author.id,
       message.guild.id
-    ).messages;
-    console.log(messagesCount);
+    );
+
+    const messagesCount = messagesCountObj.messages;
+    const mailImage = await Canvas.loadImage("assets/img/mailSmall.png");
+
+    context.drawImage(
+      mailImage,
+      490,
+      515,
+      mailImage.width,
+      mailImage.height
+    );
+
+    context.font = applyText(canvas, messagesCount, 45, 200);
+    context.strokeText(messagesCount, 590, 565);
+    context.fillStyle = "#ffffff";
+    context.fillText(messagesCount, 590, 565);
 
     const attachment = new Discord.MessageAttachment(
       canvas.toBuffer(),
@@ -197,16 +212,16 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   }
 }
 
-const applyText = (canvas, text, startSize) => {
+const applyText = (canvas, text, startSize, maxWidth) => {
   const context = canvas.getContext("2d");
-
+  maxWidth = !maxWidth?canvas.width - 285:maxWidth;
   // Declare a base size of the font
   let fontSize = startSize;
   do {
     // Assign the font to the context and decrement it so it can be measured again
     context.font = `${(fontSize -= 5)}px "Nirmala UI"`;
     // Compare pixel width of the text to the canvas minus the approximate avatar size
-  } while (context.measureText(text).width > canvas.width - 285);
+  } while (context.measureText(text).width > maxWidth);
 
   // Return the result to use in the actual canvas
   return context.font;
