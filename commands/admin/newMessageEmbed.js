@@ -28,7 +28,7 @@ module.exports = {
       }
       
       var colour = await getContent(collector);
-      console.log(colour)
+      //console.log(colour)
       colour = colour[0]
        switch (colour) {  
       case 'blue':
@@ -61,10 +61,6 @@ module.exports = {
       var customURL = await getContent(collector)
       customURL = customURL[0]
 
-      message.channel.send('Author');
-      collector = message.channel.createMessageCollector(filter, {maxMatches: 1 });
-      var author = await getContent(collector)
-
       message.channel.send('Set Thumbnail (url)');
       collector = message.channel.createMessageCollector(filter, {maxMatches: 1 });
       var thumbnail = await getContent(collector)
@@ -84,7 +80,8 @@ module.exports = {
         .setColor(colour)
         .setDescription(description)
         .setURL(customURL)
-        .setAuthor(author, 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
+        .setAuthor(`${message.author.tag}`,
+        message.author.displayAvatarURL({ dynamic: true }))
         .setThumbnail(thumbnail)
         // .addFields(
             // { name: 'Regular field title', value: 'Some value here' },
@@ -108,22 +105,3 @@ function getContent(collector){
 }
 
 
-//const exampleEmbed = new Discord.MessageEmbed()
-// .setColor(`${colour}`)
-// .setTitle('Some title')
-// .setURL('https://discord.js.org/')
-// .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
-// .setDescription('Some description here')
-// .setThumbnail('https://i.imgur.com/wSTFkRM.png')
-// .addFields(
-//     { name: 'Regular field title', value: 'Some value here' },
-//     { name: '\u200B', value: '\u200B' },
-//     { name: 'Inline field title', value: 'Some value here', inline: true },
-//     { name: 'Inline field title', value: 'Some value here', inline: true },
-// )
-// .addField('Inline field title', 'Some value here', true)
-// .setImage('https://i.imgur.com/wSTFkRM.png')
-// .setTimestamp()
-// .setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
-// channel.send(exampleEmbed);
-// }
