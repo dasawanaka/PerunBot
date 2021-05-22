@@ -72,31 +72,15 @@ client.on("message", async (message) => {
   client.events.get("newMessage").run(message, client);
 });
 
+// client.on("messageEmbed", async (message, client) => {
+//   await message.fetch();
+// client.events.get("newMessageEmbed.js").run(message, client)
+// });
+
 client.on("messageDelete", async (message) => {
-  await message.fetch();
   client.events.get("messageDelete").run(message, client);
 });
 
-client.on("messageReactionAdd", async (reaction, user) => {
-  /*
-    if (user.bot) return; // If the user was a bot, return.
-    if (!reaction.message.guild) return; // If the user was reacting something but not in the guild/server, ignore them.
-  
-    if (reaction.partial) {
-      // If the message this reaction belongs to was removed the fetching might result in an API error, which we need to handle
-      try {
-        await reaction.fetch();
-      }
-      catch (error) {
-        console.log('Something went wrong when fetching the message: ', error);
-        // Return as `reaction.message.author` may be undefined/null
-        return;
-      }
-    }
-  
-    events.get('messageReactionAdd').run(client, reaction, user);
-  */
-});
 
 client.on("messageUpdate", async (oldMessage, newMessage) => {
   await oldMessage.fetch();
@@ -143,6 +127,42 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
  
    newMessage.guild.systemChannel.send(embed);
      */
+});
+client.on("messageReactionAdd", async (reaction, user) => {
+    if (reaction.message.partial) await reaction.message.fetch(); //if (reaction.message.partial) 
+    if (reaction.partial) await reaction.fetch();
+    if (user.bot) return;
+    if (!reaction.message.guild) return;
+
+    // const moderatorRole = reaction.message.guild.roles.cache.find(role => role.name === "Rządny władzy gówniak")
+    
+    // const moderatorEmoji = '👍'
+
+    // if (reaction.emocji.name === moderatorEmoji) {
+    //     await reaction.message.guild.members.cache.get(user.id).roles.add(moderatorRole);
+    // }
+    else {
+        return;
+    }
+
+  /*
+    if (user.bot) return; // If the user was a bot, return.
+    if (!reaction.message.guild) return; // If the user was reacting something but not in the guild/server, ignore them.
+  
+    if (reaction.partial) {
+      // If the message this reaction belongs to was removed the fetching might result in an API error, which we need to handle
+      try {
+        await reaction.fetch();
+      }
+      catch (error) {
+        console.log('Something went wrong when fetching the message: ', error);
+        // Return as `reaction.message.author` may be undefined/null
+        return;
+      }
+    }
+  
+    events.get('messageReactionAdd').run(client, reaction, user);
+  */
 });
 
 client.on("messageReactionRemove", async (reaction, user) => {
