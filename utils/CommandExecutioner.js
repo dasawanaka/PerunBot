@@ -26,7 +26,7 @@ module.exports = {
               { long: true }
             )}\` cooldown.`
           );
-        command.run(client, message, args);
+        await command.run(client, message, args);
         Timeout.set(
           `${command.name}${message.author.id}`,
           Date.now() + command.cooldown
@@ -38,7 +38,7 @@ module.exports = {
         command.run(client, message, args);
       }
     } catch (error) {
-      console.error(error);
+      console.error(error.message);
     }
   },
 };
