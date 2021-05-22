@@ -6,7 +6,7 @@ module.exports = {
   public: true,
   description: "Set new prefix command",
   userPermissions: ["MANAGE_GUILD"],
-  usage: "<prefix>setPrefix <newPrefix>",
+  usage: ["\`<prefix>setPrefix <newPrefix>\`", "\`<newPrefix>\` - new server prefix (required arg)"],
   cooldown: 5000,
   async run(client, message, args) {
     const guildSettings = await Guild.findOne({

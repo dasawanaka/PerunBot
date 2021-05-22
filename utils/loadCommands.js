@@ -2,6 +2,7 @@ const { arg } = require("mathjs");
 const path = require('path');
 const fs = require('fs');
 const colors = require('colors');
+const helpGenerator = require('./HelpGenerator');
 
 module.exports = {
     name: 'loadCommandsModule',
@@ -21,6 +22,7 @@ module.exports = {
                     const commandPath = path.join(commandDirPath, module, file);
                     const command = require(commandPath);
                     client.commands.set(command.name.toLowerCase(), command);
+                    helpGenerator.addCommand(command, module);
                     if (command.alias != undefined)
                         command.alias.forEach(al => {
                             client.commands.set(al.toLowerCase(), command);

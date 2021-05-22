@@ -5,7 +5,7 @@ module.exports = {
     alias: ['pp', 'pingpong'],
     public: true,
     description: 'Ping command, return api ping',
-    usage: '<prefix>ping',
+    usage: ['<prefix>ping'],
     cooldown: 10000,
     async run(client, message, args) {
         var ping = client.ws.ping;

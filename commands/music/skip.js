@@ -4,7 +4,7 @@ module.exports = {
     alias: ['fs'],
     public: true,
     description: "Skipping? That was the best part!",
-    usage: "<prefix>skip",
+    usage: ["<prefix>skip"],
     async run(client, message, args) {  
         client.distube.skip(message);
             },

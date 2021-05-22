@@ -15,7 +15,7 @@ module.exports = {
   alias: ["prof", "pro", "userprofile", "user", "ppc"],
   public: true,
   description: "Show user profile card",
-  usage: "<prefix>profile",
+  usage: ["<prefix>profile"],
   permissions: [],
   cooldown: 60000,
   async run(client, message, args) {

@@ -1,29 +1,31 @@
-const Discord = require('discord.js');
-const pagination = require('discord.js-pagination');
+const Discord = require("discord.js");
+const pagination = require("discord.js-pagination");
+const HelpGenerator = require("../../utils/HelpGenerator");
+
+const pages = new Array();
 
 module.exports = {
-        name: "help",
-        alias: [],
-        public: true,
-        description: "I'm helping you, right?",
-        cooldown: 60000,
-       async run(client, message, args){
-        const utility = new Discord.MessageEmbed()
-        .setTitle('Utilities')
-        .addField('`$help`','Wait is that a recursion.')
-        .addField('`$ping`','Pong! Wait I missed that...')
-        .addField('`$profile`','What I have got, money, simps and my lovely popularity.')
-        .addField('`$vote`',`Let's check what is right and what is left`)
-        .setTimestamp()
+  name: "help",
+  alias: ["h"],
+  public: true,
+  description: "I'm helping you, right?",
+  cooldown: 5000,
+  async run(client, message, args) {
 
-        const pages = [
-            utility,
-        ]
-        const emojiList = ["⏪", "⏩"];
-
-        const timeout = '180000';
-
-        pagination(message, pages, emojiList, timeout)
+    if(args[0]){
+        return message.channel.send(await HelpGenerator.getHelp(args[0]));
     }
-}
 
+    if (pages.length === 0) {
+      console.log("pages coint is 0");
+      const pa = HelpGenerator.generateHelpEmbeds();
+      pa.forEach((page) => {
+        pages.push(page);
+      });
+    } else console.log("not empty pages");
+
+    const emojiList = ["⏪", "⏩"];
+    const timeout = "180000";
+    pagination(message, pages, emojiList, timeout);
+  },
+};

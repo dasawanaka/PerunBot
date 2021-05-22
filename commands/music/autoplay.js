@@ -5,7 +5,7 @@ module.exports = {
   alias: [],
   public: true,
   description: "Robot goes brr!",
-  usage: "<prefix>autoplay",
+  usage: ["<prefix>autoplay"],
   async run(client, message, args) {
     
     let mode = client.distube.toggleAutoplay(message);

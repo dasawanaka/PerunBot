@@ -6,7 +6,7 @@ module.exports = {
   public: true,
   description: "this is a vote command",
   clientPermissions: ["MANAGE_MESSAGES"],
-  usage: "<prefix>vote <topic..>",
+  usage: ["<prefix>vote <topic..>"],
   cooldown: 240000,
   async run(client, message, args) {
     try {
