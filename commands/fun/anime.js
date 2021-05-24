@@ -5,9 +5,9 @@ module.exports = {
   name: "anime",
   alias: ["animesearch", "mal", "animeinfo"],
   public: true,
-  description: "Give a kiss to mention user",
-  usage: ["kiss [user mention/ID]"],
-  examples: ["kiss @user"],
+  description: "Search for anime list",
+  usage: ["animesearch <name>"],
+  examples: ["animesearch One Piece", "anime Fairy Tail"],
   async run(client, message, args) {
     try {
       const search = `${args}`;
