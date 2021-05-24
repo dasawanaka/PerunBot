@@ -5,7 +5,7 @@ module.exports = {
   name: "baka",
   alias: [],
   public: true,
-  description: 'BAKA!',
+  description: 'BAAAAAAAKA!',
   usage: ["baka [user mention/ID]"],
   examples: ["baka @nurionis"],
   async run(client, message, args) {
