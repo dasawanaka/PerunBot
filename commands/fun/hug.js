@@ -45,13 +45,21 @@ module.exports = {
       const response = await fetch("https://nekos.life/api/v2/img/cuddle");
       const body = await response.json();
       const embed = new MessageEmbed()
-        // .setDescription(`
-        //   ${member} Just got a hug from  ${message.author.username}`)
+        .setAuthor(
+          member.displayName +
+            " Just got a hug from " +
+            message.author.username,
+          message.author.displayAvatarURL({
+            dynamic: true,
+            format: "png",
+            size: 2048,
+          })
+        )
         .setImage(body.url)
         .setURL(body.url)
         .setColor("RANDOM")
         .setDescription(
-            member.toString() + " got a hug from " + message.author.toString()
+          member.toString() + " got a hug from " + message.author.toString()
         )
         .setFooter(
           "Requested by " +
