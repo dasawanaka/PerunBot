@@ -1,18 +1,18 @@
 const { MessageEmbed } = require("discord.js");
 
 module.exports = {
-  name: "daily",
+  name: "exp",
   alias: [],
   public: true,
-  description: "Information on how to get daily coins",
+  description: "Information on how to get experience",
   usage: [
-    "daily",
+    "exp",
   ],
-  examples: ["$daily"],
+  examples: ["$exp"],
   async run(client, message, args) {
     const embed = new MessageEmbed()
-      .setTitle('Daily')
-      .setDescription(`Per day you can get 150 coins for writing a message.\n**1 coin** for one message per minute.`)
+      .setTitle('Experience')
+      .setDescription(`Per day you can get **unlimited** experience for writing a message.\n**5-15 exp(random)** for **one message per minute.**`)
       .setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
       .setTimestamp()
       .setColor(message.guild.me.displayHexColor);
