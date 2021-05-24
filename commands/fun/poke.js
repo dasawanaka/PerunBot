@@ -2,12 +2,12 @@ const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
 
 module.exports = {
-  name: "hug",
-  alias: ["cuddle"],
+  name: "poke",
+  alias: [],
   public: true,
-  description: "Give a hug to mention user",
-  usage: ["hug [user mention/ID]"],
-  examples: ["hug @nurionis"],
+  description: "Poke user",
+  usage: ["poke [user mention/ID]"],
+  examples: ["poke @nurionis"],
   async run(client, message, args) {
     try {
       const member =
@@ -18,7 +18,7 @@ module.exports = {
         return message.channel.send({
           embed: {
             color: 16734039,
-            description: "❌ | You must mention someone to hug!",
+            description: "❌ | You must mention someone to poke!",
           },
         });
       }
@@ -28,7 +28,7 @@ module.exports = {
           embed: {
             color: 5294200,
             description:
-              "😁 | You can't hug yourself but... Ok, get the hug from me ＼( ^o^ )／ !",
+              "🤦 | You can't poke yourself tfu!",
           },
         });
       }
@@ -37,17 +37,17 @@ module.exports = {
           embed: {
             color: 5294200,
             description:
-              "😁 | Oh, you tried to hug me but u can't... Im not real... But I can hug you ＼( ^o^ )／",
+              "🤦 | Oh, you tried to poke me but u cant hehe (hopefully)",
           },
         });
       }
 
-      const response = await fetch("https://nekos.life/api/v2/img/cuddle");
+      const response = await fetch("https://nekos.life/api/v2/img/poke");
       const body = await response.json();
       const embed = new MessageEmbed()
         .setAuthor(
           member.displayName +
-            " just got a hug from " +
+            " just got a poked from " +
             message.author.username,
           message.author.displayAvatarURL({
             dynamic: true,
@@ -59,12 +59,11 @@ module.exports = {
         .setURL(body.url)
         .setColor("RANDOM")
         .setDescription(
-          member.toString() + " got a hug from " + message.author.toString()
+          member.toString() + " got a poke from " + message.author.toString()
         )
         .setFooter(
           "Requested by " +
-            `${message.author.username}` +
-            " • (this is so cute ＼( ^o^ )／)",
+            `${message.author.username}`,
           message.author.displayAvatarURL({
             dynamic: true,
             format: "png",

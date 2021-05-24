@@ -49,7 +49,7 @@ module.exports = {
      .setDescription("So sweeet :3")
      .setImage(body.url)
      .setColor("RANDOM")
-     .setFooter("Requested by " + `${message.author.username}`, message.author.displayAvatarURL({ dynamic: true, format: 'png', size: 2048 }))
+     .setFooter("Requested by " + `${message.author.username} • (this is so cute ＼( ^o^ )／)`, message.author.displayAvatarURL({ dynamic: true, format: 'png', size: 2048 }))
      .setTimestamp()
      .setURL(body.url);
       message.channel.send(embed);
