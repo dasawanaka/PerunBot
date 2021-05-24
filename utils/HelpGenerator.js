@@ -31,7 +31,7 @@ module.exports = {
       const embed = new MessageEmbed()
         .setTitle(`Command not found`)
         .setDescription(
-          `Did\'t find command with name \`${commandName}\`.\n Please use \`help\` to see all avaiables commands.`
+          `Didn\'t find command with name \`${commandName}\`.\n Please use \`help\` to see all available commands.`
         )
         .setTimestamp();
       return embed;
@@ -42,7 +42,7 @@ module.exports = {
     embed.setDescription(command.description);
 
     if (command.alias && command.alias.length > 0) {
-      embed.addField("Avaiable command aliases", `${command.alias.join(", ")}`);
+      embed.addField("Available command aliases", `${command.alias.join(", ")}`);
     }
     if (command.usage && command.usage.length > 0) {
       embed.addField("How to use command", `${command.usage.join("\n")}`);
@@ -51,7 +51,7 @@ module.exports = {
       embed.addField("Examples", `${command.examples.join("\n")}`);
     }
     if (command.cooldown) {
-      embed.addField("Comamnd cooldown", `${ms(command.cooldown)}`);
+      embed.addField("Command cooldown", `${ms(command.cooldown)}`);
     }
     if (command.userPermissions && command.userPermissions.length > 0) {
       embed.addField(

@@ -20,6 +20,7 @@ const answers = [
   "My sources say no.",
   "Outlook not so good.",
   "Very doubtful.",
+  "XD"
 ];
 
 module.exports = {
@@ -28,7 +29,6 @@ module.exports = {
   public: true,
   description: "Asks the Magic 8-Ball for some psychic wisdom.",
   usage: ["8ball <question..>"],
-  cooldown: 5000,
   async run(client, message, args) {
     if (!args[0]) {
       message.channel.send("Please provide a question to ask");
