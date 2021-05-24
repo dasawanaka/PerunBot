@@ -5,7 +5,8 @@
     "main": "bot.js",
     "author": "Michal Daniel (michal.mateusz.daniel@gmail.com)",
     "scripts": {
-        "node .": "node run bot.js"
+        "node .": "node run bot.js",
+        "dev" : "nodemon --watch . bot.js"
     },
     "dependencies": {
         "@discordjs/opus": "^0.5.0",
@@ -28,10 +29,14 @@
         "node-cron": "^2.0.3",
         "node-opus": "^0.3.3",
         "node-pre-gyp": "^0.15.0",
+        "percentagebar": "^1.0.3",
         "progress": "^2.0.3",
         "pubsubhubbub": "^1.0.1",
         "superagent": "^3.8.3",
         "ytdl-core": "^4.8.0",
         "ytpl": "^2.2.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.7"
     }
 }
