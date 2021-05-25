@@ -6,7 +6,7 @@ module.exports = {
   alias: [],
   public: true,
   description: "Give user a reputation point",
-  usage: "<prefix>rep <@user>",
+  usage: ["<prefix>rep <@user>"],
   permissions: [],
   cooldown: 6 * 60 * 60 * 1000,
   async run(client, message, args) {

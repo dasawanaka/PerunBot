@@ -7,6 +7,13 @@
 > ``node . --config=$CONFIG_FILE_NAME``
 
 ___
+
+### run dev version 
+auto restart app when code change
+
+> ``npm run dev --config=$CONFIG_FILE_NAME``
+
+___
 ## **Using docker**
 
 ### compile/build

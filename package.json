@@ -5,7 +5,8 @@
     "main": "bot.js",
     "author": "Michal Daniel (michal.mateusz.daniel@gmail.com)",
     "scripts": {
-        "node .": "node run bot.js"
+        "node .": "node run bot.js",
+        "dev": "nodemon --watch . bot.js"
     },
     "dependencies": {
         "@discordjs/opus": "^0.5.0",
@@ -20,7 +21,11 @@
         "ffmpeg-static": "^4.3.0",
         "http-basic": "^8.1.3",
         "https-proxy-agent": "^5.0.0",
+<<<<<<< HEAD
         "i": "^0.3.6",
+=======
+        "mal-scraper": "^2.11.3",
+>>>>>>> 958ed2c53cdbb33c2a2356e714c933bcf602a6b8
         "mathjs": "^7.1.0",
         "minecraft-server-util": "^1.3.0",
         "mongodb": "^3.6.6",
@@ -29,10 +34,14 @@
         "node-cron": "^2.0.3",
         "node-opus": "^0.3.3",
         "node-pre-gyp": "^0.15.0",
+        "percentagebar": "^1.0.3",
         "progress": "^2.0.3",
         "pubsubhubbub": "^1.0.1",
         "superagent": "^3.8.3",
         "ytdl-core": "^4.8.0",
         "ytpl": "^2.2.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.7"
     }
 }

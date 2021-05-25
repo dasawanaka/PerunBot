@@ -15,7 +15,6 @@ module.exports = {
     "-[arg2] - optional arg",
   ],
   examples: ["$commandName Hey John"],
-
   clientPermissions: [],
   userPermissions: [],
   cooldown: 10000,

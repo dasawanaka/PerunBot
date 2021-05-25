@@ -100,6 +100,7 @@ class Coins {
         .save()
         .catch((e) => console.log(`Failed to save new user.`));
     }
+    if(!user.lastUpdated) user.lastUpdated = new Date();
     if (this.isToday(user.lastUpdated) && user.todayCoins > 150) return;
     else if (!this.isToday(user.lastUpdated)) {
       user.lastUpdated = new Date();

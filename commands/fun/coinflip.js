@@ -9,7 +9,6 @@ module.exports = {
     "<prefix>coinflip",
   ],
   examples: ["$coinflip"],
-  cooldown: 5000,
   async run(client, message, args) {
     const n = Math.floor(Math.random() * 2);
     let result;

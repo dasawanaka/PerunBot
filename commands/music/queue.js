@@ -6,7 +6,7 @@ module.exports = {
     alias: ["q"],
     public: true,
     description: "Let's check what we've got here",
-    usage: "<prefix>queue ",
+    usage: ["<prefix>queue "],
     async run(client, message, args) {  
         let queue = client.distube.getQueue(message);
     //     message.channel.send('Current queue:\n' + queue.songs.map((song, id) =>

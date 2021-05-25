@@ -6,7 +6,7 @@ module.exports = {
   public: true,
   description: "Set log channel",
   userPermissions: ['MANAGE_GUILD'],
-  usage: "<prefix>setLogChannel <#channel>",
+  usage: ["<prefix>setLogChannel <#channel>"],
   cooldown: 5000,
   async run(client, message, args) {
     if (!message.mentions.channels.first())

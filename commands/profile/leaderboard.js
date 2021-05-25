@@ -7,7 +7,7 @@ module.exports = {
   alias: ["lb", "board"],
   public: true,
   description: "Show serwer leaderboard",
-  usage: "<prefix>leaderboard",
+  usage: ["<prefix>leaderboard"],
   permissions: [],
   cooldown: 6000,
   async run(client, message, args) {
