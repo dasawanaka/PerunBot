@@ -2,14 +2,12 @@ const subcommands = new Map();
 const path = require('path');
 
 module.exports = {
-  name: "prefix",
-  alias: [],
+  name: "logchannel",
+  alias: ['lgc'],
   public: true,
-  description: "Set new prefix command",
-  userPermissions: ["MANAGE_GUILD"],
-  usage: [
-    `\`prefix [set | reset] [args..]\``,
-  ],
+  description: "Log channel commands (set | remove)",
+  userPermissions: ['MANAGE_GUILD'],
+  usage: ["logchannel <set | remove>"],
   cooldown: 5000,
   async init() {
     const subCommandsLoader = require("../../utils/loadSubCommands.js");

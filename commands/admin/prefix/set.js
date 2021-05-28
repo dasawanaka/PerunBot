@@ -5,7 +5,6 @@ const prefixList = ["$", "!", "%", ".", ",", ">", "<", ";", ":"];
 module.exports = {
   name: "set",
   alias: [],
-  description: "Set new prefix command",
   async run(client, message, args) {
     const guildSettings = await Guild.findOne({
       guildID: message.guild.id,
