@@ -29,8 +29,8 @@ module.exports = {
         discriminator = client.users.cache.find(
           (user) => user.id == key.userID
         ).discriminator;
-      } else if (await client.users.fetch(key.userID)) {
-        let us = await client.users.fetch(key.userID);
+      } else if ( client.users.fetch(key.userID)) {
+        let us = client.users.fetch(key.userID);
         userName = us.username;
         discriminator = us.discriminator;
       } else {

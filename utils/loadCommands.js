@@ -20,6 +20,7 @@ module.exports = {
             if (commandFiles.length > 0) {
                 for (const file of commandFiles) {
                     const commandPath = path.join(commandDirPath, module, file);
+                    console.log(colors.bold.blue(`[TRY]`) + colors.blue(` Try to load command from ${commandPath}`));
                     const command = require(commandPath);
                     client.commands.set(command.name.toLowerCase(), command);
                     helpGenerator.addCommand(command, module);
