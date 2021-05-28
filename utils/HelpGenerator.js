@@ -67,6 +67,7 @@ module.exports = {
     commands.forEach((value, key, map) => {
       var desc = "";
       value.forEach((val) => {
+        if(val.public && val.public === true)
         desc += `\`${val.name}\`: ${val.description.length > 100? val.description.slice(0, 97) + "...":val.description}\n`;
       });
 
