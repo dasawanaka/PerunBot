@@ -23,10 +23,14 @@ module.exports = {
             (i) => i.guildID === key.guildID && i.userID === key.userID
           ) + 1,
         username: client.users.cache.get(key.userID)
-          ? client.users.cache.get(key.userID).username
+          ? client.users.cache.get(key.userID).username 
+          ? client.users.cache.get(key.userID).username 
+          : client.users.find(user => user.id == key.userID).username
           : "Unknown",
         discriminator: client.users.cache.get(key.userID)
           ? client.users.cache.get(key.userID).discriminator
+          ? client.users.cache.get(key.userID).discriminator
+          : client.users.find(user => user.id == key.userID).discriminator
           : "0000",
       })
     );
