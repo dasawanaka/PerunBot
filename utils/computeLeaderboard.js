@@ -9,10 +9,34 @@ module.exports = {
     if (!leaderboard) throw new TypeError("A leaderboard id was not provided.");
 
     if (leaderboard.length < 1) return [];
-
+    console.log(leaderboard);
     const computedArray = [];
 
-    leaderboard.map((key) =>
+    leaderboard.map((key) => {
+      let userName;
+      let discriminator;
+
+      if (
+        client.users.cache.get(key.userID) &&
+        client.users.cache.get(key.userID).username
+      ) {
+        userName = client.users.cache.get(key.userID).username;
+        discriminator = client.users.cache.get(key.userID).discriminator;
+      } else if (client.users.cache.find((user) => user.id == key.userID)) {
+        userName = client.users.cache.find(
+          (user) => user.id == key.userID
+        ).username;
+        discriminator = client.users.cache.find(
+          (user) => user.id == key.userID
+        ).discriminator;
+      } else if (client.users.fetch(key.userID)) {
+        userName = client.users.fetch(key.userID).username;
+        discriminator = client.users.fetch(key.userID).discriminator;
+      } else {
+        userName = "Unknown";
+        discriminator = "0000";
+      }
+
       computedArray.push({
         guildID: key.guildID,
         userID: key.userID,
@@ -22,18 +46,10 @@ module.exports = {
           leaderboard.findIndex(
             (i) => i.guildID === key.guildID && i.userID === key.userID
           ) + 1,
-        username: client.users.cache.get(key.userID)
-          ? client.users.cache.get(key.userID).username 
-          ? client.users.cache.get(key.userID).username 
-          : client.users.find(user => user.id == key.userID).username
-          : "Unknown",
-        discriminator: client.users.cache.get(key.userID)
-          ? client.users.cache.get(key.userID).discriminator
-          ? client.users.cache.get(key.userID).discriminator
-          : client.users.find(user => user.id == key.userID).discriminator
-          : "0000",
-      })
-    );
+        username: userName,
+        discriminator: discriminator,
+      });
+    });
 
     return computedArray;
   },
