@@ -29,6 +29,9 @@ module.exports = {
                             client.commands.set(al.toLowerCase(), command);
                         });
                     console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` Register command ${command.name} from ${commandPath}`))
+                    if (command.init != undefined){
+                        command.init();
+                    }
                 }
             }
 
