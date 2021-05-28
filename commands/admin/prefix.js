@@ -9,7 +9,7 @@ module.exports = {
   description: "Set new prefix command",
   userPermissions: ["MANAGE_GUILD"],
   usage: [
-    "`prefix set <newPrefix>`",
+    `\`prefix [set | reset] [args..]\``,
     "`<newPrefix>` - new server prefix (required arg)",
   ],
   cooldown: 5000,
