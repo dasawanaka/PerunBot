@@ -12,6 +12,7 @@
         "@discordjs/opus": "^0.5.0",
         "canvas": "^2.7.0",
         "colors": "^1.4.0",
+        "discord-buttons": "^2.4.1",
         "discord-giveaways": "^4.2.1",
         "discord-xp": "^1.0.1",
         "discord.js": "^12.2.0",

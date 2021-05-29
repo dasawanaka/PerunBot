@@ -20,6 +20,8 @@ const client = new Discord.Client({
   disableEveryone: false,
 });
 
+require("discord-buttons")(client);
+
 const path = require("path");
 const Distube = require(`distube`);
 const ms = require("ms");
@@ -62,6 +64,23 @@ client.once("ready", () => {
   console.log(`Run in ${ms(Date.now() - startTime)}`);
 });
 
+client.on("clickButton", async (button) => {
+  if (button.id === "click_btn") {
+    await button.think();
+    button.channel.send({
+      embed: {
+        color: 5294200,
+        description: `👍 | ${button.clicker.user.tag} clicked button!`,
+      },
+    });
+    await new Promise((resolve) => setTimeout(resolve, 350));
+    await button.reply.delete();
+    //
+    //
+    // await button.think(false);
+  } else await button.defer(true);
+});
+
 client.on("guildCreate", (guild) => {
   console.log("Joined a new guild: " + guild.name);
 });
@@ -79,7 +98,6 @@ client.on("messageDelete", async (message) => {
   client.events.get("messageDelete").run(message, client);
 });
 
-
 client.on("messageUpdate", async (oldMessage, newMessage) => {
   //await oldMessage.fetch();
   //await newMessage.fetch();
@@ -89,21 +107,18 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
   client.events.get("messageUpdate").run(newMessage, oldMessage, client);
 });
 client.on("messageReactionAdd", async (reaction, user) => {
-    if (reaction.message.partial) await reaction.message.fetch(); //if (reaction.message.partial) 
-    if (reaction.partial) await reaction.fetch();
-    if (user.bot) return;
-    if (!reaction.message.guild) return;
-
-    // const moderatorRole = reaction.message.guild.roles.cache.find(role => role.name === "Rządny władzy gówniak")
-    
-    // const moderatorEmoji = '👍'
-
-    // if (reaction.emocji.name === moderatorEmoji) {
-    //     await reaction.message.guild.members.cache.get(user.id).roles.add(moderatorRole);
-    // }
-    else {
-        return;
-    }
+  if (reaction.message.partial) await reaction.message.fetch(); //if (reaction.message.partial)
+  if (reaction.partial) await reaction.fetch();
+  if (user.bot) return;
+  if (!reaction.message.guild) return;
+  // const moderatorRole = reaction.message.guild.roles.cache.find(role => role.name === "Rządny władzy gówniak")
+  // const moderatorEmoji = '👍'
+  // if (reaction.emocji.name === moderatorEmoji) {
+  //     await reaction.message.guild.members.cache.get(user.id).roles.add(moderatorRole);
+  // }
+  else {
+    return;
+  }
 
   /*
     if (user.bot) return; // If the user was a bot, return.
