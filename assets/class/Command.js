@@ -39,7 +39,7 @@ class Command {
         embed: {
           color: 16734039,
           description: `❌ | You must provide a action( ${Array.from(
-            subCommands.keys()
+            this.subCommands.keys()
           ).join(" | ")} )`,
         },
       });
@@ -128,12 +128,7 @@ class Command {
     } else return true;
   }
 
-  loadSubCommandss = (dirPath) => {
-    console.log(dirPath);
-  };
-
   loadSubCommands(dirPath) {
-    console.log(dirPath);
     const commandFiles = fs
       .readdirSync(dirPath)
       .filter((file) => file.endsWith(".js"));

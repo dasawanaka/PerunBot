@@ -1,5 +1,4 @@
 const ms = require("ms");
-const PermissionsChecker = require("./PermissionsChecker");
 
 const Timeout = new Map();
 
@@ -7,15 +6,7 @@ module.exports = {
   async run(client, message, args, commandName) {
     const command = client.commands.get(commandName);
     try {
-      if (
-        !PermissionsChecker.checkPermissions(
-          message,
-          command.clientPermissions,
-          command.userPermissions,
-          commandName
-        )
-      )
-        return;
+      if (!command.checkPermissions(message)) return;
 
       //check cooldown
       if (command.cooldown && command.cooldown > 0) {
