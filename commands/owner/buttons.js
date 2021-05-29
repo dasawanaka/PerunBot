@@ -13,28 +13,28 @@ module.exports = {
     );
     let btn = new MessageButton()
       .setStyle("green")
-      .setLabel("💚")
+      .setLabel("💚 and text")
       .setID("click_btn"); //note: if you use the style "url" you must provide url using .setURL('https://example.com')
     //.setDisabled(); //disables the button | default: false
 
     let btn2 = new MessageButton()
       .setStyle("gray")
-      .setLabel("🖤")
+      .setLabel("🖤 and text")
       .setID("click_btn");
 
     let btn3 = new MessageButton()
       .setStyle("red")
-      .setLabel("❤️")
+      .setLabel("❤️ and text")
       .setID("click_btn");
 
     let btn4 = new MessageButton()
       .setStyle("blurple")
-      .setLabel("💙")
+      .setLabel("💙 and text")
       .setID("click_btn");
 
     let btn5 = new MessageButton()
       .setStyle("url")
-      .setLabel("💞 link")
+      .setLabel("🔗 just link")
       .setURL("https://example.com");
 
     let btn6 = new MessageButton()
