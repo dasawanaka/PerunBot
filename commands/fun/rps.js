@@ -2,12 +2,20 @@ const { MessageEmbed } = require("discord.js");
 const rps = ["scissors", "rock", "paper"];
 const res = ["Scissors :v:", "Rock :fist:", "Paper :raised_hand:"];
 
-module.exports = {
-  name: "rps",
-  alias: [],
-  public: true,
-  description: "Play a game of rock–paper–scissors against Perun!",
-  usage: ["rps <rock | paper | scissors>"],
+const Command = require("../../assets/class/Command");
+
+class RPS extends Command {
+
+  constructor() {
+    super({
+      name: "rps",
+      alias: [],
+      public: true,
+      description: "Play a game of rock–paper–scissors against Perun!",
+      usage: ["rps <rock | paper | scissors>"]
+    });
+  }
+
   async run(client, message, args) {
     let userChoice;
     if (args.length) userChoice = args[0].toLowerCase();
@@ -38,5 +46,8 @@ module.exports = {
       .setTimestamp()
       .setColor(message.guild.me.displayHexColor);
     message.channel.send(embed);
-  },
-};
+  }
+
+}
+
+module.exports = RPS;

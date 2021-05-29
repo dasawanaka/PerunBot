@@ -1,14 +1,19 @@
 const Rep = require("../../database/managers/ReputationManager");
 const Discord = require("discord.js");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "rep",
+class AddRep extends Command {
+  constructor() {
+    super({ 
+      name: "rep",
   alias: [],
   public: true,
   description: "Give user a reputation point",
   usage: ["<prefix>rep <@user>"],
   permissions: [],
-  cooldown: 6 * 60 * 60 * 1000,
+  cooldown: 6 * 60 * 60 * 1000
+    })
+  }
   async run(client, message, args) {
     const user = message.mentions.members.first();
     if (!user) {
@@ -30,5 +35,7 @@ module.exports = {
       .addField("Added by", `${message.author.tag}`);
 
     message.channel.send(embed);
-  },
-};
+  }
+
+}
+module.exports = AddRep;

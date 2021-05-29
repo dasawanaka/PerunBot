@@ -2,9 +2,15 @@ const Guild = require("../../../database/models/guild");
 
 const prefixList = ["$", "!", "%", ".", ",", ">", "<", ";", ":"];
 
-module.exports = {
-  name: "set",
-  alias: [],
+const Command = require("../../../assets/class/Command");
+
+class SetPrefix extends Command {
+  constructor() {
+    super({
+      name: "set",
+      alias: [],
+    });
+  }
   async run(client, message, args) {
     const guildSettings = await Guild.findOne({
       guildID: message.guild.id,
@@ -64,5 +70,7 @@ module.exports = {
         },
       });
     }
-  },
-};
+  }
+}
+
+module.exports = SetPrefix;

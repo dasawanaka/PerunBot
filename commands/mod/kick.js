@@ -1,18 +1,23 @@
 const { MessageEmbed } = require("discord.js");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "kick",
-  alias: [],
-  public: true,
-  description: "Kicks a member from your server.",
-  usage: [
-    "`<prefix>kick <user> [reason]`",
-    "-`<user>` mention a user or type User ID (required)",
-    "-`[reason]` - optional arg",
-  ],
-  examples: ["$ban @"],
-  clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "KICK_MEMBERS"],
-  userPermissions: ["KICK_MEMBERS"],
+class Kick extends Command {
+  constructor() {
+    super({
+      name: "kick",
+      alias: [],
+      public: true,
+      description: "Kicks a member from your server.",
+      usage: [
+        "`<prefix>kick <user> [reason]`",
+        "-`<user>` mention a user or type User ID (required)",
+        "-`[reason]` - optional arg",
+      ],
+      examples: ["$ban @"],
+      clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "KICK_MEMBERS"],
+      userPermissions: ["KICK_MEMBERS"],
+    });
+  }
   async run(client, message, args) {
     const member = message.mentions.members.first()
       ? message.mentions.members.first()
@@ -54,5 +59,7 @@ module.exports = {
     console.log(
       `${message.guild.name}: ${message.author.tag} kicked ${member.user.tag}`
     );
-  },
-};
+  }
+}
+
+module.exports = Kick;

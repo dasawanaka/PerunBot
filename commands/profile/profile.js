@@ -9,15 +9,20 @@ const ComputeLeaderboard = require("../../utils/computeLeaderboard");
 Canvas.registerFont("assets/fonts/nirmala-ui-bold.ttf", {
   family: "Nirmala UI",
 });
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "profile",
-  alias: ["prof", "pro", "userprofile", "user", "ppc"],
-  public: true,
-  description: "Show user profile card",
-  usage: ["<prefix>profile"],
-  permissions: [],
-  cooldown: 60000,
+class Profile extends Command {
+  constructor() {
+    super({
+      name: "profile",
+      alias: ["prof", "pro", "userprofile", "user", "ppc"],
+      public: true,
+      description: "Show user profile card",
+      usage: ["<prefix>profile"],
+      permissions: [],
+      cooldown: 60000,
+    });
+  }
   async run(client, message, args) {
     const canvas = Canvas.createCanvas(800, 600);
     const context = canvas.getContext("2d");
@@ -150,13 +155,7 @@ module.exports = {
     const messagesCount = messagesCountObj.messages;
     const mailImage = await Canvas.loadImage("assets/img/mailSmall.png");
 
-    context.drawImage(
-      mailImage,
-      490,
-      515,
-      mailImage.width,
-      mailImage.height
-    );
+    context.drawImage(mailImage, 490, 515, mailImage.width, mailImage.height);
 
     context.font = applyText(canvas, messagesCount, 45, 200);
     context.strokeText(messagesCount, 590, 565);
@@ -169,8 +168,8 @@ module.exports = {
     );
 
     message.channel.send(``, attachment);
-  },
-};
+  }
+}
 
 function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
   if (typeof stroke === "undefined") {
@@ -211,10 +210,11 @@ function roundRect(ctx, x, y, width, height, radius, fill, stroke) {
     ctx.fill("evenodd");
   }
 }
+module.exports = Profile;
 
 const applyText = (canvas, text, startSize, maxWidth) => {
   const context = canvas.getContext("2d");
-  maxWidth = !maxWidth?canvas.width - 285:maxWidth;
+  maxWidth = !maxWidth ? canvas.width - 285 : maxWidth;
   // Declare a base size of the font
   let fontSize = startSize;
   do {

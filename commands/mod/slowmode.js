@@ -1,15 +1,20 @@
 const { MessageEmbed } = require("discord.js");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "slowmode",
-  alias: ["slow", "sm"],
-  public: true,
-  description:
-    "Enables slowmode in a channel with the specified rate. \nIf no channel is provided, then slowmode will affect the current channel. \nProvide a rate of 0 to disable.",
-  usage: ["`slowmode [channel mention/ID] <rate> [reason]`"],
-  examples: ["slowmode #general 2", "slowmode 3"],
-  clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "MANAGE_CHANNELS"],
-  userPermissions: ["MANAGE_CHANNELS"],
+class Slowmode extends Command {
+  constructor() {
+    super({
+      name: "slowmode",
+      alias: ["slow", "sm"],
+      public: true,
+      description:
+        "Enables slowmode in a channel with the specified rate. \nIf no channel is provided, then slowmode will affect the current channel. \nProvide a rate of 0 to disable.",
+      usage: ["`slowmode [channel mention/ID] <rate> [reason]`"],
+      examples: ["slowmode #general 2", "slowmode 3"],
+      clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "MANAGE_CHANNELS"],
+      userPermissions: ["MANAGE_CHANNELS"],
+    });
+  }
   async run(client, message, args) {
     let index = 1;
     let channel = message.mentions.channels.first()
@@ -25,11 +30,9 @@ module.exports = {
         "Please mention an accessible text channel or provide a valid text channel ID"
       );
 
-    const rate = args[index];
-    if (!rate || rate < 0 || rate > 300)
-      message.channel.send(
-        "Please provide a rate limit between 0 and 300 seconds"
-      );
+    const rate = ms(args[index]) / 1000;
+    if (!rate || rate < 0 || rate > 21600)
+      message.channel.send("Please provide a rate limit between 0s and 6h");
 
     if (!channel.permissionsFor(message.guild.me).has(["MANAGE_CHANNELS"]))
       message.channel.send(
@@ -68,12 +71,14 @@ module.exports = {
           .setDescription(`\`${status}\` ➔ \`enabled\``)
           .addField("Moderator", message.member, true)
           .addField("Channel", channel, true)
-          .addField("Rate", `\`${rate}\``, true)
+          .addField("Rate", `\`${ms(rate * 1000)}\``, true)
           .addField("Reason", reason)
       );
     }
     console.log(
-        `${message.guild.name}: ${message.author.tag} set slowmode on one channel to ${rate}`
-      );
-  },
-};
+      `${message.guild.name}: ${message.author.tag} set slowmode on one channel to ${rate}`
+    );
+  }
+}
+
+module.exports = Slowmode;

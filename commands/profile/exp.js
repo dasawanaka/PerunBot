@@ -1,14 +1,19 @@
 const { MessageEmbed } = require("discord.js");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "exp",
+class Exp extends Command {
+  constructor() {
+    super({
+      name: "exp",
   alias: [],
   public: true,
   description: "Information on how to get experience",
   usage: [
     "exp",
   ],
-  examples: ["$exp"],
+  examples: ["$exp"]
+    })
+  }
   async run(client, message, args) {
     const embed = new MessageEmbed()
       .setTitle('Experience')
@@ -17,5 +22,7 @@ module.exports = {
       .setTimestamp()
       .setColor(message.guild.me.displayHexColor);
     message.channel.send(embed);
-  },
-};
+  }
+}
+
+module.exports = Exp;

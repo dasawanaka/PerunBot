@@ -1,15 +1,20 @@
 const LogChannel = require("../../../database/models/log_channel");
+const Command = require("../../../assets/class/Command");
 
-module.exports = {
-  name: "remove",
-  alias: [],
+class RemoveLogChannel extends Command {
+  constructor() {
+    super({
+      name: "remove",
+      alias: [],
+    });
+  }
   async run(client, message, args) {
     await LogChannel.deleteOne(
       {
         _id: message.guild.id,
       },
       {
-          upsert: true
+        upsert: true,
       }
     )
       .then(function (result) {
@@ -29,5 +34,7 @@ module.exports = {
           },
         });
       });
-  },
-};
+  }
+}
+
+module.exports = RemoveLogChannel;

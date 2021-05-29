@@ -1,14 +1,19 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
 const progressbar = require("percentagebar");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "ship",
-  alias: ["love"],
-  public: true,
-  description: "Ship members",
-  usage: ["ship <user mention/ID> [user]"],
-  examples: ["ship @nurionis"],
+class Ship extends Command {
+  constructor() {
+    super({
+      name: "ship",
+      alias: ["love"],
+      public: true,
+      description: "Ship members",
+      usage: ["ship <user mention/ID> [user]"],
+      examples: ["ship @nurionis"]
+    })
+  }
   async run(client, message, args) {
     try {
       const user1 = args[0];
@@ -95,5 +100,7 @@ module.exports = {
       });
       console.log(err);
     }
-  },
-};
+  }
+}
+
+module.exports = Ship;

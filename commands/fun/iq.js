@@ -1,11 +1,14 @@
-const Discord = require('discord.js');
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-    name: "iq",
-    alias: [],
-    public: true,
-    description: "Give you random iq number",
-    
+class IQ extends Command {
+    constructor() {
+        super({
+            name: "iq",
+            alias: [],
+            public: true,
+            description: "Give you random iq number"
+        })
+    }
     async run(client, message, args) {
         let iq = between(-50, 200);
         let msg = ` your iq is: ${iq}. `;
@@ -36,7 +39,11 @@ module.exports = {
         }
         message.reply(msg);
     }
+
 }
+
+
+module.exports = IQ;
 
 function between(min, max) {
     return Math.floor(

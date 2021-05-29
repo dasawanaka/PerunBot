@@ -1,18 +1,23 @@
 const { MessageEmbed } = require("discord.js");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "ban",
-  alias: [],
-  public: true,
-  description: "Bans a member from your server",
-  usage: [
-    "`<prefix>ban <user> [reason]`",
-    "-`<user>` mention a user or type User ID (required)",
-    "-`[reason]` - optional arg",
-  ],
-  examples: ["$ban @"],
-  clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "BAN_MEMBERS"],
-  userPermissions: ["BAN_MEMBERS"],
+class Ban extends Command {
+  constructor() {
+    super({
+      name: "ban",
+      alias: [],
+      public: true,
+      description: "Bans a member from your server",
+      usage: [
+        "`<prefix>ban <user> [reason]`",
+        "-`<user>` mention a user or type User ID (required)",
+        "-`[reason]` - optional arg",
+      ],
+      examples: ["$ban @"],
+      clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "BAN_MEMBERS"],
+      userPermissions: ["BAN_MEMBERS"],
+    });
+  }
   async run(client, message, args) {
     const member = message.mentions.members.first()
       ? message.mentions.members.first()
@@ -54,5 +59,6 @@ module.exports = {
     console.log(
       `${message.guild.name}: ${message.author.tag} banned ${member.user.tag}`
     );
-  },
-};
+  }
+}
+module.exports = Ban;

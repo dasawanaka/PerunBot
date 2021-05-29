@@ -1,31 +1,36 @@
-const math = require('mathjs');
-const Discord = require('discord.js');
+const math = require("mathjs");
+const Discord = require("discord.js");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-    name: "calculate",
-    alias: ['calc'],
-    public: true,
-    description: "Get the answer to a math problem",
-    cooldown: 5000,
-    async run (client, message, args){
+class Calculate extends Command {
+  constructor() {
+    super({
+      name: "calculate",
+      alias: ["calc"],
+      public: true,
+      description: "Get the answer to a math problem",
+      cooldown: 5000,
+    });
+  }
+  async run(client, message, args) {
+    if (!args[0]) return message.channel.send("Please provide a question");
 
-        if(!args[0]) return message.channel.send('Please provide a question');
+    let resp;
 
-        let resp;
-
-        try {
-            resp = math.evaluate(args.join(" "))
-        } catch (e) {
-            return message.channel.send('Please provide a **valid** question')
-        }
-
-        const embed = new Discord.MessageEmbed()
-        .setColor(0x808080)
-        .setTitle('Calculator')
-        .addField('Question', `\`\`\`css\n${args.join(' ')}\`\`\``)
-        .addField('Answer', `\`\`\`css\n${resp}\`\`\``)
-
-        message.channel.send(embed);
-
+    try {
+      resp = math.evaluate(args.join(" "));
+    } catch (e) {
+      return message.channel.send("Please provide a **valid** question");
     }
+
+    const embed = new Discord.MessageEmbed()
+      .setColor(0x808080)
+      .setTitle("Calculator")
+      .addField("Question", `\`\`\`css\n${args.join(" ")}\`\`\``)
+      .addField("Answer", `\`\`\`css\n${resp}\`\`\``);
+
+    message.channel.send(embed);
+  }
 }
+
+module.exports = Calculate;

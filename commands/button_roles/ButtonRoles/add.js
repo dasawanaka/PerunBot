@@ -1,11 +1,13 @@
 const {MessageEmbed} = require('discord.js');
+const Command = require("../../../assets/class/Command");
 
-module.exports = {
-    name: "messagereactionadd",
-    alias: [],
-    public: true,
-    description: "Let's make some weird faces down there",
-    usage: "<prefix>messagereactionadd",
+class AddRolesButton extends Command {
+    constructor() {
+        super({
+            name: "add",
+    alias: []
+        })
+    }
     async run(client, message, args) {
         // if (!message.member.hasPermission("ADMINISTRATOR"))
         //   return message.channel.send("You must have an ADMINISTRATOR permission!");
@@ -25,4 +27,6 @@ module.exports = {
 //     let messageEmbed = await message.channel.send(embed);
 //     messageEmbed.react('👍');
 }
+
 }
+module.exports = AddRolesButton;

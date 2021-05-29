@@ -1,13 +1,18 @@
 const { MessageEmbed } = require("discord.js");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "vote",
-  alias: ["v"],
-  public: true,
-  description: "this is a vote command",
-  clientPermissions: ["MANAGE_MESSAGES"],
-  usage: ["<prefix>vote <topic..>"],
-  cooldown: 240000,
+class Vote extends Command {
+  constructor() {
+    super({
+      name: "vote",
+      alias: ["v"],
+      public: true,
+      description: "this is a vote command",
+      clientPermissions: ["MANAGE_MESSAGES"],
+      usage: ["<prefix>vote <topic..>"],
+      cooldown: 240000,
+    });
+  }
   async run(client, message, args) {
     try {
       if (!args[0]) {
@@ -57,5 +62,6 @@ module.exports = {
     } catch (error) {
       console.error("One of the emojis failed to react.");
     }
-  },
-};
+  }
+}
+module.exports = Vote;

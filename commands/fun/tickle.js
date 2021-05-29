@@ -1,13 +1,19 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "tickle",
-  alias: [],
-  public: true,
-  description: "Tickle a user",
-  usage: ["tickle [user mention/ID]"],
-  examples: ["tickle @user"],
+class Tickle extends Command {
+  constructor() {
+    super({
+      name: "tickle",
+      alias: [],
+      public: true,
+      description: "Tickle a user",
+      usage: ["tickle [user mention/ID]"],
+      examples: ["tickle @user"],
+    });
+  }
+
   async run(client, message, args) {
     try {
       const member =
@@ -27,8 +33,7 @@ module.exports = {
         return message.channel.send({
           embed: {
             color: 5294200,
-            description:
-              "❌ | You cant tickle yourself! BAKA!",
+            description: "❌ | You cant tickle yourself! BAKA!",
           },
         });
       }
@@ -36,12 +41,28 @@ module.exports = {
       const response = await fetch("https://nekos.life/api/v2/img/tickle");
       const body = await response.json();
       const embed = new MessageEmbed()
-     .setAuthor(member.displayName + " just got a tickled by " + message.author.username, message.author.displayAvatarURL({ dynamic: true, format: 'png', size: 2048 }))
-     .setImage(body.url)
-     .setColor("RANDOM")
-     .setFooter("._. | Requested by " + `${message.author.username}`, message.author.displayAvatarURL({ dynamic: true, format: 'png', size: 2048 }))
-     .setTimestamp()
-     .setURL(body.url);
+        .setAuthor(
+          member.displayName +
+            " just got a tickled by " +
+            message.author.username,
+          message.author.displayAvatarURL({
+            dynamic: true,
+            format: "png",
+            size: 2048,
+          })
+        )
+        .setImage(body.url)
+        .setColor("RANDOM")
+        .setFooter(
+          "._. | Requested by " + `${message.author.username}`,
+          message.author.displayAvatarURL({
+            dynamic: true,
+            format: "png",
+            size: 2048,
+          })
+        )
+        .setTimestamp()
+        .setURL(body.url);
       message.channel.send(embed);
     } catch (err) {
       message.channel.send({
@@ -52,5 +73,7 @@ module.exports = {
       });
       console.log(err);
     }
-  },
-};
+  }
+}
+
+module.exports = Tickle;

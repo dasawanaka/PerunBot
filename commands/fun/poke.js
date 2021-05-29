@@ -1,13 +1,19 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "poke",
-  alias: [],
-  public: true,
-  description: "Poke user",
-  usage: ["poke [user mention/ID]"],
-  examples: ["poke @nurionis"],
+class Poke extends Command {
+  constructor() {
+    super({
+      name: "poke",
+      alias: [],
+      public: true,
+      description: "Poke user",
+      usage: ["poke [user mention/ID]"],
+      examples: ["poke @nurionis"],
+    });
+  }
+
   async run(client, message, args) {
     try {
       const member =
@@ -27,8 +33,7 @@ module.exports = {
         return message.channel.send({
           embed: {
             color: 5294200,
-            description:
-              "🤦 | You can't poke yourself tfu!",
+            description: "🤦 | You can't poke yourself tfu!",
           },
         });
       }
@@ -62,8 +67,7 @@ module.exports = {
           member.toString() + " got a poke from " + message.author.toString()
         )
         .setFooter(
-          "Requested by " +
-            `${message.author.username}`,
+          "Requested by " + `${message.author.username}`,
           message.author.displayAvatarURL({
             dynamic: true,
             format: "png",
@@ -82,5 +86,7 @@ module.exports = {
       });
       console.log(err);
     }
-  },
-};
+  }
+}
+
+module.exports = Poke;

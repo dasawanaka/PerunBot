@@ -1,13 +1,17 @@
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-    name: "skip",
-    alias: ['fs'],
-    public: true,
-    description: "Skipping? That was the best part!",
-    usage: ["<prefix>skip"],
-    async run(client, message, args) {  
-        client.distube.skip(message);
-            },
-  };
-  
-  
+class Skip extends Command {
+  constructor() {
+    super({
+      name: "skip",
+      alias: ["fs"],
+      public: true,
+      description: "Skipping? That was the best part!",
+      usage: ["<prefix>skip"],
+    });
+  }
+  async run(client, message, args) {
+    client.distube.skip(message);
+  }
+}
+module.exports = Skip;

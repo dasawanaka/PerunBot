@@ -1,20 +1,25 @@
 const { MessageEmbed } = require("discord.js");
 const GuildSettingsManager = require("../../database/managers/GuildSettingManager");
-const WarnManager = require("../../database/managers/WarnManager")
+const WarnManager = require("../../database/managers/WarnManager");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "warn",
-  alias: [],
-  public: true,
-  description: "Warns a member in your server.",
-  usage: [
-    "`warn <user> [reason]`",
-    "-`<user>` mention a user or type User ID (required)",
-    "-`[reason]` - optional arg",
-  ],
-  examples: ["$warn @user stupid links"],
-  clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "BAN_MEMBERS"],
-  userPermissions: ["BAN_MEMBERS"],
+class Warn extends Command {
+  constructor() {
+    super({
+      name: "warn",
+      alias: [],
+      public: true,
+      description: "Warns a member in your server.",
+      usage: [
+        "`warn <user> [reason]`",
+        "-`<user>` mention a user or type User ID (required)",
+        "-`[reason]` - optional arg",
+      ],
+      examples: ["$warn @user stupid links"],
+      clientPermissions: ["SEND_MESSAGES", "EMBED_LINKS", "BAN_MEMBERS"],
+      userPermissions: ["BAN_MEMBERS"],
+    });
+  }
   async run(client, message, args) {
     const member = message.mentions.members.first()
       ? message.mentions.members.first()
@@ -40,27 +45,39 @@ module.exports = {
     if (!reason) reason = "`None`";
     if (reason.length > 1024) reason = reason.slice(0, 1021) + "...";
 
-    let activeWarnCount = await WarnManager.addWarn(member.id,  message.guild.id, message.author.id, reason);
+    let activeWarnCount = await WarnManager.addWarn(
+      member.id,
+      message.guild.id,
+      message.author.id,
+      reason
+    );
 
     const embed = new MessageEmbed()
-      .setTitle('Warn Member')
+      .setTitle("Warn Member")
       .setDescription(`${member} has been warned.`)
-      .addField('Moderator', message.member, true)
-      .addField('Member', member, true)
-      .addField('Warn Count', `\`${activeWarnCount}\``, true)
-      .addField('Reason', reason)
-      .setFooter(message.member.displayName,  message.author.displayAvatarURL({ dynamic: true }))
+      .addField("Moderator", message.member, true)
+      .addField("Member", member, true)
+      .addField("Warn Count", `\`${activeWarnCount}\``, true)
+      .addField("Reason", reason)
+      .setFooter(
+        message.member.displayName,
+        message.author.displayAvatarURL({ dynamic: true })
+      )
       .setTimestamp()
       .setColor("#ebb402");
     message.channel.send(embed);
 
     console.log(
-        `${message.guild.name}: ${message.author.tag} warned ${member.user.tag}`
-      );
-    
-    if(autoBan && activeWarnCount >= autoBan ){
-        client.commands.get("ban").run(client, message, [`Warn limit reached. Automatically banned by ${message.guild.me}.`]);
-    }    
+      `${message.guild.name}: ${message.author.tag} warned ${member.user.tag}`
+    );
 
-  },
-};
+    if (autoBan && activeWarnCount >= autoBan) {
+      client.commands
+        .get("ban")
+        .run(client, message, [
+          `Warn limit reached. Automatically banned by ${message.guild.me}.`,
+        ]);
+    }
+  }
+}
+module.exports = Warn;

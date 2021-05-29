@@ -1,16 +1,21 @@
 const LogChannel = require("../../../database/models/log_channel");
+const Command = require("../../../assets/class/Command");
 
-module.exports = {
-  name: "set",
-  alias: [],
+class SetLogChannel extends Command {
+  constructor() {
+    super({
+      name: "set",
+      alias: [],
+    });
+  }
   async run(client, message, args) {
     if (!message.mentions.channels.first())
-    return message.channel.send({
-      embed: {
-        color: 16734039,
-        description: `❌ | Please tag a **channel**!`,
-      },
-    });
+      return message.channel.send({
+        embed: {
+          color: 16734039,
+          description: `❌ | Please tag a **channel**!`,
+        },
+      });
 
     var targetChannel = message.mentions.channels.first();
 
@@ -25,7 +30,7 @@ module.exports = {
         },
       },
       {
-          upsert: true
+        upsert: true,
       }
     )
       .then(function (result) {
@@ -45,5 +50,6 @@ module.exports = {
           },
         });
       });
-  },
-};
+  }
+}
+module.exports = SetLogChannel;

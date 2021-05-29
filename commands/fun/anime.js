@@ -1,13 +1,18 @@
 const { MessageEmbed } = require("discord.js");
 const malScraper = require("mal-scraper");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "anime",
-  alias: ["animesearch", "mal", "animeinfo"],
-  public: true,
-  description: "Search for anime list",
-  usage: ["animesearch <name>"],
-  examples: ["animesearch One Piece", "anime Fairy Tail"],
+class Anime extends Command {
+  constructor() {
+    super({
+      name: "anime",
+      alias: ["animesearch", "mal", "animeinfo"],
+      public: true,
+      description: "Search for anime list",
+      usage: ["animesearch <name>"],
+      examples: ["animesearch One Piece", "anime Fairy Tail"],
+    });
+  }
   async run(client, message, args) {
     try {
       const search = `${args}`;
@@ -57,5 +62,9 @@ module.exports = {
         },
       });
     }
-  },
-};
+  }
+
+}
+
+module.exports = Anime;
+

@@ -1,13 +1,18 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "kiss",
+class Kiss extends Command {
+  constructor() {
+    super({
+      name: "kiss",
   alias: [],
   public: true,
   description: "Give a kiss to mention user",
   usage: ["kiss [user mention/ID]"],
   examples: ["kiss @user"],
+    })
+  }
   async run(client, message, args) {
     try {
       const member =
@@ -62,5 +67,9 @@ module.exports = {
       });
       console.log(err);
     }
-  },
-};
+  }
+
+}
+
+
+module.exports = Kiss;

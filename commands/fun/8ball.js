@@ -1,4 +1,5 @@
 const { MessageEmbed } = require("discord.js");
+const Command = require("../../assets/class/Command");
 const answers = [
   "It is certain.",
   "It is decidedly so.",
@@ -20,15 +21,20 @@ const answers = [
   "My sources say no.",
   "Outlook not so good.",
   "Very doubtful.",
-  "XD"
+  "XD",
 ];
 
-module.exports = {
-  name: "8ball",
-  alias: ["fortune"],
-  public: true,
-  description: "Asks the Magic 8-Ball for some psychic wisdom.",
-  usage: ["8ball <question..>"],
+class EightBall extends Command {
+  constructor() {
+    super({
+      name: "8ball",
+      alias: ["fortune"],
+      public: true,
+      description: "Asks the Magic 8-Ball for some psychic wisdom.",
+      usage: ["8ball <question..>"],
+    });
+  }
+
   async run(client, message, args) {
     if (!args[0]) {
       message.channel.send("Please provide a question to ask");
@@ -56,5 +62,7 @@ module.exports = {
       .setTimestamp()
       .setColor(message.guild.me.displayHexColor);
     message.channel.send(embed);
-  },
-};
+  }
+}
+module.exports = EightBall;
+

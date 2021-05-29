@@ -1,12 +1,17 @@
 const { MessageEmbed } = require("discord.js");
 const { MessageButton } = require("discord-buttons");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "buttons",
-  alias: [],
-  public: false,
-  description: "Display buttons",
-  usage: ["buttons"],
+class ButtonsTest extends Command {
+  constructor() {
+    super({
+      name: "buttons",
+      alias: [],
+      public: false,
+      description: "Display buttons",
+      usage: ["buttons"],
+    });
+  }
   async run(client, message, args) {
     let myembed = new MessageEmbed().setDescription(
       "Hi! This is simple button test xDD"
@@ -41,7 +46,7 @@ module.exports = {
       .setStyle("green")
       .setLabel("green")
       .setID("click_btn")
-      .setDisabled(); 
+      .setDisabled();
 
     let btn7 = new MessageButton()
       .setStyle("gray")
@@ -68,8 +73,9 @@ module.exports = {
       .setDisabled();
 
     message.channel.send({
-      buttons: [btn, btn2, btn3, btn4, btn5],  //, btn6, btn7, btn8, btn9, btn10
+      buttons: [btn, btn2, btn3, btn4, btn5], //, btn6, btn7, btn8, btn9, btn10
       embed: myembed,
     });
-  },
-};
+  }
+}
+module.exports = ButtonsTest;

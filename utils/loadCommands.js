@@ -1,4 +1,3 @@
-const { arg } = require("mathjs");
 const path = require('path');
 const fs = require('fs');
 const colors = require('colors');
@@ -21,7 +20,8 @@ module.exports = {
                 for (const file of commandFiles) {
                     const commandPath = path.join(commandDirPath, module, file);
                     console.log(colors.bold.blue(`[TRY]`) + colors.blue(` Try to load command from ${commandPath}`));
-                    const command = require(commandPath);
+                    const CommandClass = require(commandPath);
+                    const command = new CommandClass();
                     client.commands.set(command.name.toLowerCase(), command);
                     helpGenerator.addCommand(command, module);
                     if (command.alias != undefined)
@@ -29,9 +29,6 @@ module.exports = {
                             client.commands.set(al.toLowerCase(), command);
                         });
                     console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` Register command ${command.name} from ${commandPath}`))
-                    if (command.init != undefined){
-                        command.init();
-                    }
                 }
             }
 

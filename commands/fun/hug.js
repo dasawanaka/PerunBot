@@ -1,13 +1,18 @@
 const { MessageEmbed } = require("discord.js");
 const fetch = require("node-fetch");
+const Command = require("../../assets/class/Command");
 
-module.exports = {
-  name: "hug",
-  alias: ["cuddle"],
-  public: true,
-  description: "Give a hug to mention user",
-  usage: ["hug [user mention/ID]"],
-  examples: ["hug @nurionis"],
+class Hug extends Command {
+  constructor() {
+    super({
+      name: "hug",
+      alias: ["cuddle"],
+      public: true,
+      description: "Give a hug to mention user",
+      usage: ["hug [user mention/ID]"],
+      examples: ["hug @nurionis"],
+    });
+  }
   async run(client, message, args) {
     try {
       const member =
@@ -83,5 +88,7 @@ module.exports = {
       });
       console.log(err);
     }
-  },
-};
+  }
+}
+
+module.exports = Hug;
