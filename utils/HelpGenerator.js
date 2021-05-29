@@ -42,7 +42,10 @@ module.exports = {
     embed.setDescription(command.description);
 
     if (command.alias && command.alias.length > 0) {
-      embed.addField("Available command aliases", `${command.alias.join(", ")}`);
+      embed.addField(
+        "Available command aliases",
+        `${command.alias.join(", ")}`
+      );
     }
     if (command.usage && command.usage.length > 0) {
       embed.addField("How to use command", `${command.usage.join("\n")}`);
@@ -67,15 +70,20 @@ module.exports = {
     commands.forEach((value, key, map) => {
       var desc = "";
       value.forEach((val) => {
-        if(val.public && val.public === true)
-        desc += `\`${val.name}\`: ${val.description.length > 100? val.description.slice(0, 97) + "...":val.description}\n`;
+        if (val.public && val.public === true)
+          desc += `\`${val.name}\`: ${
+            val.description.length > 100
+              ? val.description.slice(0, 97) + "..."
+              : val.description
+          }\n`;
       });
-
-      var embed = new MessageEmbed()
-        .setTitle(key)
-        .setDescription(desc)
-        .setTimestamp();
-      results.push(embed);
+      if (desc.length > 0) {
+        var embed = new MessageEmbed()
+          .setTitle(key)
+          .setDescription(desc)
+          .setTimestamp();
+        results.push(embed);
+      }
     });
     return results;
   },
