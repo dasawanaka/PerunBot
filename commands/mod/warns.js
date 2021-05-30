@@ -45,7 +45,7 @@ class Warns extends Command {
 
     warnList.forEach((warn) => {
       let line = "";
-      if (warn.cleared) line += "--";
+      if (warn.cleared) line += "~~";
       line += warn.warnID + ". ";
       line +=
         warn.reason +
@@ -53,7 +53,7 @@ class Warns extends Command {
         dateFormat(warn.date, "mmmm dS, yyyy, h:MM TT") +
         ")";
 
-      if (warn.cleared) line += "--";
+      if (warn.cleared) line += "~~";
 
       if (desc.length + line.length > 1024) {
         const embed = new MessageEmbed()

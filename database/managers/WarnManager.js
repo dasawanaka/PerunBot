@@ -40,9 +40,27 @@ class WarnManager {
    * @param {string} [guildId] - Discord guild id.
    */
 
-  static async clearWarn(userId, guildId) {
+  static async clearWarn(userId, guildId, moderatorId, warnId) {
     if (!userId) throw new TypeError("An user id was not provided.");
     if (!guildId) throw new TypeError("A guild id was not provided.");
+    if (!moderatorId) throw new TypeError("A moderator id was not provided.");
+    if (!warnId) throw new TypeError("A warn id was not provided.");
+
+    const ww = await Warn.findOne({
+      userID: userId,
+      guildID: guildId,
+      warnID: warnId
+    });
+
+    if (!ww) return false;
+
+    ww.cleared = true;
+    ww.clearedDate = new Date();
+    ww.clearedBy = moderatorId;
+
+    await ww.save().catch((e) => {console.log(`Failed to unwarn user: ${e}`); return false;});
+
+    return true;
   }
 
   static async fetch(userId, guildId) {
