@@ -8,6 +8,7 @@ const WarnSchema = new mongoose.Schema({
   date: { type: Date, default: new Date() },
   moderator: { type: String },
   cleared: { type: Boolean, default: false },
+  clearedDate: { type: Date },
   clearedBy: { type: String },
 });
 
