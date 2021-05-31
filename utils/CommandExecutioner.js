@@ -9,8 +9,9 @@ module.exports = {
       if (!command.checkPermissions(message)) return;
 
       //check cooldown
+      console.log(command.cooldown)
       if (command.cooldown && command.cooldown > 0) {
-        if (Timeout.has(`${command.name}${message.author.id}`))
+        if (Timeout.has(`${command.name.toLowerCase()}${message.author.id}`))
           return message.channel.send(
             `You are on a \`${ms(
               Timeout.get(`${command.name}${message.author.id}`) - Date.now(),

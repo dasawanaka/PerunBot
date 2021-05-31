@@ -18,6 +18,8 @@ class Command {
 
     if (options.examples) this.examples = options.examples;
 
+    if (options.cooldown) this.cooldown = options.cooldown;
+
     if (options.clientPermissions)
       this.clientPermissions = options.clientPermissions;
 
