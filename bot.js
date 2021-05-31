@@ -78,7 +78,7 @@ client.on("clickButton", async (button) => {
     //
     //
     // await button.think(false);
-  } else await button.defer(true);
+  } else if (button.id.startsWith("br_")){console.log("User click reaction button"); button.defer(true)} else await button.defer(true);
 });
 
 client.on("guildCreate", (guild) => {
