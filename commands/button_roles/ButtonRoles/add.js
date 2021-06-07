@@ -2,6 +2,7 @@ const Command = require("../../../assets/class/Command");
 const EmbedGenerator = require("../../../utils/EmbedGenerator");
 const ButtonsGenerator = require("../../../utils/ButtonsGenerator");
 const ButtonRoles = require("../../../database/models/button_roles");
+const { MessageActionRow } = require("discord-buttons");
 const {RED} = require("../../../assets/other/colors.json")
 
 class AddRolesButton extends Command {
@@ -53,9 +54,10 @@ class AddRolesButton extends Command {
     let buttons_res = await ButtonsGenerator.createReactionButton(message, mte);
 
     let res;
+    let line = new MessageActionRow().addComponents(buttons_res.buttons);
 
-    if (embed) res = { embed: embed, buttons: buttons_res.buttons };
-    else res = { buttons: buttons_res.buttons };
+    if (embed) res = { embed: embed, components: line };
+    else res = { components: line };
 
     mte.forEach((msg) => {
       msg.delete();
