@@ -24,6 +24,10 @@ class AddRep extends Command {
       message.reply("You cannot give reputation points to yourself.");
       throw new Error("Try give reputation points to yourself");
     }
+    if (user.id === client.user.id) {
+      message.reply("You cannot give reputation points to bot!");
+      throw new Error("Try give reputation points to bot.");
+    }
 
     const rep = await Rep.appendRep(user.id, message.guild.id, 1);
 

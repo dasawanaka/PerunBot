@@ -37,8 +37,9 @@ if (oldMessage.partial) {
     //.setAuthor(newMessage.author.tag, newMessage.author.avatar)
     .setThumbnail(newMessage.author.displayAvatarURL())
     .setTitle('Message edited')
+    .setDescription(`<#${channel.id}> [Go to message](${newMessage.url})`)
     .addFields(
-      { name: `Channel`, Value: `<#${newMessage.channel.id}> [Go to message](${newMessage.url})` },
+      //{ name: `Channel`, Value: `<#${newMessage.channel.id}> [Go to message](${newMessage.url})` },
       { name: `User`, value: `${newMessage.author.tag}`, inline: true },
       { name: `UserID`, value: `${newMessage.author.id}`, inline: true },
       //{ name: '\u200B', value: '\u200B' },
