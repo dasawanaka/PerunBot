@@ -54,17 +54,16 @@ class AddRolesButton extends Command {
     let buttons_res = await ButtonsGenerator.createReactionButton(message, mte);
 
     let res;
-    let line = new MessageActionRow().addComponents(buttons_res.buttons);
 
-    if (embed) res = { embed: embed, components: line };
-    else res = { components: line };
+    if (embed) res = { embed: embed, components: buttons_res.lines };
+    else res = { components: buttons_res.lines };
 
     mte.forEach((msg) => {
       msg.delete();
     });
 
     let msg = await message.channel.send("_ _", res);
-    res.roles.forEach((roleId) => {
+    buttons_res.roles.forEach((roleId) => {
       let bRole = new ButtonRoles({
         guildID: msg.guild.id,
         channelID: msg.channel.id,
