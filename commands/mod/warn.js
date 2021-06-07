@@ -75,6 +75,7 @@ class Warn extends Command {
       client.commands
         .get("ban")
         .run(client, message, [
+          "",
           `Warn limit reached. Automatically banned by ${message.guild.me}.`,
         ]);
     }

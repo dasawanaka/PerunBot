@@ -37,8 +37,10 @@ class Ban extends Command {
     if (!member.bannable)
       return message.channel.send("Provided member is not bannable");
 
+    let modTag = message.author.tag;
     let reason = args.slice(1).join(" ");
     if (!reason) reason = "`None`";
+    reason = modTag + " | " + reason;
     if (reason.length > 1024) reason = reason.slice(0, 1021) + "...";
 
     await member.ban({ reason: reason });
