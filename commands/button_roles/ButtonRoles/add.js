@@ -2,6 +2,7 @@ const Command = require("../../../assets/class/Command");
 const EmbedGenerator = require("../../../utils/EmbedGenerator");
 const ButtonsGenerator = require("../../../utils/ButtonsGenerator");
 const ButtonRoles = require("../../../database/models/button_roles");
+const {RED} = require("../../../assets/other/colors.json")
 
 class AddRolesButton extends Command {
   constructor() {
@@ -74,7 +75,7 @@ class AddRolesButton extends Command {
           EmbedGenerator.createSmallEmbed(
             "❌",
             "Cannot save data into db... Try again later..."
-            , "#f20049"
+            , RED
           )
         );
         return false;
