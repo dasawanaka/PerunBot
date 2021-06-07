@@ -60,7 +60,7 @@ class UnWarn extends Command {
     let res = await WarnManager.clearWarn(
       member.id,
       message.guild.id,
-      message.author.id,
+      message.author.tag,
       parseInt(args[1])
     );
     if (!res) {

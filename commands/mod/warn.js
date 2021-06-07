@@ -48,7 +48,7 @@ class Warn extends Command {
     let activeWarnCount = await WarnManager.addWarn(
       member.id,
       message.guild.id,
-      message.author.id,
+      message.author.tag,
       reason
     );
 

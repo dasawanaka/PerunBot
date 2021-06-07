@@ -51,9 +51,13 @@ class Warns extends Command {
         warn.reason +
         " (" +
         dateFormat(warn.date, "mmmm dS, yyyy, h:MM TT") +
-        ")";
+        ") by *"
+        + warn.moderator + "*";
 
-      if (warn.cleared) line += "~~";
+      if (warn.cleared) {
+        line += "~~\n";
+        line += "*cleared by " + warn.clearedBy+"*";
+      }
 
       if (desc.length + line.length > 1024) {
         const embed = new MessageEmbed()

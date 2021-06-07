@@ -65,20 +65,8 @@ client.once("ready", () => {
 });
 
 client.on("clickButton", async (button) => {
-  if (button.id === "click_btn") {
-    await button.think();
-    button.channel.send({
-      embed: {
-        color: 5294200,
-        description: `👍 | ${button.clicker.user.tag} clicked button!`,
-      },
-    });
-    await new Promise((resolve) => setTimeout(resolve, 350));
-    await button.reply.delete();
-    //
-    //
-    // await button.think(false);
-  } else if (button.id.startsWith("br_")){console.log("User click reaction button"); button.defer(true)} else await button.defer(true);
+  client.events.get("clickButton").run(button, client);
+  
 });
 
 client.on("guildCreate", (guild) => {

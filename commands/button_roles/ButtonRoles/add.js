@@ -1,6 +1,7 @@
 const Command = require("../../../assets/class/Command");
 const EmbedGenerator = require("../../../utils/EmbedGenerator");
 const ButtonsGenerator = require("../../../utils/ButtonsGenerator");
+const ButtonRoles = require("../../../database/models/button_roles");
 
 class AddRolesButton extends Command {
   constructor() {
@@ -48,18 +49,37 @@ class AddRolesButton extends Command {
     if (action[0].toLowerCase() === "yes" || action[0].toLowerCase() === "y")
       embed = await EmbedGenerator.createUserEmbed(message, mte);
 
-    let buttons = await ButtonsGenerator.createReactionButton(message, mte);
+    let buttons_res = await ButtonsGenerator.createReactionButton(message, mte);
 
     let res;
 
-    if (embed) res = { embed: embed, buttons: buttons };
-    else res = { buttons: buttons };
+    if (embed) res = { embed: embed, buttons: buttons_res.buttons };
+    else res = { buttons: buttons_res.buttons };
 
     mte.forEach((msg) => {
       msg.delete();
     });
 
-    message.channel.send('_ _', res);
+    let msg = await message.channel.send("_ _", res);
+    res.roles.forEach((roleId) => {
+      let bRole = new ButtonRoles({
+        guildID: msg.guild.id,
+        channelID: msg.channel.id,
+        messageID: msg.id,
+        roleID: roleId,
+      });
+      bRole.save().catch((e) => {
+        console.log(`Failed to save data: ${e}`);
+        msg.channel.send(
+          EmbedGenerator.createSmallEmbed(
+            "❌",
+            "Cannot save data into db... Try again later..."
+            , "#f20049"
+          )
+        );
+        return false;
+      });
+    });
   }
 }
 module.exports = AddRolesButton;

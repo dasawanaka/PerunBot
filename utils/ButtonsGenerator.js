@@ -1,10 +1,11 @@
 const EmbedGenerator = require("./EmbedGenerator");
 const { MessageButton } = require("discord-buttons");
-const buttonStyles = ["blurple", "grey", "green", "red"];
+const buttonStyles = ["blurple", "gray", "green", "red"];
 
 class ButtonGenerator {
   static async createReactionButton(message, mtd) {
     var buttons = [];
+    var buttonRoles = [];
 
     var count;
     while (!count || count < 0 || count > 5) {
@@ -30,13 +31,13 @@ class ButtonGenerator {
           await message.channel.send(
             EmbedGenerator.createSmallEmbed(
               ":pencil:",
-              `[BTN_${i}] Type button style(one of: ${buttonStyles.join(", ")})`
+              `[BTN_${i+1}] Type button style(one of: ${buttonStyles.join(", ")})`
             )
           )
         );
         let collector = this.createCustomCollector(message, mtd);
         style = await this.getContent(collector);
-        style = style[0];
+        style = style[0].toLowerCase();
       }
 
       //get text for button
@@ -46,7 +47,7 @@ class ButtonGenerator {
           await message.channel.send(
             EmbedGenerator.createSmallEmbed(
               ":pencil:",
-              `[BTN_${i}] Type button label(**max 80** characters)`
+              `[BTN_${i+1}] Type button label(**max 80** characters)`
             )
           )
         );
@@ -61,7 +62,7 @@ class ButtonGenerator {
           await message.channel.send(
             EmbedGenerator.createSmallEmbed(
               ":pencil:",
-              `[BTN_${i}] Mention the role that is to be given when clicking the button.`
+              `[BTN_${i+1}] Mention the role that is to be given when clicking the button.`
             )
           )
         );
@@ -76,9 +77,10 @@ class ButtonGenerator {
       .setID(`br_${role.id}`);
 
       buttons.push(btn);
+      buttonRoles.push(role.id);
     }
 
-    return buttons;
+    return {buttons: buttons, roles: buttonRoles};
   }
 
   static getContent(collector) {
@@ -118,7 +120,6 @@ class ButtonGenerator {
       messagesToDelete.push(msg);
       collector.stop();
     });
-
     return collector;
   }
 }
