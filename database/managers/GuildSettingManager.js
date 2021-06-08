@@ -1,5 +1,6 @@
 const Guild = require("../models/guild");
 const mongoose = require("mongoose");
+const logger = require("../../DefaultLogger").get();
 
 const cache = new Map();
 
@@ -13,7 +14,7 @@ module.exports = {
       );
      
     } else {
-      console.log(`Use cached guild settings for ${guildSettings.guildName}(ID: ${guildId})`);
+      logger.debug(`Use cached guild settings for ${guildSettings.guildName}(ID: ${guildId})`);
     }
     return guildSettings;
   },
@@ -44,8 +45,8 @@ function getGuildFromDB(err, guild, message) {
     });
     newGuild
       .save()
-      .then((result) => console.log(result))
-      .catch((err) => console.error(err));
+      .then((result) => logger.debug(result))
+      .catch((err) => logger.error(`${err.message} ${err.stack}`));
 
       cache.set(message.guild.id, newGuild);
 

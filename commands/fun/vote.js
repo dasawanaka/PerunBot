@@ -53,14 +53,9 @@ class Vote extends Command {
 
       message
         .delete({ timeout: 1000 })
-        .then((msg) =>
-          console.log(
-            `Deleted message from ${msg.author.username} after 1 seconds`
-          )
-        )
         .catch(console.error);
-    } catch (error) {
-      console.error("One of the emojis failed to react.");
+    } catch (err) {
+      client.logger.error(`One of the emojis failed to react: ${err.message} ${err.stack}`);
     }
   }
 }

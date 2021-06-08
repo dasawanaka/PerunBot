@@ -67,7 +67,7 @@ class Warn extends Command {
       .setColor("#ebb402");
     message.channel.send(embed);
 
-    console.log(
+    client.logger.debug(
       `${message.guild.name}: ${message.author.tag} warned ${member.user.tag}`
     );
 

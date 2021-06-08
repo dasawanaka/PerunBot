@@ -58,7 +58,7 @@ class Ban extends Command {
       .setTimestamp()
       .setColor("#ad0000");
     message.channel.send(embed);
-    console.log(
+    client.logger.debug(
       `${message.guild.name}: ${message.author.tag} banned ${member.user.tag}`
     );
   }

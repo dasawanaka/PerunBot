@@ -21,12 +21,12 @@ class Help extends Command {
     }
 
     if (pages.length === 0) {
-      console.log("pages coint is 0");
       const pa = HelpGenerator.generateHelpEmbeds();
       pa.forEach((page) => {
         pages.push(page);
       });
-    } else console.log("not empty pages");
+      //TODO: add custom start and credits page
+    }
 
     const emojiList = ["⏪", "⏩"];
     const timeout = "180000";

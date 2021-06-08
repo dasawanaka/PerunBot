@@ -2,6 +2,7 @@ const path = require('path');
 const fs = require('fs');
 const colors = require('colors');
 const helpGenerator = require('./HelpGenerator');
+const logger = require('../DefaultLogger').get();
 
 module.exports = {
     name: 'loadCommandsModule',
@@ -14,12 +15,11 @@ module.exports = {
             var modulePath = path.join(commandDirPath, module);
             const commandFiles = fs.readdirSync(modulePath).filter(file => file.endsWith('.js'));
 
-            console.log(colors.bold.bgCyan.yellow(`[MODULE]`) + colors.green(` find module ${module} with ${commandFiles.length} commands.`))
-
             if (commandFiles.length > 0) {
+                logger.info(`🔍 Find ${module} module with ${commandFiles.length} commands.`);
                 for (const file of commandFiles) {
                     const commandPath = path.join(commandDirPath, module, file);
-                    console.log(colors.bold.blue(`[TRY]`) + colors.blue(` Try to load command from ${commandPath}`));
+                    logger.info(`⏳ Try to load command from ${module}/${file}`);
                     const CommandClass = require(commandPath);
                     const command = new CommandClass();
                     client.commands.set(command.name.toLowerCase(), command);
@@ -28,7 +28,7 @@ module.exports = {
                         command.alias.forEach(al => {
                             client.commands.set(al.toLowerCase(), command);
                         });
-                    console.log(colors.bold.bgBlue.yellow(`[DONE]`) + colors.green(` Register command ${command.name} from ${commandPath}`))
+                        logger.info(`✅ Register command ${command.name}`);
                 }
             }
 

@@ -37,17 +37,12 @@ class AddRolesButton extends Command {
       maxMatches: 1,
     });
     collector.on("collect", (msg) => {
-      console.log(msg.content);
       mte.push(msg);
       collector.stop();
-    });
-    collector.on("end", (collected) => {
-      console.log(collected.size);
     });
 
     let embed;
     let action = await EmbedGenerator.getContent(collector);
-    console.log(action);
     if (action[0].toLowerCase() === "yes" || action[0].toLowerCase() === "y")
       embed = await EmbedGenerator.createUserEmbed(message, mte);
 
@@ -71,7 +66,8 @@ class AddRolesButton extends Command {
         roleID: roleId,
       });
       bRole.save().catch((e) => {
-        console.log(`Failed to save data: ${e}`);
+
+        client.logger.error(`Failed to save data: ${e.message} ${e.stack}`);
         msg.channel.send(
           EmbedGenerator.createSmallEmbed(
             "❌",

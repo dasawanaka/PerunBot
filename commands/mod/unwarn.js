@@ -86,7 +86,7 @@ class UnWarn extends Command {
       .setColor("#ebb402");
     message.channel.send(embed);
 
-    console.log(
+    client.logger.debug(
       `${message.guild.name}: ${message.author.tag} unwarned ${member.user.tag}`
     );
   }

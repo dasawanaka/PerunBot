@@ -71,7 +71,7 @@ class Tickle extends Command {
           description: "Something went wrong... :cry:",
         },
       });
-      console.log(err);
+      client.logger.error(`${err.message} ${err.stack}`);
     }
   }
 }

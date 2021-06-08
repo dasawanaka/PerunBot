@@ -75,7 +75,7 @@ class Slowmode extends Command {
           .addField("Reason", reason)
       );
     }
-    console.log(
+    client.logger.debug(
       `${message.guild.name}: ${message.author.tag} set slowmode on one channel to ${rate}`
     );
   }

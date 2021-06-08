@@ -1,4 +1,5 @@
 const CoinsModel = require("../models/coins.js");
+const logger = require("../../DefaultLogger").get();
 
 class Coins {
   /**
@@ -23,7 +24,7 @@ class Coins {
 
     await newUser
       .save()
-      .catch((e) => console.log(`Failed to create user: ${e}`));
+      .catch((e) => logger.error(`Failed to create user: ${e.message} ${e.stack}`));
 
     return newUser;
   }
@@ -43,7 +44,7 @@ class Coins {
     await CoinsModel.findOneAndDelete({
       userID: userId,
       guildID: guildId,
-    }).catch((e) => console.log(`Failed to delete user: ${e}`));
+    }).catch((e) =>logger.error(`Failed to delete user: ${e.message} ${e.stack}`));
 
     return user;
   }
@@ -70,12 +71,12 @@ class Coins {
 
       await newUser
         .save()
-        .catch((e) => console.log(`Failed to save new user.`));
+        .catch((e) => logger.error(`Failed to save new user: ${e.message} ${e.stack}`));
     }
 
     user.coins += coins;
 
-    await user.save().catch((e) => console.log(`Failed to append Coins: ${e}`));
+    await user.save().catch((e) => logger.error(`Failed to append Coins: ${e.message} ${e.stack}`));
   }
   /**
    * @param {string} [userId] - Discord user id.
@@ -98,7 +99,7 @@ class Coins {
 
       await newUser
         .save()
-        .catch((e) => console.log(`Failed to save new user.`));
+        .catch((e) =>  logger.error(`Failed to save new user: ${e.message} ${e.stack}`));
     }
     if(!user.lastUpdated) user.lastUpdated = new Date();
     if (this.isToday(user.lastUpdated) && user.todayCoins > 150) return;
@@ -110,7 +111,7 @@ class Coins {
     user.coins += 1;
     user.todayCoins +=1;
 
-    await user.save().catch((e) => console.log(`Failed to append Coins: ${e}`));
+    await user.save().catch((e) => logger.error(`Failed to append Coins: ${e.message} ${e.stack}`));
   }
 
   /**
@@ -124,7 +125,6 @@ class Coins {
 
     const user = await CoinsModel.findOne({ userID: userId, guildID: guildId });
     if (!user) return false;
-    console.log("Fetch user: " + user);
     return user;
   }
 
@@ -144,7 +144,7 @@ class Coins {
 
     user.coins -= coins;
 
-    user.save().catch((e) => console.log(`Failed to subtract coins: ${e}`));
+    user.save().catch((e) => logger.error(`Failed to subtract coins: ${e.message} ${e.stack}`));
 
     return user;
   }

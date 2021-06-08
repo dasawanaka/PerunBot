@@ -110,7 +110,7 @@ class ButtonGenerator {
     if (exit === "exit") {
       message.channel.send(
         EmbedGenerator.createSmallEmbed(
-          "❌",
+          "💣",
           "Process terminated by user...",
           RED
         )

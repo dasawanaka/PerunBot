@@ -1,4 +1,5 @@
 const CounterModel = require("../models/message_counter");
+const logger = require("../../DefaultLogger").get();
 
 class MessageCounterManager {
   /**
@@ -22,7 +23,7 @@ class MessageCounterManager {
 
     await newUser
       .save()
-      .catch((e) => console.log(`Failed to create user: ${e}`));
+      .catch((e) => logger.error(`Failed to create user: ${e.message} ${e.stack}`));
 
     return newUser;
   }
@@ -45,7 +46,7 @@ class MessageCounterManager {
     await CounterModel.findOneAndDelete({
       userID: userId,
       guildID: guildId,
-    }).catch((e) => console.log(`Failed to delete user: ${e}`));
+    }).catch((e) => logger.error(`Failed to delete user: ${e.message} ${e.stack}`));
 
     return user;
   }
@@ -83,13 +84,13 @@ class MessageCounterManager {
 
       await newUser
         .save()
-        .catch((e) => console.log(`Failed to save new user.`));
+        .catch((e) => logger.error(`Failed to save new user: ${e.message} ${e.stack}`));
       return;
     }
 
     user.messages += messagesCount;
 
-    await user.save().catch((e) => console.log(`Failed to append Coins: ${e}`));
+    await user.save().catch((e) => logger.error(`Failed to append message: ${e.message} ${e.stack}`));
   }
 
   /**
@@ -106,7 +107,6 @@ class MessageCounterManager {
       guildID: guildId,
     });
     if (!user) return false;
-    console.log("Fetch MessageCounter for user: " + user);
     return user;
   }
 }

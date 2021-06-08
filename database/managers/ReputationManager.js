@@ -1,4 +1,5 @@
 const reps = require("../models/rep.js");
+const logger = require("../../DefaultLogger").get();
 
 class Reputation {
 
@@ -19,7 +20,7 @@ class Reputation {
       guildID: guildId
     });
 
-    await newUser.save().catch(e => console.log(`Failed to create user: ${e}`));
+    await newUser.save().catch(e => logger.error(`Failed to create user: ${e.message} ${e.stack}`));
 
     return newUser;
   }
@@ -36,7 +37,7 @@ class Reputation {
     const user = await reps.findOne({ userID: userId, guildID: guildId });
     if (!user) return false;
 
-    await reps.findOneAndDelete({ userID: userId, guildID: guildId }).catch(e => console.log(`Failed to delete user: ${e}`));
+    await reps.findOneAndDelete({ userID: userId, guildID: guildId }).catch(e => logger.error(`Failed to delete user: ${e.message} ${e.stack}`));
 
     return user;
   }
@@ -61,13 +62,13 @@ class Reputation {
         rep: rep
       });
 
-      await newUser.save().catch(e => console.log(`Failed to save new user.`));
+      await newUser.save().catch(e => logger.error(`Failed to create user: ${e.message} ${e.stack}`));
       return newUser;
     };
 
     user.rep += rep;
 
-    await user.save().catch(e => console.log(`Failed to append rep: ${e}`) );
+    await user.save().catch(e => logger.error(`Failed to append rep: ${e.message} ${e.stack}`) );
 
     return user;
   }
@@ -82,7 +83,6 @@ class Reputation {
 
     const user = await reps.findOne({ userID: userId, guildID: guildId });
     if (!user) return false;
-
     return user;
   }
 

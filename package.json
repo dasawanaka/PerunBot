@@ -6,7 +6,8 @@
     "author": "Michal Daniel (michal.mateusz.daniel@gmail.com)",
     "scripts": {
         "node .": "node run bot.js",
-        "dev": "nodemon --watch . bot.js"
+        "dev": "nodemon --watch . bot.js",
+        "devlog": "nodemon --watch . bot.js --dev"
     },
     "dependencies": {
         "@discordjs/opus": "^0.5.0",

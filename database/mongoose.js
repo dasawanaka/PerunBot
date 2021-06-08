@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const logger = require("../DefaultLogger").get();
 
 module.exports = {
   init: (configFileName) => {
@@ -36,15 +37,15 @@ module.exports = {
     mongoose.Promise = global.Promise;
 
     mongoose.connection.on("connected", () => {
-      console.log("Mongoose has successfully connected!");
+      logger.debug("Mongoose has successfully connected!");
     });
 
     mongoose.connection.on("err", (err) => {
-      console.error(`Mongoose connection error: \n${err.stack}`);
+      logger.error(`Mongoose connection error: \n${err.stack}`);
     });
 
     mongoose.connection.on("disconnected", () => {
-      console.warn("Mongoose connection lost");
+      logger.warn("Mongoose connection lost");
     });
   },
 };

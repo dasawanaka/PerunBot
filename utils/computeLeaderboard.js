@@ -9,7 +9,6 @@ module.exports = {
     if (!leaderboard) throw new TypeError("A leaderboard id was not provided.");
 
     if (leaderboard.length < 1) return [];
-    console.log(leaderboard);
     const computedArray = [];
 
     leaderboard.map((key) => {

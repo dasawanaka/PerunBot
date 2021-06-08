@@ -56,7 +56,7 @@ class Kick extends Command {
       .setTimestamp()
       .setColor("#ba5d00");
     message.channel.send(embed);
-    console.log(
+    client.logger.debug(
       `${message.guild.name}: ${message.author.tag} kicked ${member.user.tag}`
     );
   }

@@ -8,8 +8,6 @@ module.exports = {
     try {
       if (!command.checkPermissions(message)) return;
 
-      //check cooldown
-      console.log(command.cooldown)
       if (command.cooldown && command.cooldown > 0) {
         if (Timeout.has(`${command.name.toLowerCase()}${message.author.id}`))
           return message.channel.send(
@@ -18,7 +16,7 @@ module.exports = {
               { long: true }
             )}\` cooldown.`
           );
-        console.log(`User: ${message.author.tag} use command: ${commandName}`);
+        client.logger.debug(`User: ${message.author.tag} use command: ${commandName}`);
         await command.run(client, message, args);
         Timeout.set(
           `${command.name}${message.author.id}`,
@@ -28,7 +26,7 @@ module.exports = {
           Timeout.delete(`${command.name}${message.author.id}`);
         }, command.cooldown);
       } else {
-        console.log(`User: ${message.author.tag} use command: ${commandName}`);
+        client.logger.debug(`User: ${message.author.tag} use command: ${commandName}`);
         command.run(client, message, args);
       }
     } catch (error) {

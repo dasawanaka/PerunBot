@@ -50,7 +50,7 @@ class Unban extends Command {
       .setColor("#00960f");
 
     message.channel.send(embed);
-    console.log(
+    client.logger.debug(
       `${message.guild.name}: ${message.author.tag} unban ${user.tag}`
     );
   }

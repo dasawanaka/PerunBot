@@ -23,7 +23,6 @@ class ResetPrefix extends Command {
         { $set: { prefix: "$" } }
       )
         .then(function (result) {
-          console.log(result);
           return message.channel.send({
             embed: {
               color: 5294200,
@@ -32,7 +31,7 @@ class ResetPrefix extends Command {
           });
         })
         .catch(function (err) {
-          console.error(err);
+          client.logger.error(err);
           return message.channel.send({
             embed: {
               color: 16734039,

@@ -22,7 +22,7 @@ class WarnManager {
     });
 
     await warn.save().catch((e) => {
-      console.log(`Failed to create user: ${e}`);
+      logger.error(`Failed to save warn: ${e.message} ${e.stack}`);
       return false;
     });
 
@@ -58,7 +58,7 @@ class WarnManager {
     ww.clearedDate = new Date();
     ww.clearedBy = moderatorId;
 
-    await ww.save().catch((e) => {console.log(`Failed to unwarn user: ${e}`); return false;});
+    await ww.save().catch((e) => {logger.error(`Failed to unwarn user: ${e.message} ${e.stack}`); return false;});
 
     return true;
   }
@@ -67,16 +67,13 @@ class WarnManager {
     if (!userId) throw new TypeError("An user id was not provided.");
     if (!guildId) throw new TypeError("A guild id was not provided.");
 
-    //var warns = await Warn.find({ userID: userId, guildID: guildId }).projection({}).sort({_id: -1}).limit(100);
     var warns = await Warn.collection.find({ userID: userId, guildID: guildId }).limit(100);
-    //console.log(warns);
     if((warns.count()) === 0) return false;
 
     const warnList = [];
     await warns.forEach(w => warnList.push(w));
 
     if (!warnList) return false;
-    //console.log("Fetch user: " + warnList);
     return warnList;
   }
 }

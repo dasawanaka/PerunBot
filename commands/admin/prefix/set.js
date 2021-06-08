@@ -44,7 +44,7 @@ class SetPrefix extends Command {
         { $set: { prefix: args[0] } }
       )
         .then(function (result) {
-          console.log(result);
+          client.logger.debug(result);
 
           return message.channel.send({
             embed: {

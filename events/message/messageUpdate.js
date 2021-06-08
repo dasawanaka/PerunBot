@@ -18,7 +18,7 @@ if (oldMessage.partial) {
      try {
        await oldMessage.fetch();
      } catch (error) {
-       console.log('Something went wrong when fetching the message: ', error);
+       client.logger.error(`Something went wrong when fetching the message: ${error.message} ${error.stack}`);
        // Return as `reaction.message.author` may be undefined/null
        return;
      }
@@ -27,7 +27,7 @@ if (oldMessage.partial) {
     try {
       await newMessage.fetch();
     } catch (error) {
-      console.log('Something went wrong when fetching the message: ', error);
+      client.logger.error(`Something went wrong when fetching the message:  ${error.message} ${error.stack}`);
       // Return as `reaction.message.author` may be undefined/null
       return;
     }

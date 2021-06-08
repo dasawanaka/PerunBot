@@ -7,36 +7,28 @@ const Discord = require("discord.js");
 
 //get config file name from param
 const args = require("minimist")(process.argv.slice(2));
+console.log(args);
 var configFileName;
 if (args["config"] === undefined) {
   configFileName = "config.json";
 } else {
   configFileName = args["config"];
 }
-console.log("Use config file: ", configFileName);
+var devMode;
+if (args["dev"] === undefined || args["dev"] === false) {
+  devMode = false;
+} else {
+  devMode = true;
+}
 
-const { discord_conf, webHook } = require(`./${configFileName}`);
+const { discord_conf } = require(`./${configFileName}`);
 const client = new Discord.Client({
   partials: ["MESSAGE", "CHANNEL", "REACTION"],
   disableEveryone: false,
 });
 
-client.logger = require("js-logger");
-client.logger.useDefaults();
-if (webHook && webHook.id && webHook.token) {
-  let webHookClient =  new Discord.WebhookClient(webHook.id, webHook.token);
-  client.logger.webHook = webHookClient;}
-
-client.logger.setHandler(function (messages, context) {
-  // Send messages to a custom logging endpoint for analysis.
-  // TODO: Add some security? (nah, you worry too much! :P)
-  let msg = `[${context.level.name}] ${messages[0]}`;
-  console.log(msg);
-  if(client.logger.webHook){
-    client.logger.webHook.send(`*${dateFormat(Date.now(), "m/d/yyyy, h:MM TT")}*  **[${context.level.name}]** ${messages[0]}`);
-  }
-});
-
+client.logger = require("./DefaultLogger").init(configFileName, devMode);
+client.logger.info(`Use config file: ${configFileName}`);
 require("discord-buttons")(client);
 
 const path = require("path");
@@ -78,8 +70,10 @@ loader.events.load(paths.events, client);
 
 client.once("ready", () => {
   client.logger.info("Ready! Bot started now!");
-  //console.log(`Ready! Bot started now!`);
   client.logger.info(`Run in ${ms(Date.now() - startTime)}`);
+  for (let index = 0; index < 10; index++) {
+    client.logger.debug(`⚠️ _ _ APP ON DEV MODE _ _ ⚠️`);
+  }
 });
 
 client.on("clickButton", async (button) => {
@@ -87,7 +81,7 @@ client.on("clickButton", async (button) => {
 });
 
 client.on("guildCreate", (guild) => {
-  console.log("Joined a new guild: " + guild.name);
+  client.logger.info("Joined a new guild: " + guild.name);
 });
 
 client.on("message", async (message) => {
@@ -224,13 +218,15 @@ client.distube
   // DisTubeOptions.searchSongs = true
   .on("searchCancel", (message) => message.channel.send(`Searching canceled`))
   .on("error", (message, e) => {
-    console.error(e);
+    client.logger.error(e);
     message.channel.send("An error encountered: " + e);
   });
 
 //handle unhandled rejection error
 process.on("unhandledRejection", (error) => {
-  console.error("Unhandled promise rejection:\n", error);
+  client.logger.error(
+    "Unhandled promise rejection: " + error.message + "\n" + error.stack
+  );
 });
 
 client.levels.init(configFileName);

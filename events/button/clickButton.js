@@ -8,7 +8,6 @@ module.exports = {
   description: "BUTONS!!! ZAEBYŚCIE",
   async run(button, client) {
     const { id, guild, channel, clicker, message } = button;
-    console.log(id);
     if (id === "test") {
       channel.send(
         EmbedGenerator.createSmallEmbed(
@@ -19,7 +18,7 @@ module.exports = {
       );
       button.defer(true);
     } else if (id.startsWith("br_")) {
-      //console.log("button " + JSON.stringify(button));
+
       let data = id.split("_");
       let roleId = data[1];
       let guildd = client.guilds.cache.get(guild.id);
@@ -60,8 +59,8 @@ module.exports = {
         (user.roles.cache.has(roleId) && !toggleRoleCache.has(kk)) ||
         (!user.roles.cache.has(roleId) && toggleRoleCache.has(kk))
       ) {
-        await user.roles.remove(role).catch(() => {
-          console.error;
+        await user.roles.remove(role).catch((e) => {
+          client.logger.debug(`${e.message} ${e.stack}`)
           return channel
             .send(
               EmbedGenerator.createSmallEmbed(

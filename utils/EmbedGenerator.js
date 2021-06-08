@@ -15,7 +15,6 @@ class EmbedGenerator {
     let collector = this.createCustomCollector(message, messagesToDelete);
 
     var colour = await this.getContent(collector);
-    //console.log(colour)
     colour = colour[0].toLowerCase();
     switch (colour) {
       case "blue":

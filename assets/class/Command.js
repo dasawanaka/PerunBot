@@ -26,6 +26,8 @@ class Command {
     if (options.userPermissions) this.userPermissions = options.userPermissions;
 
     if (options.hasSubCommands) this.hasSubCommands = options.hasSubCommands;
+
+    this.logger = require("../../DefaultLogger.js").get();
   }
 
   init(dirPath) {
@@ -135,20 +137,13 @@ class Command {
       .readdirSync(dirPath)
       .filter((file) => file.endsWith(".js"));
 
-    console.log(
-      colors.bold.bgCyan.yellow(`[SUB COMMANDS]`) +
-        colors.green(
-          ` find sub commands dir with ${commandFiles.length} commands.`
-        )
-    );
-
     if (commandFiles.length > 0) {
+      this.logger.info(
+        `🔍 Sub commands dir with ${commandFiles.length} commands.`
+      );
       for (const file of commandFiles) {
         const commandPath = path.join(dirPath, file);
-        console.log(
-          colors.bold.blue(`[TRY]`) +
-            colors.blue(` Try to load sub command from ${commandPath}`)
-        );
+        this.logger.info(`⏳ Try to load sub command ${file}`);
         const subCommandClass = require(commandPath);
         const command = new subCommandClass();
         this.subCommands.set(command.name.toLowerCase(), command);
@@ -156,12 +151,7 @@ class Command {
           command.alias.forEach((al) => {
             this.subCommands.set(al.toLowerCase(), command);
           });
-        console.log(
-          colors.bold.bgBlue.yellow(`[DONE]`) +
-            colors.green(
-              ` Register sub command ${command.name} from ${commandPath}`
-            )
-        );
+        this.logger.info(`✅ Register sub command ${command.name}`);
       }
     }
     return;
