@@ -9,5 +9,9 @@
     "host": "$DB_HOST",
     "port": "$DB_PORT",
     "dbName": "$DB_NAME"
+  },
+  "webHook": {
+    "id": "$WEBHOOK_ID",
+    "token": "$WEBHOOK_TOKEN"
   }
 }

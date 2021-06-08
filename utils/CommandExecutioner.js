@@ -18,6 +18,7 @@ module.exports = {
               { long: true }
             )}\` cooldown.`
           );
+        console.log(`User: ${message.author.tag} use command: ${commandName}`);
         await command.run(client, message, args);
         Timeout.set(
           `${command.name}${message.author.id}`,
@@ -27,6 +28,7 @@ module.exports = {
           Timeout.delete(`${command.name}${message.author.id}`);
         }, command.cooldown);
       } else {
+        console.log(`User: ${message.author.tag} use command: ${commandName}`);
         command.run(client, message, args);
       }
     } catch (error) {

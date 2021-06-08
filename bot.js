@@ -1,6 +1,7 @@
 /* eslint-disable no-inline-comments */
 /* eslint-disable indent */
 var startTime = Date.now();
+const dateFormat = require("dateformat");
 const Discord = require("discord.js");
 // eslint-disable-next-line no-unused-vars
 
@@ -14,10 +15,26 @@ if (args["config"] === undefined) {
 }
 console.log("Use config file: ", configFileName);
 
-const { discord_conf } = require(`./${configFileName}`);
+const { discord_conf, webHook } = require(`./${configFileName}`);
 const client = new Discord.Client({
   partials: ["MESSAGE", "CHANNEL", "REACTION"],
   disableEveryone: false,
+});
+
+client.logger = require("js-logger");
+client.logger.useDefaults();
+if (webHook && webHook.id && webHook.token) {
+  let webHookClient =  new Discord.WebhookClient(webHook.id, webHook.token);
+  client.logger.webHook = webHookClient;}
+
+client.logger.setHandler(function (messages, context) {
+  // Send messages to a custom logging endpoint for analysis.
+  // TODO: Add some security? (nah, you worry too much! :P)
+  let msg = `[${context.level.name}] ${messages[0]}`;
+  console.log(msg);
+  if(client.logger.webHook){
+    client.logger.webHook.send(`*${dateFormat(Date.now(), "m/d/yyyy, h:MM TT")}*  **[${context.level.name}]** ${messages[0]}`);
+  }
 });
 
 require("discord-buttons")(client);
@@ -60,13 +77,13 @@ loader.commands.load(paths.commands, client);
 loader.events.load(paths.events, client);
 
 client.once("ready", () => {
-  console.log(`Ready! Bot started now!`);
-  console.log(`Run in ${ms(Date.now() - startTime)}`);
+  client.logger.info("Ready! Bot started now!");
+  //console.log(`Ready! Bot started now!`);
+  client.logger.info(`Run in ${ms(Date.now() - startTime)}`);
 });
 
 client.on("clickButton", async (button) => {
   client.events.get("clickButton").run(button, client);
-  
 });
 
 client.on("guildCreate", (guild) => {
