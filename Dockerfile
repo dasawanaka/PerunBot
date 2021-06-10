@@ -12,4 +12,4 @@ RUN npm install
 
 RUN npm install -g node-gyp
 
-CMD ["sh", "-c", "node bot.js --config=${config} --dev" ]
+CMD ["sh", "-c", "node bot.js --config=${config}" ]
