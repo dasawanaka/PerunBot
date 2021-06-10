@@ -17,7 +17,7 @@ module.exports.init = (configFileName, devMode) => {
   DefaultLogger.setHandler(function (messages, context) {
     // Send messages to a custom logging endpoint for analysis.
     // TODO: Add some security? (nah, you worry too much! :P)
-    if (this.devMode === false && context.level.value < 3) return;
+    if (DefaultLogger.devMode === false && context.level.value < 3) return;
 
     let msg = "";
     let i = 0;
