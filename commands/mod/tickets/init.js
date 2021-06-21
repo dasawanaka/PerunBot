@@ -12,6 +12,7 @@ class Init extends Command {
     super({
       name: "init",
       alias: [],
+      userPermissions: ["ADMINISTRATOR"],
     });
     this.categoriesEmbed = EmbedGenerator.createSmallEmbed(
       ":pencil:",

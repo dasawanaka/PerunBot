@@ -1,19 +1,18 @@
 const Command = require("../../assets/class/Command");
 const path = require("path");
 
-class Tickets extends Command {
+class AutoVoiceChannels extends Command {
   constructor() {
     super({
-      name: "tickets",
-      alias: [],
+      name: "autoVoiceChannels",
+      alias: ['av'],
       public: false,
       description: "",
-      dev: false,
-      clientPermissions: ["MANAGE_CHANNELS", "VIEW_CHANNEL", "SEND_MESSAGES", "ATTACH_FILES", "READ_MESSAGE_HISTORY"],
+      dev: true,
     })
     let dirPath = path.join(__dirname, this.name);
      this.init(dirPath);
   }
 }
 
-module.exports = Tickets;
+module.exports = AutoVoiceChannels;

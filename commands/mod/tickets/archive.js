@@ -11,6 +11,7 @@ class Archive extends Command {
     super({
       name: "archive",
       alias: [],
+      userPermissions: ["MANAGE_CHANNELS", "MANAGE_MESSAGES"],
     });
   }
   async run(client, message, args) {
