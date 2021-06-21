@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=0.5" />
+    <style>
+      body {
+        margin: 0 auto;
+        max-width: 800px;
+        padding: 0 20px;
+      }
+
+      .container {
+        border: 2px solid #dedede;
+        background-color: #f1f1f1;
+        border-radius: 5px;
+        padding: 10px;
+        margin: 10px 0;
+      }
+
+      .container.left {
+        border-color: #ccc;
+        background-color: #ddd;
+      }
+
+      .container::after {
+        content: "";
+        clear: both;
+        display: table;
+      }
+
+      .avatar {
+        float: left;
+        max-width: 60px;
+        width: 100%;
+        margin-right: 20px;
+        border-radius: 50%;
+      }
+
+      .avatar.left {
+        float: left;
+      }
+
+      .avatar.right {
+        float: right;
+        margin-left: 20px;
+        margin-right: 0;
+      }
+
+      .time-right {
+        float: right;
+        color: #aaa;
+      }
+
+      .time-left {
+        float: left;
+        color: #999;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>{{channelName}}</h2>
+    {{#each messages}}
+    <div class="container {{this.side}}">
+      <img
+        src="{{this.avatar}}"
+        alt="Avatar"
+        class="avatar {{this.side}}"
+        style="width: 100%"
+      />
+      <b>{{this.author}}</b>
+      <p>{{this.content}}</p>
+      <span class="time-{{this.side}}">{{this.date}}</span>
+    </div>
+    {{/each}}
+
+  </body>
+</html>

@@ -36,6 +36,7 @@
         "node-cron": "^2.0.3",
         "node-opus": "^0.3.3",
         "node-pre-gyp": "^0.15.0",
+        "pdf-creator-node": "^2.2.2",
         "percentagebar": "^1.0.3",
         "progress": "^2.0.3",
         "pubsubhubbub": "^1.0.1",
