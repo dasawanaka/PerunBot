@@ -2,6 +2,7 @@ const AutoVC = require("../database/models/autoVc");
 const TempChannels = require("discord-temp-channels");
 
 class AutoVoiceChannels {
+    
   constructor(client) {
     this.tempChannels = new TempChannels(client);
     const Guilds = client.guilds.cache.map((guild) => guild.id);
