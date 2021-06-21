@@ -34,6 +34,7 @@ require("discord-buttons")(client);
 const path = require("path");
 const Distube = require(`distube`);
 const ms = require("ms");
+const AutoVoiceChannels = require("./utils/AutoVoiceChannels")
 
 const status = (queue) =>
   `Filter: \`${queue.filter || "Off"}\` | Loop: \`${
@@ -74,6 +75,8 @@ client.once("ready", () => {
   for (let index = 0; index < 10; index++) {
     client.logger.debug(`⚠️ _ _ APP ON DEV MODE _ _ ⚠️`);
   }
+  //init
+  client.autoVoiceChannels = new AutoVoiceChannels(client);
 });
 
 client.on("clickButton", async (button) => {

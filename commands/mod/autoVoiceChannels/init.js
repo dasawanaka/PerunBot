@@ -2,10 +2,8 @@ const Command = require("../../../assets/class/Command");
 const EmbedGenerator = require("../../../utils/EmbedGenerator");
 const UserInput = require("../../../utils/UserInput");
 const { RED, BLUE, GREEN } = require("../../../assets/other/colors.json");
-const { MessageButton, MessageActionRow } = require("discord-buttons");
-const buttonStyles = ["blurple", "gray", "green", "red"];
 const { MessageEmbed } = require("discord.js");
-const TicketButton = require("../../../database/models/ticket");
+const AutoVC = require("../../../database/models/autoVc");
 
 class Init extends Command {
   constructor() {
@@ -17,6 +15,11 @@ class Init extends Command {
     this.createVoiceChannelsEmbed = EmbedGenerator.createSmallEmbed(
       ":pencil:",
       `How many voice channels u want to add? (min:1, max:20)`,
+      BLUE
+    );
+    this.maxUsersEmbed = EmbedGenerator.createSmallEmbed(
+      ":pencil:",
+      `How many users can join to vc? (min:2, max:99)`,
       BLUE
     );
     this.categoryNameEmbed = EmbedGenerator.createSmallEmbed(
@@ -44,7 +47,6 @@ class Init extends Command {
     var tryAgain = false;
     var mtd = [];
     var count = 0;
-    const ticketToRoleMap = new Map();
     mtd.push(message);
 
     mtd.push(await message.channel.send(this.rememberInfo));
@@ -73,10 +75,8 @@ class Init extends Command {
     } while (tryAgain);
 
     for (var i = 0; i < count; i++) {
-      var categoryName = "none";
-      var roleMention;
-      var buttonStyle;
-      var channelMention;
+      var vcName = "none";
+      var maxUsers;
       //getting information about category name
       do {
         tryAgain = false;
@@ -103,15 +103,14 @@ class Init extends Command {
             return;
           }
         }
-        categoryName = input;
+        vcName = input;
       } while (tryAgain);
 
-      //getting information about role to manage this type of ticket
       do {
         tryAgain = false;
-        mtd.push(await message.channel.send(this.roleMentionEmbed));
-        let input = await UserInput.getUserRoleMention(message, mtd);
-        if (!input) {
+        mtd.push(await message.channel.send(this.maxUsersEmbed));
+        let input = await UserInput.getNumber(message, mtd);
+        if (!input || input === Number.NaN || input < 2 || input > 99) {
           mtd.push(await message.channel.send(this.invalidValueEmbed));
           let tryInput = await UserInput.getText(message, mtd);
           tryAgain =
@@ -126,127 +125,25 @@ class Init extends Command {
             return;
           }
         }
-        roleMention = input;
+        maxUsers = input;
       } while (tryAgain);
 
-      //get channel mention
-      do {
-        tryAgain = false;
-        mtd.push(await message.channel.send(this.channelMentionEmbed));
-        let input = await UserInput.getUserChannelMention(message, mtd);
-        if (!input) {
-          mtd.push(await message.channel.send(this.invalidValueEmbed));
-          let tryInput = await UserInput.getText(message, mtd);
-          tryAgain =
-            tryInput &&
-            (tryInput.toLowerCase() === "yes" || tryInput.toLowerCase() === "y")
-              ? true
-              : false;
-          if (!tryAgain) {
-            mtd.push(await message.channel.send(this.terminatedEmbed));
-            await this.delay(2000);
-            message.channel.bulkDelete(mtd);
-            return;
-          }
-        }
-        channelMention = input;
-      } while (tryAgain);
-      //getting information about button style
-      do {
-        tryAgain = false;
-        mtd.push(await message.channel.send(this.buttonStyleEmbed));
-        let input = await UserInput.getText(message, mtd);
-        if (!input || !buttonStyles.includes(input.toLowerCase())) {
-          mtd.push(await message.channel.send(this.invalidValueEmbed));
-          let tryInput = await UserInput.getText(message, mtd);
-          tryAgain =
-            tryInput &&
-            (tryInput.toLowerCase() === "yes" || tryInput.toLowerCase() === "y")
-              ? true
-              : false;
-          if (!tryAgain) {
-            mtd.push(await message.channel.send(this.terminatedEmbed));
-            await this.delay(2000);
-            message.channel.bulkDelete(mtd);
-            return;
-          }
-        }
-        buttonStyle = input.toLowerCase();
-      } while (tryAgain);
-      //creating a new button and add to list
-      const ticketCategoryPreparedName = categoryName.split(' ').join('-').toLowerCase();
-      let btn = new MessageButton()
-        .setStyle(buttonStyle)
-        .setLabel(categoryName)
-        .setID(`tit_${roleMention.id}_${ticketCategoryPreparedName}`);
+      const channel = await message.guild.channels.create(vcName, {
+        type: 'voice',
+        parent: message.channel.parent
+      });
+      const clearParentID = `${channel.parent}`.replace("<#", "").replace(">", "");
+      const vc = new AutoVC({
+        guildID: message.guild.id,
+        channelID: channel.id,
+        parentID: clearParentID,
+        maxUsers: maxUsers
+      }) 
 
-      ticketToRoleMap.set(ticketCategoryPreparedName, `${roleMention.id}_${channelMention.id}`);
-
-      if (buttons.length === 5) {
-        let line = new MessageActionRow().addComponents(buttons);
-        lines.push(line);
-        buttons = [];
-      }
-      buttons.push(btn);
+      vc.save().then(() => {client.autoVoiceChannels.add(vc)}).catch(err =>{client.logger.error(err)});
     }
-    let line = new MessageActionRow().addComponents(buttons);
-    lines.push(line);
-    var embedText;
-    do {
-      tryAgain = false;
-      mtd.push(await message.channel.send(this.embedTextEmbed));
-      let input = await UserInput.getText(message, mtd);
-      if (input && input === "exit") {
-        mtd.push(await message.channel.send(this.terminatedEmbed));
-        await this.delay(2000);
-        message.channel.bulkDelete(mtd);
-        return;
-      }
-      if (!input || input.length > 600) {
-        mtd.push(await message.channel.send(this.invalidValueEmbed));
-        let tryInput = await UserInput.getText(message, mtd);
-        tryAgain =
-          tryInput &&
-          (tryInput.toLowerCase() === "yes" || tryInput.toLowerCase() === "y")
-            ? true
-            : false;
-        if (!tryAgain) {
-          mtd.push(await message.channel.send(this.terminatedEmbed));
-          await this.delay(3000);
-          message.channel.bulkDelete(mtd);
-          return;
-        }
-      }
-      embedText = input;
-    } while (tryAgain);
 
     message.channel.bulkDelete(mtd);
-
-    const embed = new MessageEmbed().setColor(GREEN).setDescription(embedText);
-    const res = { embed: embed, components: lines };
-    let msg = await message.channel.send("_ _", res);
-    ticketToRoleMap.forEach((val, key) => {
-      const splitted = val.split("_");
-      let bTicket = new TicketButton({
-        guildID: msg.guild.id,
-        channelID: msg.channel.id,
-        messageID: msg.id,
-        ticketName: key,
-        roleID: splitted[0],
-        archiveChannelID: splitted[1],
-      });
-      bTicket.save().catch((e) => {
-        client.logger.error(`Failed to save data: ${e.message} ${e.stack}`);
-        msg.channel.send(
-          EmbedGenerator.createSmallEmbed(
-            "❌",
-            "Cannot save data into db... Try again later...",
-            RED
-          )
-        );
-        return false;
-      });
-    });
   }
 
   delay = (millis) =>

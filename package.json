@@ -17,6 +17,7 @@
         "discord-buttons": "^3.1.1",
         "discord-fetch-all": "^3.0.2",
         "discord-giveaways": "^4.2.1",
+        "discord-temp-channels": "^2.0.0",
         "discord-xp": "^1.0.1",
         "discord.js": "^12.5.3",
         "discord.js-pagination": "^1.0.2",
