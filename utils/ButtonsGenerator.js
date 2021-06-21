@@ -152,6 +152,7 @@ class ButtonGenerator {
     let collector = message.channel.createMessageCollector(filter, {
       maxMatches: 1,
       time: 30000,
+      errors: ['time']
     });
     collector.on("collect", (msg) => {
       messagesToDelete.push(msg);

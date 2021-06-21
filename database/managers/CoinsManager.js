@@ -100,6 +100,7 @@ class Coins {
       await newUser
         .save()
         .catch((e) =>  logger.error(`Failed to save new user: ${e.message} ${e.stack}`));
+        user = newUser;
     }
     if(!user.lastUpdated) user.lastUpdated = new Date();
     if (this.isToday(user.lastUpdated) && user.todayCoins > 150) return;

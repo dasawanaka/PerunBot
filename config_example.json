@@ -1,7 +1,6 @@
 {
   "discord_conf": {
-    "token": "$TOKEN",
-    "owner_id": "$USER_ID"
+    "token": "$TOKEN"
   },
   "mongodbConf": {
     "user": "$DB_USERNAME",

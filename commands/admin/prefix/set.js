@@ -45,7 +45,6 @@ class SetPrefix extends Command {
       )
         .then(function (result) {
           client.logger.debug(result);
-
           return message.channel.send({
             embed: {
               color: 5294200,

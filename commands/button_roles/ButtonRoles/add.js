@@ -53,9 +53,8 @@ class AddRolesButton extends Command {
     if (embed) res = { embed: embed, components: buttons_res.lines };
     else res = { components: buttons_res.lines };
 
-    mte.forEach((msg) => {
-      msg.delete();
-    });
+    //i wish is not more than 100 messages xDD
+    message.channel.bulkDelete(mte);
 
     let msg = await message.channel.send("_ _", res);
     buttons_res.roles.forEach((roleId) => {

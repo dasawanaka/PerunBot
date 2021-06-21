@@ -8,6 +8,7 @@ class ButtonsTest extends Command {
       name: "buttons",
       alias: [],
       public: false,
+      dev: true,
       description: "Display buttons",
       usage: ["buttons"],
     });
@@ -116,7 +117,7 @@ class ButtonsTest extends Command {
     let line4 = new MessageActionRow().addComponents([btn14, btn15, btn16, btn15, btn16]);
     message.channel
       .send({
-        components: [line1, line2, line3, line4], //, btn6, btn7, btn8, btn9, btn10
+        components: [line1, line2, line3, line4], 
         embed: myEmbed,
       })
       .catch(console.error);

@@ -1,6 +1,7 @@
 const path = require("path");
 const fs = require("fs");
-const colors = require("colors");
+const developers = require("../../developers.json");
+const { MessageEmbed } = require("discord.js");
 
 class Command {
   constructor(options) {
@@ -26,6 +27,8 @@ class Command {
     if (options.userPermissions) this.userPermissions = options.userPermissions;
 
     if (options.hasSubCommands) this.hasSubCommands = options.hasSubCommands;
+
+    if (options.dev) this.dev = options.dev;
 
     this.logger = require("../../DefaultLogger.js").get();
   }
@@ -59,6 +62,8 @@ class Command {
         },
       });
     }
+
+    if (!command.checkPermissions(message)) return;
     command.run(client, message, args);
   }
 
@@ -69,10 +74,10 @@ class Command {
         .has(["SEND_MESSAGES", "EMBED_LINKS"])
     )
       return false;
-
+    const devPermissions = this.checkDevPermissions(message);
     const clientPermission = this.checkClientPermissions(message);
     const userPermission = this.checkUserPermissions(message);
-    if (clientPermission && userPermission) return true;
+    if (clientPermission && userPermission && devPermissions) return true;
     else return false;
   }
 
@@ -90,8 +95,8 @@ class Command {
       if (missingPermissions.length !== 0) {
         const embed = new MessageEmbed()
           .setAuthor(
-            `${message.author.tag}`,
-            message.author.displayAvatarURL({ dynamic: true })
+            `${message.client.user.tag}`,
+            message.client.user.displayAvatarURL({ dynamic: true })
           )
           .setTitle(`🙄 Missing User Permissions: \`${this.name}\``)
           .setDescription(
@@ -116,10 +121,10 @@ class Command {
     if (missingPermissions.length !== 0) {
       const embed = new MessageEmbed()
         .setAuthor(
-          `${this.client.user.tag}`,
+          `${message.client.user.tag}`,
           message.client.user.displayAvatarURL({ dynamic: true })
         )
-        .setTitle(`${fail} Missing Bot Permissions: \`${this.name}\``)
+        .setTitle(`🙄 Missing Bot Permissions: \`${this.name}\``)
         .setDescription(
           `\`\`\`DIFF\n${missingPermissions
             .map((p) => `- ${p}`)
@@ -130,6 +135,32 @@ class Command {
       message.channel.send(embed);
       return false;
     } else return true;
+  }
+
+  checkDevPermissions(message) {
+    const userID = message.author.id;
+    if (!this.dev) return true;
+    let userIsDeveloper = false;
+    for (const dev in developers) {
+      const developer = developers[dev];
+      if (developer.id === userID) {
+        userIsDeveloper = true;
+        return userIsDeveloper;
+      }
+    }
+    if (!userIsDeveloper) {
+      const embed = new MessageEmbed()
+        .setAuthor(
+          `${message.client.user.tag}`,
+          message.client.user.displayAvatarURL({ dynamic: true })
+        )
+        .setTitle(`🙄 Missing Developer Permissions: \`${this.name}\``)
+        .setDescription(`\`\`\`YOU ARE NOT A BOT DEVELOPER\`\`\``)
+        .setTimestamp()
+        .setColor("#eb3483");
+      message.channel.send(embed);
+    }
+    return false;
   }
 
   loadSubCommands(dirPath) {

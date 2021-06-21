@@ -9,7 +9,7 @@ class ButtonRoles extends Command {
       public: true,
       description: "Weird faces were weird... delete them asap",
       userPermissions: ["MANAGE_GUILD", "MANAGE_ROLES", "MANAGE_EMOJIS"],
-      usage: "rr <action>",
+      usage: "br <action>",
     });
 
     let dirPath = path.join(__dirname, this.name);

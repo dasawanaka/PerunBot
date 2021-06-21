@@ -35,7 +35,8 @@ module.exports.init = (configFileName, devMode) => {
 
   DefaultLogger.sendToDcTask = () => {
     cron.schedule("*/5 * * * * *", () => {
-      //console.log(DefaultLogger.logsStack)
+      if(DefaultLogger.logsStack.length > 0)
+        DefaultLogger.debug(`Cron schedule: check logs to send. Count: ${DefaultLogger.logsStack.length}`)
       let msg = "";
       let line;
       do {

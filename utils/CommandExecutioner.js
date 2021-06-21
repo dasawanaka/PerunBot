@@ -16,7 +16,11 @@ module.exports = {
               { long: true }
             )}\` cooldown.`
           );
-        client.logger.debug(`User: ${message.author.tag} use command: ${commandName}`);
+        client.logger.debug(
+          `User: ${message.author.tag} use command: ${commandName} ${
+            args && args.length > 0 ? "with args: " + args : ""
+          }`
+        );
         await command.run(client, message, args);
         Timeout.set(
           `${command.name}${message.author.id}`,
@@ -26,7 +30,11 @@ module.exports = {
           Timeout.delete(`${command.name}${message.author.id}`);
         }, command.cooldown);
       } else {
-        client.logger.debug(`User: ${message.author.tag} use command: ${commandName}`);
+        client.logger.debug(
+          `User: ${message.author.tag} use command: ${commandName} ${
+            args && args.length > 0 ? "with args: " + args : ""
+          }`
+        );
         command.run(client, message, args);
       }
     } catch (error) {
