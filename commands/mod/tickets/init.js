@@ -28,6 +28,11 @@ class Init extends Command {
       `Mention the role to be assigned to resolve ticket (use @roleName)`,
       BLUE
     );
+    this.channelMentionEmbed = EmbedGenerator.createSmallEmbed(
+      ":pencil:",
+      `Mention the archive channel, where archived tickets is saved into file.`,
+      BLUE
+    );
     this.buttonStyleEmbed = EmbedGenerator.createSmallEmbed(
       ":pencil:",
       `Type button style(one of: ${buttonStyles.join(", ")})`,
@@ -92,6 +97,7 @@ class Init extends Command {
       var categoryName = "none";
       var roleMention;
       var buttonStyle;
+      var channelMention;
       //getting information about category name
       do {
         tryAgain = false;
@@ -120,6 +126,7 @@ class Init extends Command {
         }
         categoryName = input;
       } while (tryAgain);
+
       //getting information about role to manage this type of ticket
       do {
         tryAgain = false;
@@ -141,6 +148,29 @@ class Init extends Command {
           }
         }
         roleMention = input;
+      } while (tryAgain);
+
+      //get channel mention
+      do {
+        tryAgain = false;
+        mtd.push(await message.channel.send(this.channelMentionEmbed));
+        let input = await UserInput.getUserChannelMention(message, mtd);
+        if (!input) {
+          mtd.push(await message.channel.send(this.invalidValueEmbed));
+          let tryInput = await UserInput.getText(message, mtd);
+          tryAgain =
+            tryInput &&
+            (tryInput.toLowerCase() === "yes" || tryInput.toLowerCase() === "y")
+              ? true
+              : false;
+          if (!tryAgain) {
+            mtd.push(await message.channel.send(this.terminatedEmbed));
+            await this.delay(2000);
+            message.channel.bulkDelete(mtd);
+            return;
+          }
+        }
+        channelMention = input;
       } while (tryAgain);
       //getting information about button style
       do {
@@ -165,13 +195,13 @@ class Init extends Command {
         buttonStyle = input.toLowerCase();
       } while (tryAgain);
       //creating a new button and add to list
-      const ticketCategoryPreparedName = categoryName.split(' ').join('-');
+      const ticketCategoryPreparedName = categoryName.split(' ').join('-').toLowerCase();
       let btn = new MessageButton()
         .setStyle(buttonStyle)
         .setLabel(categoryName)
         .setID(`tit_${roleMention.id}_${ticketCategoryPreparedName}`);
 
-      ticketToRoleMap.set(ticketCategoryPreparedName, roleMention.id);
+      ticketToRoleMap.set(ticketCategoryPreparedName, `${roleMention.id}_${channelMention.id}`);
 
       if (buttons.length === 5) {
         let line = new MessageActionRow().addComponents(buttons);
@@ -217,12 +247,14 @@ class Init extends Command {
     const res = { embed: embed, components: lines };
     let msg = await message.channel.send("_ _", res);
     ticketToRoleMap.forEach((val, key) => {
+      const splitted = val.split("_");
       let bTicket = new TicketButton({
         guildID: msg.guild.id,
         channelID: msg.channel.id,
         messageID: msg.id,
         ticketName: key,
-        roleID: val,
+        roleID: splitted[0],
+        archiveChannelID: splitted[1],
       });
       bTicket.save().catch((e) => {
         client.logger.error(`Failed to save data: ${e.message} ${e.stack}`);

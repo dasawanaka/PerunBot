@@ -105,6 +105,11 @@ client.on("messageUpdate", async (oldMessage, newMessage) => {
   }
   client.events.get("messageUpdate").run(newMessage, oldMessage, client);
 });
+
+// client.on("guildMemberAdd", async (member) => {
+//   client.events.get("guildMemberAdd").run(member, client);
+// });
+
 client.on("messageReactionAdd", async (reaction, user) => {
   if (reaction.message.partial) await reaction.message.fetch(); //if (reaction.message.partial)
   if (reaction.partial) await reaction.fetch();

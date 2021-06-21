@@ -6,6 +6,7 @@ const TicketButton = new mongoose.Schema({
   messageID: { type: String },
   ticketName: { type: String },
   roleID: { type: String },
+  archiveChannelID: { type: String },
 });
 
 module.exports = mongoose.model('TicketButton', TicketButton, 'ticketButton');

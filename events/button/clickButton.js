@@ -118,55 +118,78 @@ module.exports = {
       let user = button.clicker.member;
       if (!user) await button.clicker.fetch();
       user = button.clicker.member;
-      var preparedTicketName = `ticket-${categoryName.toLowerCase()}-${user.id}`;
+      var preparedTicketName = `ticket-${categoryName.toLowerCase()}-${
+        user.id
+      }`;
       var ticketExist = false;
       var chanList = [];
       //max channels in category error
-      if(channel.parent.children.size===50){
+      if (channel.parent.children.size === 50) {
         channel
-          .send(EmbedGenerator.createSmallEmbed("❌", `Discord limit: max channels in category. Admins must delete old tickets.`, RED))
+          .send(
+            EmbedGenerator.createSmallEmbed(
+              "❌",
+              `Discord limit: max channels in category. Admins must archive old tickets.`,
+              RED
+            )
+          )
           .then((msg) => {
             setTimeout(() => msg.delete(), 10000);
           });
         return button.defer(true);
       }
       //check ticket is exist
-      channel.parent.children.map(c => chanList.push(c));
+      channel.parent.children.map((c) => chanList.push(c));
       for (let c in chanList) {
-        console.log(`${chanList[c].name} ? ${preparedTicketName}`)
-        if(chanList[c].name === preparedTicketName) {
+        console.log(`${chanList[c].name} ? ${preparedTicketName}`);
+        if (chanList[c].name === preparedTicketName) {
           ticketExist = true;
         }
       }
       //if ticket exit send message and end event
-      if(ticketExist) {
+      if (ticketExist) {
         channel
-          .send(EmbedGenerator.createSmallEmbed("❌", `Only one open ticket per user per category.`, RED))
+          .send(
+            EmbedGenerator.createSmallEmbed(
+              "❌",
+              `Only one open ticket per user per category.`,
+              RED
+            )
+          )
           .then((msg) => {
             setTimeout(() => msg.delete(), 2000);
           });
         return button.defer(true);
       }
-      const newChannel = await guild.channels.create(`ticket-${categoryName}-${user.id}`, {
-        type: "text",
-        parent: channel.parent,
-        permissionOverwrites: [
-          {
-            id: message.guild.roles.everyone,
-            deny: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
-          },
-          {
-            id: user.id,
-            allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"]
-          },
-          {
-            id: roleId,
-            allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"]
-          }
-        ],
-      });
-      
-      newChannel.send(EmbedGenerator.createSmallEmbed(":pushpin:",`User: ${user.user.tag} requested a help with: \`\`${categoryName}\`\``, GREEN));
+      const newChannel = await guild.channels.create(
+        `ticket-${categoryName}-${user.id}`,
+        {
+          type: "text",
+          parent: channel.parent,
+          permissionOverwrites: [
+            {
+              id: message.guild.roles.everyone,
+              deny: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+            },
+            {
+              id: user.id,
+              allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+            },
+            {
+              id: roleId,
+              allow: ["VIEW_CHANNEL", "SEND_MESSAGES", "READ_MESSAGE_HISTORY"],
+            },
+          ],
+        }
+      );
+
+      newChannel.send(
+        EmbedGenerator.createSmallEmbed(
+          ":pushpin:",
+          `User: ${user.user.tag} requested a help with: \`\`${categoryName}\`\`. When ticket is done type \`\`$tickets archive\`\``,
+          GREEN
+        )
+      );
       button.defer(true);
     } else await button.defer(true);
   },

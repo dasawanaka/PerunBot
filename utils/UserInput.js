@@ -27,6 +27,14 @@ class UserInput {
     return role;
   }
 
+  static async getUserChannelMention(message, mtd) {
+    var role;
+    let collector = this.createCustomCollector(message, mtd);
+    role = await this.getChannelMentions(collector);
+    role = role[0];
+    return role;
+  }
+
   static getContent(collector) {
     return new Promise((resolve, reject) => {
       collector.on("end", (collected) =>
@@ -47,6 +55,19 @@ class UserInput {
       );
     });
   }
+  static getChannelMentions(collector) {
+    return new Promise((resolve, reject) => {
+      collector.on("end", (collected) =>
+        resolve(
+          collected.map(
+            (m) =>
+              m.mentions.channels.first() || m.guild.channels.cache.get(m.content)
+          )
+        )
+      );
+    });
+  }
+
 
   static createCustomCollector(message, messagesToDelete) {
     let filter = (m) => {

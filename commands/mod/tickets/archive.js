@@ -4,6 +4,7 @@ var pdf = require("pdf-creator-node");
 var fs = require("fs");
 const path = require("path");
 const { MessageAttachment } = require("discord.js");
+const TicketButton = require("../../../database/models/ticket");
 
 class Archive extends Command {
   constructor() {
@@ -16,7 +17,14 @@ class Archive extends Command {
     const channelName = message.channel.name;
     if (!channelName.startsWith("ticket")) return;
     const channelArgs = channelName.split("-");
+    const ticketName = channelArgs.slice(1, channelArgs.length-1).join("-");
     const ticketCreatorId = channelArgs[channelArgs.length - 1];
+
+    //get info from database about archive Channels
+    const existTicketButton = await TicketButton.findOne({
+      guildID: message.guild.id,
+      ticketName: ticketName
+    });
 
     const allMessages = await fetchAll.messages(message.channel, {
       reverseArray: true, // Reverse the returned array
@@ -29,8 +37,8 @@ class Archive extends Command {
     const messagesToTemplate = [];
     for (let index = 0; index < allMessages.length; index++) {
       const m = allMessages[index];
-      var av = m.author.avatarURL({format: 'png', size:512});
-      if(!av){
+      var av = m.author.avatarURL({ format: "png", size: 512 });
+      if (!av) {
         av = m.author.defaultAvatarURL;
       }
       var messageToPush = {
@@ -38,7 +46,7 @@ class Archive extends Command {
         content: m.content,
         avatar: av,
         date: m.createdAt,
-        side: m.author.id === ticketCreatorId?"right":"left",
+        side: m.author.id === ticketCreatorId ? "right" : "left",
       };
       messagesToTemplate.push(messageToPush);
     }
@@ -60,7 +68,7 @@ class Archive extends Command {
       html: html,
       data: {
         messages: messagesToTemplate,
-        channelName: channelName
+        channelName: channelName,
       },
       path: tmpFilePath,
       type: "",
@@ -77,7 +85,17 @@ class Archive extends Command {
       tmpFilePath,
       path.basename(tmpFilePath)
     );
-    await message.channel.send(attachment);
+
+    if (existTicketButton && existTicketButton.archiveChannelID) {
+      var ch = message.guild.channels.cache.get(
+        existTicketButton.archiveChannelID
+      );
+      await ch.send(attachment);
+      message.channel.delete();
+    } else {
+      await message.channel.send(attachment);
+      message.channel.setName(channelName.replace("ticket", "🔒closed"));
+    }
 
     fs.unlink(tmpFilePath, (error) => {
       if (error) client.logger.error(error);
