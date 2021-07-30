@@ -7,7 +7,7 @@ class EmbedGenerator {
       await message.channel.send(
         this.createSmallEmbed(
           ":pencil:",
-          'Type "done" when u want to skip step.\nType Colour [blue, yellow, red, green] or in html'
+          'Type "done" when u want to skip step.\nType Colour [blue, yellow, red, green] or html code(ex #ffff1)'
         )
       )
     );
@@ -82,10 +82,6 @@ class EmbedGenerator {
       .setColor(colour)
       .setDescription(description)
       .setURL(customURL)
-      .setAuthor(
-        `${message.author.tag}`,
-        message.author.displayAvatarURL({ dynamic: true })
-      )
       .setThumbnail(thumbnail)
       // .addFields(
       // { name: 'Regular field title', value: 'Some value here' },

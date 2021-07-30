@@ -9,7 +9,8 @@ class AutoVoiceChannels {
 
     for (let index = 0; index < Guilds.length; index++) {
       const element = Guilds[index];
-      var vcDef = AutoVC.collection.find({ guildID: element }).limit(100);
+      //max 50 autoVC per server, is totally overkill
+      var vcDef = AutoVC.collection.find({ guildID: element }).limit(50);
       if (vcDef.count() === 0) return false;
 
       vcDef.forEach((vc) => {

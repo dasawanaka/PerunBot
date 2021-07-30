@@ -6,7 +6,7 @@ class AutoVoiceChannels extends Command {
     super({
       name: "autoVoiceChannels",
       alias: ['av'],
-      public: false,
+      public: true,
       description: "",
       clientPermissions: ["MANAGE_CHANNELS", "VIEW_CHANNEL", "MOVE_MEMBERS"],
       dev: false,

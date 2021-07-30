@@ -34,7 +34,7 @@ class Archive extends Command {
       pinnedOnly: false, // Only returned pinned messages
     });
 
-    console.log(allMessages.length);
+    client.logger.debug(`Channel ${message.channel} has ${allMessages.length} messages`);
     const messagesToTemplate = [];
     for (let index = 0; index < allMessages.length; index++) {
       const m = allMessages[index];
@@ -51,9 +51,7 @@ class Archive extends Command {
       };
       messagesToTemplate.push(messageToPush);
     }
-
-    //console.log(messagesToTemplate);
-
+    
     var html = fs.readFileSync(path.join(__dirname, "template.html"), "utf8");
     var options = {
       format: "A4",
@@ -82,11 +80,12 @@ class Archive extends Command {
       .catch((error) => {
         console.error(error);
       });
+      client.logger.debug(`Parsed all messages to ${tmpFilePath}.`);
     const attachment = new MessageAttachment(
       tmpFilePath,
       path.basename(tmpFilePath)
     );
-
+    client.logger.debug(`Now sending this file: ${tmpFilePath}`);
     if (existTicketButton && existTicketButton.archiveChannelID) {
       var ch = message.guild.channels.cache.get(
         existTicketButton.archiveChannelID
@@ -97,10 +96,11 @@ class Archive extends Command {
       await message.channel.send(attachment);
       message.channel.setName(channelName.replace("ticket", "🔒closed"));
     }
-
+    client.logger.debug(`Now deleting temporary file: ${tmpFilePath}`);
     fs.unlink(tmpFilePath, (error) => {
       if (error) client.logger.error(error);
     });
+    client.logger.debug(`Archiving done.`);
   }
 }
 

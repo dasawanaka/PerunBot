@@ -2,6 +2,7 @@ const Levels = require("discord-xp");
 const Coins = require("../database/managers/CoinsManager");
 const MessageCounterManager = require("../database/managers/MessageCounterManager");
 const logger = require("../DefaultLogger").get();
+const EmbedGenerator = require("./EmbedGenerator");
 
 const expCD = new Map();
 
@@ -23,9 +24,15 @@ module.exports = {
     if (hasLeveledUp) {
       const user = await Levels.fetch(message.author.id, message.guild.id);
       message.channel.send(
-        `Congrats ${message.author.username}! You leveled up to ${user.level}! Keep it going! \`$1000\` added to your account `
+        EmbedGenerator.createSmallEmbed(
+          ":pencil:",
+          `Congrats ${message.author.username}! You leveled up to ${user.level}! Keep it going! \`$1000\` added to your account `
+        )
       );
       Coins.appendCoins(message.author.id, message.guild.id, 1000);
+      logger.debug(
+        `${message.author.username} leveled up to ${user.level}! \`$1000\` added to account `
+      );
     }
     expCD.set(`${message.author.id}_${message.guild.id}`, Date.now() + 60000);
     setTimeout(() => {
