@@ -12,8 +12,9 @@ class ReactionRoleSystem {
       if (rrDef.count() === 0) return false;
 
       var messagesFetched = new Map();
-      rrDef.forEach((rr) => {
-        reactionRolesData.push(rr);
+      for (const rr in rrDef) {
+       
+        this.reactionRolesData.push(rr);
 
         if(messagesFetched.has(rr.messageID)) continue;
 
@@ -30,12 +31,13 @@ class ReactionRoleSystem {
           });
 
           messagesFetched.set(rr.messageID, true);
-      });
+      }
     }
+    client.logger.info("✅ *Role System Manager* load all required data.")
   }
 
   async addReactionRole(reactionRole) {
-    reactionRolesData.push(reactionRole);
+    this.reactionRolesData.push(reactionRole);
   }
 
   async deleteReactionRole(messageID, reaction) {}
@@ -56,10 +58,12 @@ class ReactionRoleSystem {
     for (const rr in this.reactionRolesData) {
         if(rr.guildID == guildID && rr.channelID == channelID && rr.messageID== messageID && rr.emoji == emojiID){
             user.roles.add(rr.roleID);
+            client.logger.debug("Add role: " + rr.roleID + " to user: " + user.id + " on guild: " + guildID);
         }
     }
 
   }
+
   async processRemoveReaction(client, reaction, user) {
     let emojiID;
 
@@ -76,6 +80,7 @@ class ReactionRoleSystem {
     for (const rr in this.reactionRolesData) {
         if(rr.guildID == guildID && rr.channelID == channelID && rr.messageID== messageID && rr.emoji == emojiID){
             user.roles.remove(rr.roleID);
+            client.logger.debug("Remove role: " + rr.roleID + " to user: " + user.id + " on guild: " + guildID);
         }
     }
   }

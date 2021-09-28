@@ -69,6 +69,8 @@ client.tasks = new Discord.Collection(); //used to cron jobs
 loader.commands.load(paths.commands, client);
 loader.events.load(paths.events, client);
 
+const ReactionRoleSystem = require("./utils/ReactionRoleSystem");
+
 client.once("ready", () => {
   client.logger.info("Ready! Bot started now!");
   client.logger.info(`Run in ${ms(Date.now() - startTime)}`);
@@ -77,6 +79,7 @@ client.once("ready", () => {
   }
   //init
   client.autoVoiceChannels = new AutoVoiceChannels(client);
+  client.ReactionRoleSystem = new ReactionRoleSystem(client);
 });
 
 client.on("clickButton", async (button) => {
@@ -232,6 +235,7 @@ client.distube
 
 //handle unhandled rejection error
 process.on("unhandledRejection", (error) => {
+  console.log(error);
   client.logger.error(
     "Unhandled promise rejection: " + error.message + "\n" + error.stack
   );

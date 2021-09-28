@@ -178,6 +178,7 @@ class Add extends Command {
       var err = false;
       try {
         rrDb.save();
+        client.ReactionRoleSystem.addReactionRole(rr);
       } catch (error) {
         err = true;
         message.channel.send(
