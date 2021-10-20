@@ -32,7 +32,6 @@ client.logger.info(`Use config file: ${configFileName}`);
 require("discord-buttons")(client);
 
 const path = require("path");
-const Distube = require(`distube`);
 const ms = require("ms");
 const AutoVoiceChannels = require("./utils/AutoVoiceChannels")
 
@@ -47,10 +46,6 @@ const status = (queue) =>
 
 client.mongoose = require("./database/mongoose");
 client.levels = require("./utils/levels");
-client.distube = new Distube(client, {
-  searchSongs: true,
-  emitNewSongOnly: true,
-});
 
 const paths = {
   commands: path.join(__dirname, "commands"),
@@ -169,69 +164,6 @@ client.on("messageReactionRemove", async (reaction, user) => {
     events.get('messageReactionRemove').run(client, reaction, user);*/
 });
 
-client.distube
-  .on("playSong", (message, queue, song) => {
-    queue.autoplay = false;
-
-    const embed = new Discord.MessageEmbed()
-      .setTitle(`Monke's playin`)
-      .setDescription(
-        `Playing \`${song.name}\` - \`${song.formattedDuration}\`\nRequested by: ${song.user}`
-      )
-      .setFooter(`${status(queue)}`);
-    message.channel.send(embed);
-  })
-
-  .on("addSong", (message, queue, song) => {
-    queue.autoplay = false;
-    const embed = new Discord.MessageEmbed()
-      .setTitle(`Monke's playin`)
-      .setDescription(
-        `Added ${song.name} - \`${song.formattedDuration}\` to the queue by ${song.user}`
-      );
-    message.channel.send(embed);
-  })
-
-  .on("playList", (message, queue, playlist, song) => {
-    queue.autoplay = false;
-    const embed = new Discord.MessageEmbed()
-      .setTitle(`Monke's playin`)
-      .setDescription(
-        `Play \`${playlist.name}\` playlist (${playlist.songs.length} songs).\nRequested by: ${song.user}\nNow playing \`${song.name}\` - \`${song.formattedDuration}`
-      )
-      .setFooter(`${status(queue)}`);
-    message.channel.send(embed);
-  })
-
-  .on("addList", (message, queue, playlist) => {
-    queue.autoplay = false;
-    const embed = new Discord.MessageEmbed()
-      .setTitle(`Monke's Playin`)
-      .setDescription(
-        `Added \`${playlist.name}\` playlist (${
-          playlist.songs.length
-        } songs) to queue\n${status(queue)}`
-      );
-    message.channel.send(embed);
-  })
-
-  // DisTubeOptions.searchSongs = true
-  .on("searchResult", (message, result) => {
-    let i = 0;
-    message.channel.send(
-      `**Choose an option from below**\n${result
-        .map(
-          (song) => `**${++i}**. ${song.name} - \`${song.formattedDuration}\``
-        )
-        .join("\n")}\n*Enter anything else or wait 60 seconds to cancel*`
-    );
-  })
-  // DisTubeOptions.searchSongs = true
-  .on("searchCancel", (message) => message.channel.send(`Searching canceled`))
-  .on("error", (message, e) => {
-    client.logger.error(e);
-    message.channel.send("An error encountered: " + e);
-  });
 
 //handle unhandled rejection error
 process.on("unhandledRejection", (error) => {

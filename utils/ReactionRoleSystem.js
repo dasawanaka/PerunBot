@@ -8,7 +8,7 @@ class ReactionRoleSystem {
     for (let index = 0; index < Guilds.length; index++) {
       const g = Guilds[index];
       //max 100 reaction roles per server, is totally overkill
-      var rrDef = ReactionRole.collection.find({ guildID: g }).limit(100);
+      var rrDef = ReactionRole.collection.find({ guildID: g }).limit(1000);
       if (rrDef.count() === 0) return false;
 
       var messagesFetched = new Map();
