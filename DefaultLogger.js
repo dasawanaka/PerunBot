@@ -1,11 +1,12 @@
 const Discord = require("discord.js");
-const dateFormat = require("dateformat");
+
 var webHookConf;
 const DefaultLogger = require("js-logger");
 const cron = require("node-cron");
 
 module.exports.init = (configFileName, devMode) => {
   const { webHook } = require(`./${configFileName}`);
+  const dateFormat = import( "dateformat");
   DefaultLogger.useDefaults();
   DefaultLogger.devMode = devMode ? devMode : false;
   if (webHook && webHook.id && webHook.token) {
