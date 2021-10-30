@@ -1,36 +1,40 @@
-//get config file name from param
 var configFileName = "config.json";
 var devMode = false;
 
-const { discord_conf } = require(`./${configFileName}`);
+const { discord_conf } = require(`./config.json`);
 const { Collection, Client, Intents } = require('discord.js');
 const fs = require("fs");
+
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+var align = require('align-text');
 
-client.logger = require("./DefaultLogger").init(configFileName, devMode);
-
-client.logger.info(`Use config file: ${configFileName}`);
+client.logger = require("./DefaultLogger").init("config.json", devMode);
 
 client.commands = new Collection();
 client.guildSettings = new Collection();
 client.tasks = new Collection(); //used to cron jobs
+client.dirname = __dirname;
 
-const eventFiles = fs.readdirSync('./events').filter(file => file.endsWith('.js'));
-for (const file of eventFiles) {
-	const event = require(`./events/${file}`);
-	if (event.once) {
-		client.once(event.name, (...args) => event.execute(...args));
-	} else {
-		client.on(event.name, (...args) => event.execute(...args));
-	}
-}
+//Load and bind events
+client.logger.info('EVENTS');
+client.logger.info('▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬');
+
+require("./utils/loader/loadEvents").load(client);
+
+client.logger.info('▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬');
+
+//Register scheduling cron tasks
+client.logger.info('TASKS');
+client.logger.info('▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬');
+
+//Commands loader is use in ready event - need to have client ID
 
 
 //handle unhandled rejection error
 process.on("unhandledRejection", (error) => {
   console.log(error);
   client.logger.error(
-    "Unhandled promise rejection: " + error.message + "\n" + error.stack
+    `Unhandled Rejection: \nMessage: ${error.message}  \nStack: ${error.stack}`
   );
 });
 

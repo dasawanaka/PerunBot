@@ -67,16 +67,16 @@ class Command {
     command.run(client, message, args);
   }
 
-  checkPermissions(message) {
+  checkPermissions(interaction) {
     if (
-      !message.channel
-        .permissionsFor(message.guild.me)
+      !interaction.channel
+        .permissionsFor(interaction.guild.me)
         .has(["SEND_MESSAGES", "EMBED_LINKS"])
     )
       return false;
-    const devPermissions = this.checkDevPermissions(message);
-    const clientPermission = this.checkClientPermissions(message);
-    const userPermission = this.checkUserPermissions(message);
+    const devPermissions = this.checkDevPermissions(interaction);
+    const clientPermission = this.checkClientPermissions(interaction);
+    const userPermission = this.checkUserPermissions(interaction);
     if (clientPermission && userPermission && devPermissions) return true;
     else return false;
   }
@@ -84,19 +84,19 @@ class Command {
   /**
    * Code modified from: https://github.com/discordjs/Commando/blob/master/src/commands/base.js
    */
-  checkUserPermissions(message) {
-    if (message.member.hasPermission("ADMINISTRATOR")) return true;
+  checkUserPermissions(interaction) {
+    if (interaction.member.hasPermission("ADMINISTRATOR")) return true;
 
     if (this.userPermissions) {
-      const missingPermissions = message.channel
-        .permissionsFor(message.author)
+      const missingPermissions = interaction.channel
+        .permissionsFor(interaction.member)
         .missing(this.userPermissions)
         .map((p) => permissions[p]);
       if (missingPermissions.length !== 0) {
         const embed = new MessageEmbed()
           .setAuthor(
-            `${message.client.user.tag}`,
-            message.client.user.displayAvatarURL({ dynamic: true })
+            `${interaction.client.user.tag}`,
+            interaction.client.user.displayAvatarURL({ dynamic: true })
           )
           .setTitle(`🙄 Missing User Permissions: \`${this.name}\``)
           .setDescription(
@@ -106,23 +106,23 @@ class Command {
           )
           .setTimestamp()
           .setColor("#eb3483");
-        message.channel.send(embed);
+          interaction.channel.send(embed);
         return false;
       }
     }
     return true;
   }
 
-  checkClientPermissions(message) {
-    const missingPermissions = message.channel
-      .permissionsFor(message.guild.me)
-      .missing(this.userPermissions)
+  checkClientPermissions(interaction) {
+    const missingPermissions = interaction.channel
+      .permissionsFor(interaction.guild.me)
+      .missing(this.clientPermissions)
       .map((p) => permissions[p]);
     if (missingPermissions.length !== 0) {
       const embed = new MessageEmbed()
         .setAuthor(
-          `${message.client.user.tag}`,
-          message.client.user.displayAvatarURL({ dynamic: true })
+          `${interaction.client.user.tag}`,
+          interaction.client.user.displayAvatarURL({ dynamic: true })
         )
         .setTitle(`🙄 Missing Bot Permissions: \`${this.name}\``)
         .setDescription(
@@ -132,13 +132,13 @@ class Command {
         )
         .setTimestamp()
         .setColor("#eb3483");
-      message.channel.send(embed);
+      interaction.channel.send(embed);
       return false;
     } else return true;
   }
 
   checkDevPermissions(message) {
-    const userID = message.author.id;
+    const userID = interaction.member.id;
     if (!this.dev) return true;
     let userIsDeveloper = false;
     for (const dev in developers) {
@@ -151,14 +151,14 @@ class Command {
     if (!userIsDeveloper) {
       const embed = new MessageEmbed()
         .setAuthor(
-          `${message.client.user.tag}`,
-          message.client.user.displayAvatarURL({ dynamic: true })
+          `${interaction.client.user.tag}`,
+          interaction.client.user.displayAvatarURL({ dynamic: true })
         )
         .setTitle(`🙄 Missing Developer Permissions: \`${this.name}\``)
         .setDescription(`\`\`\`YOU ARE NOT A BOT DEVELOPER\`\`\``)
         .setTimestamp()
         .setColor("#eb3483");
-      message.channel.send(embed);
+      interaction.channel.send(embed);
     }
     return false;
   }

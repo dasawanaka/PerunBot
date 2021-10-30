@@ -1,3 +1,5 @@
+const path = require("path");
+
 module.exports = {
   name: "ready",
   once: true,
@@ -6,5 +8,8 @@ module.exports = {
     for (let index = 0; index < 10; index++) {
       client.logger.debug(`⚠️ _ _ APP ON DEV MODE _ _ ⚠️`);
     }
+    //Register global slash commands
+    const commandPath = path.join(client.dirname, "commands")
+    require('./../utils/loader/loadCommands.js').load(commandPath, client)
   },
 };
