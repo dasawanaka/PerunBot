@@ -12,12 +12,12 @@ class IQ extends Command {
     }
     data = new SlashCommandBuilder()
         .setName("iq")
-        .setDescription("Give you random iq number. It really works! v2")
+        .setDescription("Give you random iq number. It really works!")
 
     async run(interaction) {
 
         let iq = between(-50, 200);
-        let msg = ` your iq is: ${iq}. `;
+        let msg = `Your iq is: ${iq}. `;
 
         if (iq < -25) {
             msg += `🥴`;

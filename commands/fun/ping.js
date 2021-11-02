@@ -13,7 +13,7 @@ class PING extends Command {
     }
     data = new SlashCommandBuilder()
         .setName("ping")
-        .setDescription("Ping command, return api ping for bot. (not return your client ping) v2")
+        .setDescription("Ping command, return api ping for bot. (not return your client ping)")
 
     async run(interaction) {
 
