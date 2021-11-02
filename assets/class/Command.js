@@ -68,6 +68,7 @@ class Command {
   }
 
   checkPermissions(interaction) {
+    console.log("Checking permissions" )
     if (
       !interaction.channel
         .permissionsFor(interaction.guild.me)
@@ -85,7 +86,8 @@ class Command {
    * Code modified from: https://github.com/discordjs/Commando/blob/master/src/commands/base.js
    */
   checkUserPermissions(interaction) {
-    if (interaction.member.hasPermission("ADMINISTRATOR")) return true;
+    console.log("Checking permissions for user " )
+    if (interaction.memberPermissions.has("ADMINISTRATOR")) return true;
 
     if (this.userPermissions) {
       const missingPermissions = interaction.channel
@@ -114,6 +116,7 @@ class Command {
   }
 
   checkClientPermissions(interaction) {
+    console.log("Checking permissions for client" )
     const missingPermissions = interaction.channel
       .permissionsFor(interaction.guild.me)
       .missing(this.clientPermissions)
@@ -137,7 +140,8 @@ class Command {
     } else return true;
   }
 
-  checkDevPermissions(message) {
+  checkDevPermissions(interaction) {
+    console.log("Checking permissions for dev" )
     const userID = interaction.member.id;
     if (!this.dev) return true;
     let userIsDeveloper = false;
@@ -164,27 +168,27 @@ class Command {
   }
 
   loadSubCommands(dirPath) {
-    const commandFiles = fs
-      .readdirSync(dirPath)
-      .filter((file) => file.endsWith(".js"));
+    // const commandFiles = fs
+    //   .readdirSync(dirPath)
+    //   .filter((file) => file.endsWith(".js"));
 
-    if (commandFiles.length > 0) {
-      this.logger.info(
-        `🔍 Sub commands dir with ${commandFiles.length} commands.`
-      );
-      for (const file of commandFiles) {
-        const commandPath = path.join(dirPath, file);
-        this.logger.info(`⏳ Try to load sub command ${file}`);
-        const subCommandClass = require(commandPath);
-        const command = new subCommandClass();
-        this.subCommands.set(command.name.toLowerCase(), command);
-        if (command.alias != undefined)
-          command.alias.forEach((al) => {
-            this.subCommands.set(al.toLowerCase(), command);
-          });
-        this.logger.info(`✅ Register sub command ${command.name}`);
-      }
-    }
+    // if (commandFiles.length > 0) {
+    //   this.logger.info(
+    //     `🔍 Sub commands dir with ${commandFiles.length} commands.`
+    //   );
+    //   for (const file of commandFiles) {
+    //     const commandPath = path.join(dirPath, file);
+    //     this.logger.info(`⏳ Try to load sub command ${file}`);
+    //     const subCommandClass = require(commandPath);
+    //     const command = new subCommandClass();
+    //     this.subCommands.set(command.name.toLowerCase(), command);
+    //     if (command.alias != undefined)
+    //       command.alias.forEach((al) => {
+    //         this.subCommands.set(al.toLowerCase(), command);
+    //       });
+    //     this.logger.info(`✅ Register sub command ${command.name}`);
+    //   }
+    // }
     return;
   }
 }

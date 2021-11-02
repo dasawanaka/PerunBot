@@ -12,9 +12,10 @@ class IQ extends Command {
     }
     data = new SlashCommandBuilder()
         .setName("iq")
-        .setDescription("Give you random iq number. It really works!")
+        .setDescription("Give you random iq number. It really works! v2")
 
-    async run(client, message, args) {
+    async run(interaction) {
+
         let iq = between(-50, 200);
         let msg = ` your iq is: ${iq}. `;
 
@@ -42,7 +43,8 @@ class IQ extends Command {
         else if (iq === 200) {
             msg += `🥇`
         }
-        message.reply(msg);
+
+       await interaction.reply(msg);
     }
 
 }
