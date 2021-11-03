@@ -31,14 +31,11 @@ const answers = [
 class EightBall extends Command {
   constructor() {
     super({
-      name: "eightball",
-      alias: ["fortune"],
-      description: "Asks the Magic 8-Ball for some psychic wisdom.",
-      usage: ["8ball <question..>"],
+      name: "eightball"
     });
   }
   data = new SlashCommandBuilder()
-    .setName("eightball")
+    .setName(this.name)
     .setDescription("Asks the Magic 8-Ball for some psychic wisdom.")
     .addStringOption((option) =>
       option

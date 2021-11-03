@@ -4,14 +4,11 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 class IQ extends Command {
     constructor() {
         super({
-            name: "iq",
-            alias: [],
-            public: true,
-            description: "Give you random iq number. It really works!"
+            name: "iq"
         })
     }
     data = new SlashCommandBuilder()
-        .setName("iq")
+        .setName(this.name)
         .setDescription("Give you random iq number. It really works!")
 
     async run(interaction) {

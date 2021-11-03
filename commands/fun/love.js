@@ -10,7 +10,7 @@ class Love extends Command {
     });
   }
   data = new SlashCommandBuilder()
-    .setName("love")
+    .setName(this.name)
     .setDescription("Ship members")
     .addUserOption((option) =>
       option

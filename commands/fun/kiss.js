@@ -10,7 +10,7 @@ class Kiss extends Command {
     });
   }
   data = new SlashCommandBuilder()
-    .setName("kiss")
+    .setName(this.name)
     .setDescription("Give a kiss to mention user")
     .addUserOption((option) =>
       option.setName("user").setDescription("The user").setRequired(true)

@@ -7,12 +7,11 @@ class CoinFlip extends Command {
   constructor() {
     super({
       name: "coinflip",
-      description: "Flips a coin.",
     });
   }
 
   data = new SlashCommandBuilder()
-    .setName("coinflip")
+    .setName(this.name)
     .setDescription("Flips a coin.");
 
   async run(interaction) {

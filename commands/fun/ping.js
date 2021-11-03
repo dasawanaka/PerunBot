@@ -5,14 +5,11 @@ const { MessageEmbed } = require('discord.js');
 class PING extends Command {
     constructor() {
         super({
-            name: "ping",
-            alias: [],
-            public: true,
-            description: "Ping command, return api ping v2"
+            name: "ping"
         })
     }
     data = new SlashCommandBuilder()
-        .setName("ping")
+        .setName(this.name)
         .setDescription("Ping command, return api ping for bot. (not return your client ping)")
 
     async run(interaction) {

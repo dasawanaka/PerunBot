@@ -10,7 +10,7 @@ class Poke extends Command {
     });
   }
   data = new SlashCommandBuilder()
-    .setName("poke")
+    .setName(this.name)
     .setDescription("Poke user")
     .addUserOption((option) =>
       option.setName("user").setDescription("The user").setRequired(true)

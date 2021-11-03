@@ -7,15 +7,11 @@ const { SlashCommandBuilder } = require('@discordjs/builders');
 class Baka extends Command {
   constructor() {
     super({
-      name: "baka",
-      alias: [],
-      public: true,
-      description: "BAAAAAAAKA!",
-      usage: ["baka [user mention]"],
+      name: "baka"
     });
   }
   data = new SlashCommandBuilder()
-    .setName("baka")
+    .setName(this.name)
     .setDescription("BAAAAAAAKA!")
     .addUserOption((option) =>
       option.setName("user").setDescription("The user")

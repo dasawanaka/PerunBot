@@ -10,7 +10,7 @@ class Anime extends Command {
     });
   }
   data = new SlashCommandBuilder()
-    .setName("anime")
+    .setName(this.name)
     .setDescription("Search for anime ex. anime One Piece")
     .addStringOption((option) =>
       option.setName("anime").setDescription("Anime name").setRequired(true)

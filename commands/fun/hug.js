@@ -6,17 +6,12 @@ const { SlashCommandBuilder } = require("@discordjs/builders");
 class Hug extends Command {
   constructor() {
     super({
-      name: "hug",
-      alias: ["cuddle"],
-      public: true,
-      description: "Give a hug to mention user",
-      usage: ["hug [user mention/ID]"],
-      examples: ["hug @nurionis"],
+      name: "hug"
     });
   }
   data = new SlashCommandBuilder()
-    .setName("hug")
-    .setDescription("Give a hug to mention user")
+    .setName(this.name)
+    .setDescription("Give a hug to mentioned user")
     .addUserOption((option) =>
       option.setName("user").setDescription("The user").setRequired(true)
     );

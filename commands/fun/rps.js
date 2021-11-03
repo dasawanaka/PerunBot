@@ -12,7 +12,7 @@ class RPS extends Command {
     });
   }
   data = new SlashCommandBuilder()
-    .setName("rps")
+    .setName(this.name)
     .setDescription("Play a game of rock–paper–scissors against me!")
     .addStringOption((option) =>
       option
