@@ -68,7 +68,6 @@ class Command {
   }
 
   checkPermissions(interaction) {
-    console.log("Checking permissions" )
     if (
       !interaction.channel
         .permissionsFor(interaction.guild.me)
@@ -86,7 +85,6 @@ class Command {
    * Code modified from: https://github.com/discordjs/Commando/blob/master/src/commands/base.js
    */
   checkUserPermissions(interaction) {
-    console.log("Checking permissions for user " )
     if (interaction.memberPermissions.has("ADMINISTRATOR")) return true;
 
     if (this.userPermissions) {
@@ -116,7 +114,6 @@ class Command {
   }
 
   checkClientPermissions(interaction) {
-    console.log("Checking permissions for client" )
     const missingPermissions = interaction.channel
       .permissionsFor(interaction.guild.me)
       .missing(this.clientPermissions)
@@ -141,7 +138,6 @@ class Command {
   }
 
   checkDevPermissions(interaction) {
-    console.log("Checking permissions for dev" )
     const userID = interaction.member.id;
     if (!this.dev) return true;
     let userIsDeveloper = false;

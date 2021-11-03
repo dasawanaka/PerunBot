@@ -33,7 +33,7 @@ module.exports = {
             });
             commands.push(command.data.toJSON());
 
-            client.logger.info('│✅ │' + align(` ${command.name}`,3));
+            client.logger.info('│✅ │' + align(`${module} / ${command.name}`,1));
         }
       }
     }

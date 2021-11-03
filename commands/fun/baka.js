@@ -34,19 +34,19 @@ class Baka extends Command {
         .setColor("RANDOM")
         .setFooter(
           "Requested by " + `${interaction.member.displayName}`,
-          interaction.member.avatarURL({
+          interaction.member.displayAvatarURL({
             dynamic: true,
-            format: "gif",
+            format: "png",
             size: 2048,
           })
         )
         .setURL(body.url);
-      await interaction.reply({ embeds: [embed] });
+      interaction.reply({ embeds: [embed] });
     } catch (err) {
       const errEmbed = new MessageEmbed()
         .setColor(RED)
         .setDescription("Something went wrong... :cry:");
-      await interaction.reply({ embeds: [errEmbed] });
+      interaction.reply({ embeds: [errEmbed] });
     }
   }
 }
