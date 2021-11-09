@@ -2,22 +2,13 @@ const path = require("path");
 const fs = require("fs");
 const developers = require("../../developers.json");
 const { MessageEmbed } = require("discord.js");
+var align = require('align-text');
 
 class Command {
   constructor(options) {
     if (!options.name) throw new Error("Command must have a name");
 
     this.name = options.name;
-
-    if (options.alias) this.alias = options.alias;
-
-    if (options.public) this.public = options.public;
-
-    if (options.description) this.description = options.description;
-
-    if (options.usage) this.usage = options.usage;
-
-    if (options.examples) this.examples = options.examples;
 
     if (options.cooldown) this.cooldown = options.cooldown;
 
@@ -38,33 +29,23 @@ class Command {
     this.loadSubCommands(dirPath);
   }
 
-  run(client, message, args) {
-    let action = args.shift();
+  run(interaction) {
+    let action = interaction.options.getSubcommand();
 
-    if (!action) {
-      return message.channel.send({
-        embed: {
-          color: 16734039,
-          description: `❌ | You must provide a action( ${Array.from(
-            this.subCommands.keys()
-          ).join(" | ")} )`,
-        },
-      });
-    }
     let command = this.subCommands.get(action);
     if (!command) {
-      return message.channel.send({
-        embed: {
-          color: 16734039,
-          description: `❌ | You must provide a **VALID** action( ${Array.from(
-            this.subCommands.keys()
-          ).join(" | ")} )`,
-        },
+      return interaction.reply({
+        embeds: [
+          {
+            color: 16734039,
+            description: `🤔 | Command not found. `,
+          },
+        ],
       });
     }
 
-    if (!command.checkPermissions(message)) return;
-    command.run(client, message, args);
+    if (!command.checkPermissions(interaction)) return;
+    command.run(interaction);
   }
 
   checkPermissions(interaction) {
@@ -106,7 +87,7 @@ class Command {
           )
           .setTimestamp()
           .setColor("#eb3483");
-          interaction.channel.send(embed);
+        interaction.channel.send(embed);
         return false;
       }
     }
@@ -164,27 +145,19 @@ class Command {
   }
 
   loadSubCommands(dirPath) {
-    // const commandFiles = fs
-    //   .readdirSync(dirPath)
-    //   .filter((file) => file.endsWith(".js"));
+    const commandFiles = fs
+      .readdirSync(dirPath)
+      .filter((file) => file.endsWith(".js"));
 
-    // if (commandFiles.length > 0) {
-    //   this.logger.info(
-    //     `🔍 Sub commands dir with ${commandFiles.length} commands.`
-    //   );
-    //   for (const file of commandFiles) {
-    //     const commandPath = path.join(dirPath, file);
-    //     this.logger.info(`⏳ Try to load sub command ${file}`);
-    //     const subCommandClass = require(commandPath);
-    //     const command = new subCommandClass();
-    //     this.subCommands.set(command.name.toLowerCase(), command);
-    //     if (command.alias != undefined)
-    //       command.alias.forEach((al) => {
-    //         this.subCommands.set(al.toLowerCase(), command);
-    //       });
-    //     this.logger.info(`✅ Register sub command ${command.name}`);
-    //   }
-    // }
+    if (commandFiles.length > 0) {
+      for (const file of commandFiles) {
+        const commandPath = path.join(dirPath, file);
+        const subCommandClass = require(commandPath);
+        const command = new subCommandClass();
+        this.subCommands.set(command.name.toLowerCase(), command);
+        this.logger.info(`║${align('╚═✅', 10)} - ${command.name}`);
+      }
+    }
     return;
   }
 }

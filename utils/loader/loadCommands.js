@@ -11,7 +11,7 @@ module.exports = {
   description: "Simple command loader with subcommands",
   async load(commandDirPath, client) {
     client.logger.info("COMMANDS");
-    client.logger.info("▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬▬");
+    client.logger.info("╔══════════════════════════");
     const commands = [];
     const commandModules = fs.readdirSync(commandDirPath);
     for (const module of commandModules) {
@@ -21,8 +21,10 @@ module.exports = {
         .filter((file) => file.endsWith(".js"));
 
       if (commandFiles.length > 0) {
+        client.logger.info(`╠═✅ - ${module}`);
         for (const file of commandFiles) {
           const commandPath = path.join(commandDirPath, module, file);
+          client.logger.info(`║${align('╚═✅', 5)} - ${file}`);
           const CommandClass = require(commandPath);
           const command = new CommandClass();
           client.commands.set(command.name.toLowerCase(), command);
@@ -33,10 +35,10 @@ module.exports = {
             });
             commands.push(command.data.toJSON());
 
-            client.logger.info('│✅ │' + align(`${module} / ${command.name}`,1));
         }
       }
     }
+    client.logger.info("╚══════════════════════════");
     //send/register slash command using REST
     const rest = new REST({ version: '9' }).setToken(discord_conf.token);
     (async () => {
