@@ -28,7 +28,7 @@
         "get-redirects": "^1.0.0",
         "http-basic": "^8.1.3",
         "https-proxy-agent": "^5.0.0",
-        "i": "^0.3.6",
+        "i": "^0.3.7",
         "js-logger": "^1.6.1",
         "mal-scraper": "^2.11.3",
         "mathjs": "^7.6.0",
